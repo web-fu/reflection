@@ -3,6 +3,7 @@
 $includes = [];
 if (PHP_VERSION_ID < 80100) {
     $includes[] = __DIR__ . '/readonly-property.neon';
+    $includes[] = __DIR__ . '/enum.neon';
 }
 
 $config = [];
