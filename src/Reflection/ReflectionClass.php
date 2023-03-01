@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-use phpDocumentor\Reflection\DocBlock\Tags\See;
-
 class ReflectionClass
 {
     private \ReflectionClass $reflectionClass;
@@ -16,11 +14,6 @@ class ReflectionClass
     public function __construct(object|string $objectOrClass)
     {
         $this->reflectionClass = new \ReflectionClass($objectOrClass);
-    }
-
-    public static function getInstance(object|string $objectOrClass): self
-    {
-        return new self($objectOrClass);
     }
 
     public function getNativeReflectionClass(): \ReflectionClass
@@ -101,7 +94,7 @@ class ReflectionClass
     public function getInterfaces(): array
     {
         return array_map(function (\ReflectionClass $class) {
-            return self::getInstance($class->getName());
+            return Reflector::createReflectionClass($class);
         }, $this->reflectionClass->getInterfaces());
     }
 
@@ -141,7 +134,7 @@ class ReflectionClass
             return null;
         }
 
-        return self::getInstance($parentClass->getName());
+        return Reflector::createReflectionClass($parentClass);
     }
 
     /**
@@ -215,7 +208,7 @@ class ReflectionClass
     public function getTraits(): array
     {
         return array_map(function (\ReflectionClass $reflectionClass) {
-            return self::getInstance($reflectionClass->getName());
+            return Reflector::createReflectionClass($reflectionClass);
         }, $this->reflectionClass->getTraits());
     }
 
