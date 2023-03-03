@@ -12,7 +12,7 @@ class Reflector
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
         /** @var class-string $name */
-       $name = self::getClassName($objectOrClass);
+        $name = self::getClassName($objectOrClass);
 
         if (! array_key_exists($name, self::$reflectionClasses)) {
             self::$reflectionClasses[$name] = new ReflectionClass($name);
@@ -31,7 +31,7 @@ class Reflector
         }
 
         if (is_object($objectOrClass)) {
-            return get_class($objectOrClass);
+            return $objectOrClass::class;
         }
 
         return $objectOrClass;

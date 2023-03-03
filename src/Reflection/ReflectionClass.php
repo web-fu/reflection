@@ -93,9 +93,7 @@ class ReflectionClass
      */
     public function getInterfaces(): array
     {
-        return array_map(function (\ReflectionClass $class) {
-            return Reflector::createReflectionClass($class);
-        }, $this->reflectionClass->getInterfaces());
+        return array_map(fn (\ReflectionClass $class) => Reflector::createReflectionClass($class), $this->reflectionClass->getInterfaces());
     }
 
     public function getMethod(string $name): \ReflectionMethod
@@ -152,7 +150,7 @@ class ReflectionClass
 
     public function getReflectionConstant(string $name): \ReflectionClassConstant|null
     {
-        return $this->reflectionClass->getReflectionConstant($name)  ?: null;
+        return $this->reflectionClass->getReflectionConstant($name) ?: null;
     }
 
     /**
@@ -207,9 +205,7 @@ class ReflectionClass
      */
     public function getTraits(): array
     {
-        return array_map(function (\ReflectionClass $reflectionClass) {
-            return Reflector::createReflectionClass($reflectionClass);
-        }, $this->reflectionClass->getTraits());
+        return array_map(fn (\ReflectionClass $reflectionClass) => Reflector::createReflectionClass($reflectionClass), $this->reflectionClass->getTraits());
     }
 
     public function hasConstant(string $name): bool
