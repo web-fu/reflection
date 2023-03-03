@@ -1,0 +1,6 @@
+parameters:
+    ignoreErrors:
+        - '#Call to an undefined method ReflectionFunctionAbstract::getClosureUsedVariables\(\)#'
+        - '#Call to an undefined method ReflectionFunctionAbstract::getTentativeReturnType\(\)#'
+        - '#Call to an undefined method ReflectionFunctionAbstract::hasTentativeReturnType\(\)#'
+        - '#Call to an undefined method ReflectionFunctionAbstract::isStatic\(\)#'
