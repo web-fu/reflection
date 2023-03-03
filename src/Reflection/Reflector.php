@@ -8,13 +8,15 @@ class Reflector
 {
     /** @var ReflectionClass[]  */
     private static array $reflectionClasses;
+    /** @var array<ReflectionMethod[]> */
+    private static array $reflectionMethods;
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (! array_key_exists($name, self::$reflectionClasses)) {
+        if (! isset(self::$reflectionClasses[$name])) {
             self::$reflectionClasses[$name] = new ReflectionClass($name);
         }
 
@@ -35,5 +37,17 @@ class Reflector
         }
 
         return $objectOrClass;
+    }
+
+    public static function createReflectionMethod(object|string $objectOrMethod, string $method): ReflectionMethod
+    {
+        /** @var class-string $name */
+        $name = self::getClassName($objectOrMethod);
+
+        if (! isset(self::$reflectionMethods[$name][$method])) {
+            self::$reflectionMethods[$name][$method] = new ReflectionMethod($name, $method);
+        }
+
+        return self::$reflectionMethods[$name][$method];
     }
 }

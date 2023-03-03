@@ -40,11 +40,12 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         return $this->reflectionFunction->getModifiers();
     }
 
-    public function getPrototype(): \ReflectionMethod
+    public function getPrototype(): ReflectionMethod
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
-        return $this->reflectionFunction->getPrototype();
+        $method = $this->reflectionFunction->getPrototype();
+        return Reflector::createReflectionMethod($method->getDeclaringClass(), $method->getName());
     }
 
     public function hasPrototype(): bool
