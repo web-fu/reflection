@@ -6,7 +6,7 @@ if (PHP_VERSION_ID < 80100) {
     $includes[] = __DIR__ . '/enum.neon';
     $includes[] = __DIR__ . '/final.neon';
     $includes[] = __DIR__ . '/reflection-function-abstract.neon';
-    $includes[] = __DIR__ . '/reflection-abstract.neon';
+    $includes[] = __DIR__ . '/reflection-function.neon';
 }
 
 $config = [];
