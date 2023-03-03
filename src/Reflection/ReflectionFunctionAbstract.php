@@ -169,4 +169,6 @@ abstract class ReflectionFunctionAbstract
     {
         return $this->reflectionFunction->returnsReference();
     }
+
+    abstract public function __toString(): string;
 }
