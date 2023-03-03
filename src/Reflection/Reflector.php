@@ -6,10 +6,12 @@ namespace WebFu\Reflection;
 
 class Reflector
 {
+    /** @var ReflectionClass[]  */
     private static array $reflectionClasses;
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
+        /** @var class-string $name */
        $name = self::getClassName($objectOrClass);
 
         if (! array_key_exists($name, self::$reflectionClasses)) {

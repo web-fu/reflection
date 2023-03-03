@@ -319,7 +319,7 @@ class ReflectionClass
     /**
      * @param mixed[] $args
      */
-    public function newInstanceArgs(array $args = []): object|null
+    public function newInstanceArgs(array $args = []): object
     {
         return $this->reflectionClass->newInstanceArgs($args);
     }

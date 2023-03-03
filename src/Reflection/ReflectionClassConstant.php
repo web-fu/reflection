@@ -19,6 +19,9 @@ class ReflectionClassConstant
         $this->reflectionClassConstant = new \ReflectionClassConstant($class, $constant);
     }
 
+    /**
+     * @return \ReflectionAttribute[]
+     */
     public function getAttributes(?string $name = null, int $flags = 0): array
     {
         return $this->reflectionClassConstant->getAttributes($name, $flags);
