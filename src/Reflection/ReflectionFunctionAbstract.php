@@ -16,9 +16,12 @@ abstract class ReflectionFunctionAbstract
         return $this->reflectionFunction->getAttributes($name, $flags);
     }
 
-    public function getClosureScopeClass(): \ReflectionClass|null
+    public function getClosureScopeClass(): ReflectionClass|null
     {
-        return $this->reflectionFunction->getClosureScopeClass();
+        if (!$closureScopeClass = $this->reflectionFunction->getClosureScopeClass()) {
+            return null;
+        }
+        return Reflector::createReflectionClass($closureScopeClass);
     }
 
     public function getClosureThis(): ?object
