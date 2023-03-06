@@ -35,7 +35,6 @@ class ReflectionParameter
         return $this->reflectionParameter->getAttributes($name, $flags);
     }
 
-
     public function getDeclaringClass(): ?ReflectionClass
     {
         if (!$object = $this->reflectionParameter->getDeclaringClass()) {
@@ -90,14 +89,12 @@ class ReflectionParameter
         return $this->reflectionParameter->hasType();
     }
 
-    public
-    function isDefaultValueAvailable(): bool
+    public function isDefaultValueAvailable(): bool
     {
         return $this->reflectionParameter->isDefaultValueAvailable();
     }
 
-    public
-    function isDefaultValueConstant(): bool
+    public function isDefaultValueConstant(): bool
     {
         return $this->reflectionParameter->isDefaultValueConstant();
     }
