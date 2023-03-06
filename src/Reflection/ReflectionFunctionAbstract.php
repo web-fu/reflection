@@ -11,7 +11,7 @@ abstract class ReflectionFunctionAbstract
     /**
      * @return \ReflectionAttribute[]
      */
-    public function getAttributes(?string $name = null, int $flags = 0): array
+    public function getAttributes(string|null $name = null, int $flags = 0): array
     {
         return $this->reflectionFunction->getAttributes($name, $flags);
     }
@@ -24,7 +24,7 @@ abstract class ReflectionFunctionAbstract
         return Reflector::createReflectionClass($closureScopeClass);
     }
 
-    public function getClosureThis(): ?object
+    public function getClosureThis(): object|null
     {
         return $this->reflectionFunction->getClosureThis();
     }
@@ -47,14 +47,14 @@ abstract class ReflectionFunctionAbstract
         return $this->reflectionFunction->getEndLine() ?: null;
     }
 
-    public function getExtension(): ?\ReflectionExtension
+    public function getExtension(): \ReflectionExtension|null
     {
         return $this->reflectionFunction->getExtension();
     }
 
-    public function getExtensionName(): string|false
+    public function getExtensionName(): string|null
     {
-        return $this->reflectionFunction->getExtensionName();
+        return $this->reflectionFunction->getExtensionName() ?: null;
     }
 
     public function getFileName(): string|null

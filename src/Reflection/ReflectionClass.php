@@ -24,7 +24,7 @@ class ReflectionClass
     /**
      * @return \ReflectionAttribute[]
      */
-    public function getAttributes(?string $name = null, int $flags = 0): array
+    public function getAttributes(string|null $name = null, int $flags = 0): array
     {
         return $this->reflectionClass->getAttributes($name, $flags);
     }
@@ -37,7 +37,7 @@ class ReflectionClass
     /**
      * @return mixed[]
      */
-    public function getConstants(?int $filter = null): array
+    public function getConstants(int|null $filter = null): array
     {
         return $this->reflectionClass->getConstants($filter);
     }
@@ -108,7 +108,7 @@ class ReflectionClass
     /**
      * @return ReflectionMethod[]
      */
-    public function getMethods(?int $filter = null): array
+    public function getMethods(int|null $filter = null): array
     {
         return array_map(fn (\ReflectionMethod $method) =>
             Reflector::createReflectionMethod($this, $method->getName()), $this->reflectionClass->getMethods($filter));
@@ -143,7 +143,7 @@ class ReflectionClass
     /**
      * @return ReflectionProperty[]
      */
-    public function getProperties(?int $filter = null): array
+    public function getProperties(int|null $filter = null): array
     {
         return array_map(fn (\ReflectionProperty $reflectionProperty) => Reflector::createReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
     }
@@ -167,7 +167,7 @@ class ReflectionClass
     /**
      * @return ReflectionClassConstant[]
      */
-    public function getReflectionConstants(?int $filter = null): array
+    public function getReflectionConstants(int|null $filter = null): array
     {
         return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => Reflector::createReflectionClassConstant($this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
     }

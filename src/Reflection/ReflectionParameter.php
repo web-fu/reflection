@@ -30,12 +30,12 @@ class ReflectionParameter
      * @return \ReflectionAttribute[]
      */
 
-    public function getAttributes(?string $name = null, int $flags = 0): array
+    public function getAttributes(string|null $name = null, int $flags = 0): array
     {
         return $this->reflectionParameter->getAttributes($name, $flags);
     }
 
-    public function getDeclaringClass(): ?ReflectionClass
+    public function getDeclaringClass(): ReflectionClass|null
     {
         if (!$object = $this->reflectionParameter->getDeclaringClass()) {
             return null;
@@ -64,7 +64,7 @@ class ReflectionParameter
         return $this->reflectionParameter->getDefaultValue();
     }
 
-    public function getDefaultValueConstantName(): ?string
+    public function getDefaultValueConstantName(): string|null
     {
         return $this->reflectionParameter->getDefaultValueConstantName();
     }

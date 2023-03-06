@@ -22,7 +22,7 @@ class ReflectionProperty
     /**
      * @return \ReflectionAttribute[]
      */
-    public function getAttributes(?string $name = null, int $flags = 0): array
+    public function getAttributes(string|null $name = null, int $flags = 0): array
     {
         return $this->reflectionProperty->getAttributes($name, $flags);
     }
@@ -57,7 +57,7 @@ class ReflectionProperty
         return Reflector::createReflectionType($this->reflectionProperty->getType());
     }
 
-    public function getValue(?object $object = null): mixed
+    public function getValue(object|null $object = null): mixed
     {
         return $this->reflectionProperty->getValue($object);
     }
@@ -77,7 +77,7 @@ class ReflectionProperty
         return $this->reflectionProperty->isDefault();
     }
 
-    public function isInitialized(?object $object = null): bool
+    public function isInitialized(object|null $object = null): bool
     {
         return $this->reflectionProperty->isInitialized($object);
     }

@@ -19,7 +19,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         $this->reflectionFunction = new \ReflectionMethod($objectOrMethod, $method);
     }
 
-    public function getClosure(?object $object = null): \Closure|null
+    public function getClosure(object|null $object = null): \Closure|null
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
@@ -53,7 +53,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         return $this->reflectionFunction->hasReturnType();
     }
 
-    public function invoke(?object $object, mixed ...$args): mixed
+    public function invoke(object|null $object, mixed ...$args): mixed
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
@@ -63,7 +63,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     /**
      * @param mixed[] $args
      */
-    public function invokeArgs(?object $object, array $args): mixed
+    public function invokeArgs(object|null $object, array $args): mixed
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
