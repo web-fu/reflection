@@ -148,22 +148,28 @@ class ReflectionClass
         return array_map(fn (\ReflectionProperty $reflectionProperty) => Reflector::createReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
     }
 
-    public function getProperty(string $name): ReflectionProperty
+    public function getProperty(string $name): ReflectionProperty|null
     {
+        if (!$this->reflectionClass->hasProperty($name)) {
+            return null;
+        }
         return Reflector::createReflectionProperty($this->reflectionClass->getName(), $name);
     }
 
-    public function getReflectionConstant(string $name): \ReflectionClassConstant|null
+    public function getReflectionConstant(string $name): ReflectionClassConstant|null
     {
-        return $this->reflectionClass->getReflectionConstant($name) ?: null;
+        if (!$this->reflectionClass->hasConstant($name)) {
+            return null;
+        }
+        return Reflector::createReflectionClassConstant($this->reflectionClass->getName(), $name);
     }
 
     /**
-     * @return \ReflectionClassConstant[]
+     * @return ReflectionClassConstant[]
      */
     public function getReflectionConstants(?int $filter = null): array
     {
-        return $this->reflectionClass->getReflectionConstants($filter);
+        return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => Reflector::createReflectionClassConstant($this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
     }
 
     public function getShortName(): string

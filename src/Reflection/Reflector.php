@@ -12,7 +12,8 @@ class Reflector
     private static array $reflectionMethods = [];
     /** @var array<ReflectionProperty[]> */
     private static array $reflectionProperties = [];
-
+    /** @var array<ReflectionClassConstant[]> */
+    private static array $reflectionClassConstants = [];
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
@@ -84,5 +85,17 @@ class Reflector
         }
 
         return self::$reflectionProperties[$name][$property];
+    }
+
+    public static function createReflectionClassConstant(object|string $objectOrClass, string $constant): ReflectionClassConstant
+    {
+        /** @var class-string $name */
+        $name = self::getClassName($objectOrClass);
+
+        if (! isset(self::$reflectionClassConstants[$name][$constant])) {
+            self::$reflectionClassConstants[$name][$constant] = new ReflectionClassConstant($name, $constant);
+        }
+
+        return self::$reflectionClassConstants[$name][$constant];
     }
 }
