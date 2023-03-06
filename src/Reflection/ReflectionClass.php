@@ -42,9 +42,13 @@ class ReflectionClass
         return $this->reflectionClass->getConstants($filter);
     }
 
-    public function getConstructor(): \ReflectionMethod|null
+    public function getConstructor(): ReflectionMethod|null
     {
-        return $this->reflectionClass->getConstructor();
+        if (! $constructor = $this->reflectionClass->getConstructor()) {
+            return null;
+        }
+
+        return Reflector::createReflectionMethod($constructor->getDeclaringClass(), $constructor->getName());
     }
 
     /**
@@ -96,17 +100,18 @@ class ReflectionClass
         return array_map(fn (\ReflectionClass $class) => Reflector::createReflectionClass($class), $this->reflectionClass->getInterfaces());
     }
 
-    public function getMethod(string $name): \ReflectionMethod
+    public function getMethod(string $name): ReflectionMethod
     {
-        return $this->reflectionClass->getMethod($name);
+        return Reflector::createReflectionMethod($this, $this->reflectionClass->getMethod($name)->getName());
     }
 
     /**
-     * @return \ReflectionMethod[]
+     * @return ReflectionMethod[]
      */
     public function getMethods(?int $filter = null): array
     {
-        return $this->reflectionClass->getMethods($filter);
+        return array_map(fn (\ReflectionMethod $method) =>
+            Reflector::createReflectionMethod($this, $method->getName()), $this->reflectionClass->getMethods($filter));
     }
 
     public function getModifiers(): int
