@@ -50,4 +50,10 @@ class Reflector
 
         return self::$reflectionMethods[$name][$method];
     }
+
+
+    public static function createReflectionFunction(\Closure $closure): ReflectionFunction
+    {
+        return new ReflectionFunction($closure);
+    }
 }
