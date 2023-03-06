@@ -7,9 +7,12 @@ namespace WebFu\Reflection;
 class Reflector
 {
     /** @var ReflectionClass[]  */
-    private static array $reflectionClasses;
+    private static array $reflectionClasses = [];
     /** @var array<ReflectionMethod[]> */
-    private static array $reflectionMethods;
+    private static array $reflectionMethods = [];
+    /** @var array<ReflectionProperty[]> */
+    private static array $reflectionProperties = [];
+
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
@@ -51,7 +54,6 @@ class Reflector
         return self::$reflectionMethods[$name][$method];
     }
 
-
     public static function createReflectionFunction(\Closure $closure): ReflectionFunction
     {
         return new ReflectionFunction($closure);
@@ -70,5 +72,17 @@ class Reflector
         assert($type instanceof \ReflectionUnionType);
 
         return new ReflectionType(array_map(fn (\ReflectionNamedType $type): string => $type->getName(), $type->getTypes()));
+    }
+
+    public static function createReflectionProperty(object|string $objectOrClass, string $property): ReflectionProperty
+    {
+        /** @var class-string $name */
+        $name = self::getClassName($objectOrClass);
+
+        if (! isset(self::$reflectionProperties[$name][$property])) {
+            self::$reflectionProperties[$name][$property] = new ReflectionProperty($name, $property);
+        }
+
+        return self::$reflectionProperties[$name][$property];
     }
 }

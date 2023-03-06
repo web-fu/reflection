@@ -141,16 +141,16 @@ class ReflectionClass
     }
 
     /**
-     * @return \ReflectionProperty[]
+     * @return ReflectionProperty[]
      */
     public function getProperties(?int $filter = null): array
     {
-        return $this->reflectionClass->getProperties($filter);
+        return array_map(fn (\ReflectionProperty $reflectionProperty) => Reflector::createReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
     }
 
-    public function getProperty(string $name): \ReflectionProperty
+    public function getProperty(string $name): ReflectionProperty
     {
-        return $this->reflectionClass->getProperty($name);
+        return Reflector::createReflectionProperty($this->reflectionClass->getName(), $name);
     }
 
     public function getReflectionConstant(string $name): \ReflectionClassConstant|null
