@@ -52,9 +52,9 @@ class ReflectionProperty
         return $this->reflectionProperty->getName();
     }
 
-    public function getType(): ?\ReflectionType
+    public function getType(): ReflectionType
     {
-        return $this->reflectionProperty->getType();
+        return Reflector::createReflectionType($this->reflectionProperty->getType());
     }
 
     public function getValue(?object $object = null): mixed

@@ -87,9 +87,9 @@ abstract class ReflectionFunctionAbstract
         return $this->reflectionFunction->getParameters();
     }
 
-    public function getReturnType(): ?\ReflectionType
+    public function getReturnType(): ReflectionType
     {
-        return $this->reflectionFunction->getReturnType();
+        return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
     }
 
     public function getShortName(): string
@@ -110,9 +110,13 @@ abstract class ReflectionFunctionAbstract
         return $this->reflectionFunction->getStaticVariables();
     }
 
-    public function getTentativeReturnType(): ?\ReflectionType
+    public function getTentativeReturnType(): ReflectionType|null
     {
-        return PHP_VERSION_ID >= 80100 ? $this->reflectionFunction->getTentativeReturnType() : null;
+        if (PHP_VERSION_ID < 80100) {
+            return null;
+        }
+
+        return Reflector::createReflectionType($this->reflectionFunction->getTentativeReturnType());
     }
 
     public function hasReturnType(): bool

@@ -80,9 +80,9 @@ class ReflectionParameter
         return $this->reflectionParameter->getPosition();
     }
 
-    public function getType(): ?\ReflectionType
+    public function getType(): ReflectionType
     {
-        return $this->reflectionParameter->getType();
+        return Reflector::createReflectionType($this->reflectionParameter->getType());
     }
 
     public function hasType(): bool

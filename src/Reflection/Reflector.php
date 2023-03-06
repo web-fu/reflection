@@ -56,4 +56,19 @@ class Reflector
     {
         return new ReflectionFunction($closure);
     }
+
+    public static function createReflectionType(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): ReflectionType
+    {
+        if (null === $type) {
+            return new ReflectionType(['null']);
+        }
+
+        if ($type instanceof \ReflectionNamedType) {
+            return new ReflectionType([$type->getName()]);
+        }
+
+        assert($type instanceof \ReflectionUnionType);
+
+        return new ReflectionType(array_map(fn (\ReflectionNamedType $type): string => $type->getName(), $type->getTypes()));
+    }
 }
