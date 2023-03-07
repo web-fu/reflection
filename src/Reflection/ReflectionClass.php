@@ -31,15 +31,24 @@ class ReflectionClass
 
     public function getConstant(string $name): mixed
     {
-        return $this->reflectionClass->getConstant($name);
+        foreach ($this->getReflectionConstants() as $constant) {
+            if ($constant->getName() === $name) {
+                return $constant->getValue();
+            }
+        }
+        throw new ReflectionException('Undefined constant name: ' . $name);
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getConstants(int|null $filter = null): array
     {
-        return $this->reflectionClass->getConstants($filter);
+        $result = [];
+        foreach ($this->getReflectionConstants($filter) as $constant) {
+            $result[$constant->getName()] = $constant->getValue();
+        }
+        return $result;
     }
 
     public function getConstructor(): ReflectionMethod|null
