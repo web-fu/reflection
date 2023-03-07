@@ -83,11 +83,12 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     }
 
     /**
-     * @return \ReflectionParameter[]
+     * @return ReflectionParameter[]
      */
     public function getParameters(): array
     {
-        return $this->reflectionFunction->getParameters();
+        $closure = $this->reflectionFunction->getClosureThis();
+        return array_map(fn(\ReflectionParameter $reflectionParameter) => Reflector::createReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
     }
 
     public function getReturnType(): ReflectionType

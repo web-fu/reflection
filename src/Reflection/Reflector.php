@@ -98,4 +98,9 @@ class Reflector
 
         return self::$reflectionClassConstants[$name][$constant];
     }
+
+    public static function createReflectionParameter(string|array|object $function, int|string $param): ReflectionParameter
+    {
+        return new ReflectionParameter($function, $param);
+    }
 }
