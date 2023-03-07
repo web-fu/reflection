@@ -6,6 +6,7 @@ namespace WebFu\Tests\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
+use WebFu\Reflection\ReflectionType;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 
 class ReflectionMethodTest extends TestCase
@@ -18,5 +19,12 @@ class ReflectionMethodTest extends TestCase
             '@depends-annotations Test',
             '@return class-string',
         ], $reflectionMethod->getAnnotations());
+    }
+
+    public function testGetReturnType(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(new ReflectionType(['string']), $reflectionMethod->getReturnType());
     }
 }

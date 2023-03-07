@@ -19,6 +19,11 @@ class ReflectionType
         return in_array('null', $this->types);
     }
 
+    public function hasType(string $type): bool
+    {
+        return in_array($type, $this->types);
+    }
+
     public function __toString(): string
     {
         return implode($this->separator, $this->types);
