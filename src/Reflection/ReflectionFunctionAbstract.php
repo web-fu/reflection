@@ -86,6 +86,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      * @return ReflectionParameter[]
      */
     abstract public function getParameters(): array;
+
     public function getReturnType(): ReflectionType
     {
         return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
