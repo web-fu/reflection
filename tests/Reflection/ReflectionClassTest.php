@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;
+use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithStaticProperties;
 
 class ReflectionClassTest extends TestCase
@@ -68,6 +69,14 @@ class ReflectionClassTest extends TestCase
             'PRIVATE' => 3,
         ], $reflectionClass->getConstants());
     }
+
+    public function testGetAnnotation(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
+
+        $this->assertEquals(['@template Test'], $reflectionClass->getAnnotations());
+    }
+
     public function testGetStaticProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithStaticProperties::class);
