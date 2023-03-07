@@ -24,6 +24,14 @@ class ReflectionType
         return in_array($type, $this->types);
     }
 
+    /**
+     * @return string[]
+     */
+    public function getTypeNames(): array
+    {
+        return $this->types;
+    }
+
     public function __toString(): string
     {
         return implode($this->separator, $this->types);
