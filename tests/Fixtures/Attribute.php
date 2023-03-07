@@ -7,5 +7,4 @@ namespace WebFu\Tests\Fixtures;
 #[\Attribute]
 class Attribute
 {
-
 }

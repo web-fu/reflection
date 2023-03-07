@@ -29,7 +29,6 @@ class ReflectionParameter extends AbstractReflection
     /**
      * @return \ReflectionAttribute[]
      */
-
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
         return $this->reflectionParameter->getAttributes($name, $flags);
