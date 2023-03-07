@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-class ReflectionProperty
+class ReflectionProperty extends AbstractReflection
 {
     public const IS_STATIC = \ReflectionProperty::IS_STATIC;
     public const IS_READONLY = 128;

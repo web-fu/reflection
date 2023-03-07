@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-abstract class ReflectionFunctionAbstract
+abstract class ReflectionFunctionAbstract extends AbstractReflection
 {
     protected \ReflectionFunctionAbstract $reflectionFunction;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-class ReflectionParameter
+class ReflectionParameter extends AbstractReflection
 {
     private \ReflectionParameter $reflectionParameter;
 
@@ -67,6 +67,11 @@ class ReflectionParameter
     public function getDefaultValueConstantName(): string|null
     {
         return $this->reflectionParameter->getDefaultValueConstantName();
+    }
+
+    public function getDocComment(): string|null
+    {
+        return $this->getDeclaringClass()?->getDocComment();
     }
 
     public function getName(): string

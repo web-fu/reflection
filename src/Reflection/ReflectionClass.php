@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-class ReflectionClass
+class ReflectionClass extends AbstractReflection
 {
     private \ReflectionClass $reflectionClass;
 
@@ -68,7 +68,7 @@ class ReflectionClass
         return $this->reflectionClass->getDefaultProperties();
     }
 
-    public function getDocComments(): string|null
+    public function getDocComment(): string|null
     {
         return $this->reflectionClass->getDocComment() ?: null;
     }

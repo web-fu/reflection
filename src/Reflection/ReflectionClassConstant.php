@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-class ReflectionClassConstant
+class ReflectionClassConstant extends AbstractReflection
 {
     /* Constants */
     public const IS_PUBLIC = \ReflectionClassConstant::IS_PUBLIC;
