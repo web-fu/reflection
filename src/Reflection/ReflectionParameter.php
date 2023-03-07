@@ -76,7 +76,7 @@ class ReflectionParameter extends AbstractReflection
     public function getAnnotations(): array
     {
         $functionAnnotations = parent::getAnnotations();
-        return array_filter($functionAnnotations, fn(string $annotation) => str_contains($annotation, $this->getName()));
+        return array_filter($functionAnnotations, fn (string $annotation) => str_contains($annotation, $this->getName()));
     }
 
     public function getName(): string

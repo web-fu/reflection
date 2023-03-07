@@ -74,7 +74,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function getNumberOfParameters(): int
     {
-        return $this->reflectionFunction->getNumberOfRequiredParameters();
+        return $this->reflectionFunction->getNumberOfParameters();
     }
 
     public function getNumberOfRequiredParameters(): int
