@@ -40,6 +40,15 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         return $this->reflectionFunction->getModifiers();
     }
 
+    /**
+     * @return ReflectionParameter[]
+     */
+    public function getParameters(): array
+    {
+        $closure = [$this->getDeclaringClass()->getName(), $this->reflectionFunction->getName()];
+        return array_map(fn(\ReflectionParameter $reflectionParameter) => Reflector::createReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
+    }
+
     public function getPrototype(): ReflectionMethod
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);

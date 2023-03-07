@@ -85,12 +85,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     /**
      * @return ReflectionParameter[]
      */
-    public function getParameters(): array
-    {
-        $closure = $this->reflectionFunction->getClosureThis();
-        return array_map(fn(\ReflectionParameter $reflectionParameter) => Reflector::createReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
-    }
-
+    abstract public function getParameters(): array;
     public function getReturnType(): ReflectionType
     {
         return Reflector::createReflectionType($this->reflectionFunction->getReturnType());

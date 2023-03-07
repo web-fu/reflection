@@ -42,6 +42,11 @@ class ReflectionFunction extends ReflectionFunctionAbstract
         return PHP_VERSION_ID >= 80100 && $this->reflectionFunction->isAnonymous();
     }
 
+    public function getParameters(): array
+    {
+        return []; //TODO
+    }
+
     public function __toString(): string
     {
         return $this->reflectionFunction->__toString();

@@ -52,6 +52,15 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(1, $reflectionMethod->getNumberOfRequiredParameters());
     }
 
+    public function testGetParameters(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
+        $parameters = $reflectionMethod->getParameters();
+
+        $this->assertEquals(new ReflectionType(['int']), $parameters[0]->getType());
+        $this->assertEquals(new ReflectionType(['string']), $parameters[1]->getType());
+    }
+
     public function testGetReturnType(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
