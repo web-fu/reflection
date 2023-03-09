@@ -9,6 +9,7 @@ class ClassWithTypes
     public int $simple;
     public int|string $union;
 
-    public function returnVoid(): void {
+    public function returnVoid(): void
+    {
     }
 }

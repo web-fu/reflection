@@ -44,7 +44,7 @@ class ReflectionProperty extends AbstractReflection
 
     public function getDocTypeName(): string
     {
-        $annotations = array_filter($this->getAnnotations(), fn(string $annotation) => str_starts_with($annotation, '@var'));
+        $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
         $docTypes = preg_replace('/@var\s/', '$1', $annotations);
 
         if (!count($docTypes)) {
