@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WebFu\Tests\Reflection;
+namespace WebFu\Tests\Unit\Reflection;
 
-use WebFu\Reflection\ReflectionClass;
 use PHPUnit\Framework\TestCase;
+use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;

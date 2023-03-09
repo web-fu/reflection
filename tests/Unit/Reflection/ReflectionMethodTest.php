@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WebFu\Tests\Reflection;
+namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
