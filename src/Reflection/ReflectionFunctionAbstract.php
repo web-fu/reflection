@@ -92,6 +92,25 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
     }
 
+    public function getReturnDocTypeName(): string
+    {
+        $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@return'));
+
+        if (!count($docTypes)) {
+            return 'mixed';
+        }
+
+        if (count($docTypes) > 1) {
+            throw new ReflectionException('Invalid PHPDoc annotation');
+        }
+
+        $docType = array_pop($docTypes);
+
+        preg_match('/@return\s(?<return>.+)/', $docType, $matches);
+
+        return $matches['return'] ?? 'mixed';
+    }
+
     public function getShortName(): string
     {
         return $this->reflectionFunction->getShortName();
