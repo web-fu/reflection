@@ -9,7 +9,7 @@ class ReflectionParameter extends AbstractReflection
     private \ReflectionParameter $reflectionParameter;
 
     /**
-     * @param string|mixed[]|object $function
+     * @param string|string[]|object $function
      */
     public function __construct(string|array|object $function, int|string $param)
     {
