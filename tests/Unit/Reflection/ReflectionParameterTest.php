@@ -26,4 +26,10 @@ class ReflectionParameterTest extends TestCase
 
         $this->assertEquals(new ReflectionType(['string']), $reflectionParameter->getType());
     }
+
+    public function testGetDocTypeName(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
+        $this->assertEquals('class-string', $reflectionParameter->getDocTypeName());
+    }
 }

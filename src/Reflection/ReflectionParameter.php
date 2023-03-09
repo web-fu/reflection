@@ -79,6 +79,25 @@ class ReflectionParameter extends AbstractReflection
         return array_filter($functionAnnotations, fn (string $annotation) => str_contains($annotation, $this->getName()));
     }
 
+    public function getDocTypeName(): string
+    {
+        $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@param'));
+
+        if (!count($docTypes)) {
+            return 'mixed';
+        }
+
+        if (count($docTypes) > 1) {
+            throw new ReflectionException('Invalid PHPDoc annotation');
+        }
+
+        $docType = array_pop($docTypes);
+
+        preg_match('/@param\s(?<param>.+)\s\$'.$this->getName().'/', $docType, $matches);
+
+        return $matches['param'] ?? 'mixed';
+    }
+
     public function getName(): string
     {
         return $this->reflectionParameter->getName();
