@@ -9,7 +9,10 @@ namespace WebFu\Tests\Fixtures;
  */
 class ClassWithDocComments
 {
-    /** @var class-string  */
+    /**
+     * @depends-annotations Test
+     * @var class-string
+     */
     private string $property;
 
     /**
