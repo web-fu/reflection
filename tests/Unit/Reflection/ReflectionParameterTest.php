@@ -7,6 +7,7 @@ namespace WebFu\Tests\Unit\Reflection;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 
 class ReflectionParameterTest extends TestCase
@@ -30,6 +31,14 @@ class ReflectionParameterTest extends TestCase
     public function testGetDocTypeName(): void
     {
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
-        $this->assertEquals('class-string', $reflectionParameter->getDocTypeName());
+
+        $this->assertEquals(['class-string'], $reflectionParameter->getDocTypeNames());
+    }
+
+    public function testGetTypeExtended(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
+
+        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionParameter->getTypeExtended());
     }
 }

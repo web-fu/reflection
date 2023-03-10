@@ -42,20 +42,36 @@ class ReflectionProperty extends AbstractReflection
         return $this->reflectionProperty->getDocComment() ?: null;
     }
 
-    public function getDocTypeName(): string
+    /**
+     * @return string[]
+     */
+    public function getTypeNames(): array
+    {
+        return Reflector::getTypeNames($this->reflectionProperty->getType());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDocTypeNames(): array
     {
         $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
         $docTypes = preg_replace('/@var\s/', '$1', $annotations);
 
         if (!count($docTypes)) {
-            return 'mixed';
+            return ['mixed'];
         }
 
         if (count($docTypes) > 1) {
             throw new ReflectionException('Invalid PHPDoc annotation');
         }
 
-        return array_pop($docTypes);
+        return explode("|", array_pop($docTypes));
+    }
+
+    public function getTypeExtended(): ReflectionTypeExtended
+    {
+        return new ReflectionTypeExtended($this->getTypeNames(), $this->getDocTypeNames());
     }
 
     public function getModifiers(): int

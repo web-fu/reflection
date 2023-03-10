@@ -7,6 +7,7 @@ namespace WebFu\Tests\Unit\Reflection;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 
@@ -72,6 +73,13 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals('class-string', $reflectionMethod->getReturnDocTypeName());
+        $this->assertEquals(['class-string'], $reflectionMethod->getReturnDocTypeNames());
+    }
+
+    public function testGetReturnTypeExtended(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionMethod->getReturnTypeExtended());
     }
 }

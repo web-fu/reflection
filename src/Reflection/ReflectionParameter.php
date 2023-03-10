@@ -79,12 +79,23 @@ class ReflectionParameter extends AbstractReflection
         return array_filter($functionAnnotations, fn (string $annotation) => str_contains($annotation, $this->getName()));
     }
 
-    public function getDocTypeName(): string
+    /**
+     * @return string[]
+     */
+    public function getTypeNames(): array
+    {
+        return Reflector::getTypeNames($this->reflectionParameter->getType());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDocTypeNames(): array
     {
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@param'));
 
         if (!count($docTypes)) {
-            return 'mixed';
+            return ['mixed'];
         }
 
         if (count($docTypes) > 1) {
@@ -95,7 +106,14 @@ class ReflectionParameter extends AbstractReflection
 
         preg_match('/@param\s(?<param>.+)\s\$'.$this->getName().'/', $docType, $matches);
 
-        return $matches['param'] ?? 'mixed';
+        $name = $matches['param'] ?? 'mixed';
+
+        return explode("|", $name);
+    }
+
+    public function getTypeExtended(): ReflectionTypeExtended
+    {
+        return new ReflectionTypeExtended($this->getTypeNames(), $this->getDocTypeNames());
     }
 
     public function getName(): string

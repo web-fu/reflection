@@ -92,12 +92,23 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
     }
 
-    public function getReturnDocTypeName(): string
+    /**
+     * @return string[]
+     */
+    public function getReturnTypeNames(): array
+    {
+        return Reflector::getTypeNames($this->reflectionFunction->getReturnType());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getReturnDocTypeNames(): array
     {
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@return'));
 
         if (!count($docTypes)) {
-            return 'mixed';
+            return ['mixed'];
         }
 
         if (count($docTypes) > 1) {
@@ -108,7 +119,14 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
         preg_match('/@return\s(?<return>.+)/', $docType, $matches);
 
-        return $matches['return'] ?? 'mixed';
+        $name = $matches['return'] ?? 'mixed';
+
+        return explode("|", $name);
+    }
+
+    public function getReturnTypeExtended(): ReflectionTypeExtended
+    {
+        return new ReflectionTypeExtended($this->getReturnTypeNames(), $this->getReturnDocTypeNames());
     }
 
     public function getShortName(): string

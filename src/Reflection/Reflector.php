@@ -62,17 +62,25 @@ class Reflector
 
     public static function createReflectionType(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): ReflectionType
     {
+        return new ReflectionType(self::getTypeNames($type));
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getTypeNames(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): array
+    {
         if (null === $type) {
-            return new ReflectionType(['null']);
+            return ['null'];
         }
 
         if ($type instanceof \ReflectionNamedType) {
-            return new ReflectionType([$type->getName()]);
+            return [$type->getName()];
         }
 
         assert($type instanceof \ReflectionUnionType);
 
-        return new ReflectionType(array_map(fn (\ReflectionNamedType $type): string => $type->getName(), $type->getTypes()));
+        return array_map(fn (\ReflectionNamedType $type): string => $type->getName(), $type->getTypes());
     }
 
     public static function createReflectionProperty(object|string $objectOrClass, string $property): ReflectionProperty
