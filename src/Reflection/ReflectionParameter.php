@@ -108,7 +108,7 @@ class ReflectionParameter extends AbstractReflection
 
         $name = $matches['param'] ?? 'mixed';
 
-        return explode("|", $name);
+        return explode('|', $name);
     }
 
     public function getTypeExtended(): ReflectionTypeExtended

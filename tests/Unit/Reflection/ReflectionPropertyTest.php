@@ -36,7 +36,6 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals(['class-string'], $reflectionProperty->getDocTypeNames());
     }
 
-
     public function testGetTypeExtended(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');

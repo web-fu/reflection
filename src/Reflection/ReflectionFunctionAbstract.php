@@ -121,7 +121,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
         $name = $matches['return'] ?? 'mixed';
 
-        return explode("|", $name);
+        return explode('|', $name);
     }
 
     public function getReturnTypeExtended(): ReflectionTypeExtended

@@ -6,8 +6,27 @@ namespace WebFu\Reflection;
 
 class ReflectionTypeExtended
 {
-    public function __construct(private array $types = [], private array $docBlockTypes = [])
+    /**
+     * @param string[] $typeNames
+     * @param string[] $docBlockTypeNames
+     */
+    public function __construct(private array $typeNames = [], private array $docBlockTypeNames = [])
     {
     }
-}
 
+    /**
+     * @return string[]
+     */
+    public function getTypeNames(): array
+    {
+        return $this->typeNames;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDocBlockTypeNames(): array
+    {
+        return $this->docBlockTypeNames;
+    }
+}

@@ -58,6 +58,8 @@ class ReflectionProperty extends AbstractReflection
         $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
         $docTypes = preg_replace('/@var\s/', '$1', $annotations);
 
+        assert(is_array($docTypes));
+
         if (!count($docTypes)) {
             return ['mixed'];
         }
@@ -66,7 +68,7 @@ class ReflectionProperty extends AbstractReflection
             throw new ReflectionException('Invalid PHPDoc annotation');
         }
 
-        return explode("|", array_pop($docTypes));
+        return explode('|', array_pop($docTypes));
     }
 
     public function getTypeExtended(): ReflectionTypeExtended
