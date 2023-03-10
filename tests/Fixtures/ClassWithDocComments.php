@@ -14,6 +14,7 @@ class ClassWithDocComments
      * @var class-string
      */
     private string $property;
+    private string $noDocComments;
 
     /**
      * @depends-annotations Test
@@ -33,5 +34,9 @@ class ClassWithDocComments
         $this->property = $property;
 
         return $this;
+    }
+
+    public function noDocComments(string $noDocComments): void
+    {
     }
 }

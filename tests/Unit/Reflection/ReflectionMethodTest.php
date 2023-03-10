@@ -74,6 +74,10 @@ class ReflectionMethodTest extends TestCase
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
         $this->assertEquals(['class-string'], $reflectionMethod->getReturnDocTypeNames());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'noDocComments');
+
+        $this->assertEquals([], $reflectionMethod->getReturnDocTypeNames());
     }
 
     public function testGetReturnTypeExtended(): void

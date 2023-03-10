@@ -61,7 +61,7 @@ class ReflectionProperty extends AbstractReflection
         assert(is_array($docTypes));
 
         if (!count($docTypes)) {
-            return ['mixed'];
+            return [];
         }
 
         if (count($docTypes) > 1) {

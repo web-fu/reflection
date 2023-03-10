@@ -95,7 +95,7 @@ class ReflectionParameter extends AbstractReflection
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@param'));
 
         if (!count($docTypes)) {
-            return ['mixed'];
+            return [];
         }
 
         if (count($docTypes) > 1) {
@@ -106,7 +106,7 @@ class ReflectionParameter extends AbstractReflection
 
         preg_match('/@param\s(?<param>.+)\s\$'.$this->getName().'/', $docType, $matches);
 
-        $name = $matches['param'] ?? 'mixed';
+        $name = $matches['param'] ?? '';
 
         return explode('|', $name);
     }

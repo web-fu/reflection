@@ -108,7 +108,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@return'));
 
         if (!count($docTypes)) {
-            return ['mixed'];
+            return [];
         }
 
         if (count($docTypes) > 1) {
@@ -119,7 +119,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
         preg_match('/@return\s(?<return>.+)/', $docType, $matches);
 
-        $name = $matches['return'] ?? 'mixed';
+        $name = $matches['return'] ?? '';
 
         return explode('|', $name);
     }
