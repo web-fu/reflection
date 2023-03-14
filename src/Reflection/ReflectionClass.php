@@ -128,6 +128,9 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->getModifiers();
     }
 
+    /**
+     * @return class-string
+     */
     public function getName(): string
     {
         return $this->reflectionClass->getName();
@@ -226,6 +229,14 @@ class ReflectionClass extends AbstractReflection
     public function getTraits(): array
     {
         return array_map(fn (\ReflectionClass $reflectionClass) => Reflector::createReflectionClass($reflectionClass), $this->reflectionClass->getTraits());
+    }
+
+    /**
+     * @return ReflectionUseStatement[]
+     */
+    public function getUseStatements(): array
+    {
+        return Reflector::createReflectionClassUseStatements($this->getName());
     }
 
     public function hasConstant(string $name): bool

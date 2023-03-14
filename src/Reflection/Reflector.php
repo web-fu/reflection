@@ -14,6 +14,8 @@ class Reflector
     private static array $reflectionProperties = [];
     /** @var array<ReflectionClassConstant[]> */
     private static array $reflectionClassConstants = [];
+    /** @var array<ReflectionUseStatement[]> */
+    private static array $reflectionClassUseStatements = [];
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
@@ -113,5 +115,112 @@ class Reflector
     public static function createReflectionParameter(string|array|object $function, int|string $param): ReflectionParameter
     {
         return new ReflectionParameter($function, $param);
+    }
+
+    /**
+     * @param class-string $className
+     * @return ReflectionUseStatement[]
+     */
+    public static function createReflectionClassUseStatements(string $className): array
+    {
+        if (! isset(self::$reflectionClassUseStatements[$className])) {
+            $class = self::createReflectionClass($className);
+
+            if (! $class->getFileName()) {
+                throw new ReflectionException('Unable to retrieve filename for class ' . $className);
+            }
+
+            $source = file_get_contents($class->getFileName());
+            if (!$source) {
+                throw new ReflectionException('Could not open file ' . $class->getFileName());
+            }
+            $tokens = token_get_all($source);
+
+            $builtNamespace = '';
+            $buildingNamespace = false;
+            $matchedNamespace = false;
+
+            $useStatements = [];
+            $record = false;
+
+            $currentUse = [
+                'class' => '',
+                'as' => '',
+            ];
+
+            foreach ($tokens as $token) {
+                if ($token[0] === T_NAMESPACE) {
+                    $buildingNamespace = true;
+
+                    if ($matchedNamespace) {
+                        break;
+                    }
+                }
+
+                if ($buildingNamespace) {
+                    if ($token === ';') {
+                        $buildingNamespace = false;
+                        continue;
+                    }
+
+                    switch ($token[0]) {
+                        case T_STRING:
+                        case T_NS_SEPARATOR:
+                            $builtNamespace .= $token[1];
+                            break;
+                    }
+
+                    continue;
+                }
+
+                if (!is_array($token)) {
+                    if ($record) {
+                        /** @var class-string $className */
+                        $className = basename($currentUse['class']);
+                        $useStatements[] = new ReflectionUseStatement($className, $currentUse['as']);
+                        $record = false;
+                        $currentUse = [
+                            'class' => '',
+                            'as' => '',
+                        ];
+                    }
+
+                    continue;
+                }
+
+                if ($token[0] === T_CLASS) {
+                    break;
+                }
+
+                if (strcasecmp($builtNamespace, $class->getNamespaceName()) === 0) {
+                    $matchedNamespace = true;
+                }
+
+                if ($token[0] === T_USE) {
+                    $record = 'class';
+                }
+
+                if ($token[0] === T_AS) {
+                    $record = 'as';
+                }
+
+                if ($record) {
+                    switch ($token[0]) {
+                        case T_STRING:
+                        case T_NS_SEPARATOR:
+                            $currentUse[$record] .= $token[1];
+                            break;
+                    }
+                }
+
+                if ($token[2] >= $class->getStartLine()) {
+                    break;
+                }
+            }
+
+            self::$reflectionClassUseStatements[$className] = $useStatements;
+        }
+
+        return self::$reflectionClassUseStatements[$className];
     }
 }

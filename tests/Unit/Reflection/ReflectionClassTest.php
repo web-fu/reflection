@@ -7,10 +7,12 @@ namespace WebFu\Tests\Unit\Reflection;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionException;
+use WebFu\Reflection\ReflectionUseStatement;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithStaticProperties;
+use WebFu\Tests\Fixtures\ClassWithUseStatements;
 
 class ReflectionClassTest extends TestCase
 {
@@ -85,5 +87,13 @@ class ReflectionClassTest extends TestCase
             'protected' => 2,
             'private' => 3,
         ], $reflectionClass->getStaticProperties());
+    }
+
+    public function testGetUseStatements(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithUseStatements::class);
+        $this->assertEquals([
+            new ReflectionUseStatement(\DateTime::class, 'DT'),
+        ], $reflectionClass->getUseStatements());
     }
 }
