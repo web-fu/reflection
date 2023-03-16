@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace WebFu\Tests\Fixtures;
 
+use WebFu\Tests\Fixtures\GenericClass as GC;
+
 /**
  * @template Test
  */
@@ -15,6 +17,9 @@ class ClassWithDocComments
      */
     private string $property;
     private string $noDocComments;
+
+    /** @var GC[] */
+    private array $useStatementDocComment;
 
     /**
      * @depends-annotations Test

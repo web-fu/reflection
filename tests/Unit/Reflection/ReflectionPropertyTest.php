@@ -9,6 +9,7 @@ use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionPropertyTest extends TestCase
 {
@@ -38,6 +39,10 @@ class ReflectionPropertyTest extends TestCase
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'noDocComments');
 
         $this->assertEquals([], $reflectionProperty->getDocTypeNames());
+
+        $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'useStatementDocComment');
+
+        $this->assertEquals([GenericClass::class . '[]'], $reflectionProperty->getDocTypeNames());
     }
 
     public function testGetTypeExtended(): void

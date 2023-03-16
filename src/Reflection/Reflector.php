@@ -6,7 +6,7 @@ namespace WebFu\Reflection;
 
 class Reflector
 {
-    /** @var ReflectionClass[]  */
+    /** @var ReflectionClass[] */
     private static array $reflectionClasses = [];
     /** @var array<ReflectionMethod[]> */
     private static array $reflectionMethods = [];
@@ -16,13 +16,15 @@ class Reflector
     private static array $reflectionClassConstants = [];
     /** @var array<ReflectionUseStatement[]> */
     private static array $reflectionClassUseStatements = [];
+    /** @var array<ReflectionType[]> */
+    private static array $reflectionClassTypesResolved = [];
 
     public static function createReflectionClass(object|string $objectOrClass): ReflectionClass
     {
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (! isset(self::$reflectionClasses[$name])) {
+        if (!isset(self::$reflectionClasses[$name])) {
             self::$reflectionClasses[$name] = new ReflectionClass($name);
         }
 
@@ -50,7 +52,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrMethod);
 
-        if (! isset(self::$reflectionMethods[$name][$method])) {
+        if (!isset(self::$reflectionMethods[$name][$method])) {
             self::$reflectionMethods[$name][$method] = new ReflectionMethod($name, $method);
         }
 
@@ -90,7 +92,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (! isset(self::$reflectionProperties[$name][$property])) {
+        if (!isset(self::$reflectionProperties[$name][$property])) {
             self::$reflectionProperties[$name][$property] = new ReflectionProperty($name, $property);
         }
 
@@ -102,7 +104,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (! isset(self::$reflectionClassConstants[$name][$constant])) {
+        if (!isset(self::$reflectionClassConstants[$name][$constant])) {
             self::$reflectionClassConstants[$name][$constant] = new ReflectionClassConstant($name, $constant);
         }
 
@@ -123,10 +125,10 @@ class Reflector
      */
     public static function createReflectionClassUseStatements(string $className): array
     {
-        if (! isset(self::$reflectionClassUseStatements[$className])) {
+        if (!isset(self::$reflectionClassUseStatements[$className])) {
             $class = self::createReflectionClass($className);
 
-            if (! $class->getFileName()) {
+            if (!$class->getFileName()) {
                 throw new ReflectionException('Unable to retrieve filename for class ' . $className);
             }
 
@@ -134,87 +136,75 @@ class Reflector
             if (!$source) {
                 throw new ReflectionException('Could not open file ' . $class->getFileName());
             }
+
             $tokens = token_get_all($source);
 
             $builtNamespace = '';
-            $buildingNamespace = false;
-            $matchedNamespace = false;
-
             $useStatements = [];
-            $record = false;
-
-            $currentUse = [
-                'class' => '',
-                'as' => '',
-            ];
+            $class = '';
+            $as = '';
+            $buildingNamespace = false;
+            $buildingUse = false;
+            $buildingAs = false;
 
             foreach ($tokens as $token) {
-                if ($token[0] === T_NAMESPACE) {
-                    $buildingNamespace = true;
+                if (is_array($token)) {
+                    if ($token[0] === T_NAMESPACE) {
+                        $buildingNamespace = true;
+                    }
 
-                    if ($matchedNamespace) {
-                        break;
+                    if ($token[0] === T_USE) {
+                        $buildingUse = true;
+                    }
+
+                    if ($token[0] === T_AS) {
+                        $buildingAs = true;
+                    }
+                }
+
+                if ($token === ';') {
+                    $buildingNamespace = false;
+                    $buildingUse = false;
+                    $buildingAs = false;
+
+                    if ($builtNamespace) {
+                        $builtNamespace = trim($builtNamespace);
+                    }
+
+                    if ($class) {
+                        /** @var class-string $class */
+                        $class = trim($class);
+                        $as = $as ? trim($as) : $class;
+                        $useStatements[] = new ReflectionUseStatement($class, $as);
+                        $class = '';
+                        $as = '';
                     }
                 }
 
                 if ($buildingNamespace) {
-                    if ($token === ';') {
-                        $buildingNamespace = false;
+                    if ($token[0] === T_NAMESPACE) {
                         continue;
                     }
 
-                    switch ($token[0]) {
-                        case T_STRING:
-                        case T_NS_SEPARATOR:
-                            $builtNamespace .= $token[1];
-                            break;
-                    }
+                    $builtNamespace .= $token[1];
 
                     continue;
                 }
 
-                if (!is_array($token)) {
-                    if ($record) {
-                        /** @var class-string $className */
-                        $className = basename($currentUse['class']);
-                        $useStatements[] = new ReflectionUseStatement($className, $currentUse['as']);
-                        $record = false;
-                        $currentUse = [
-                            'class' => '',
-                            'as' => '',
-                        ];
+                if ($buildingUse) {
+                    if ($token[0] === T_USE) {
+                        continue;
                     }
 
-                    continue;
-                }
-
-                if ($token[0] === T_CLASS) {
-                    break;
-                }
-
-                if (strcasecmp($builtNamespace, $class->getNamespaceName()) === 0) {
-                    $matchedNamespace = true;
-                }
-
-                if ($token[0] === T_USE) {
-                    $record = 'class';
-                }
-
-                if ($token[0] === T_AS) {
-                    $record = 'as';
-                }
-
-                if ($record) {
-                    switch ($token[0]) {
-                        case T_STRING:
-                        case T_NS_SEPARATOR:
-                            $currentUse[$record] .= $token[1];
-                            break;
+                    if ($token[0] === T_AS) {
+                        continue;
                     }
-                }
 
-                if ($token[2] >= $class->getStartLine()) {
-                    break;
+                    if (! $buildingAs) {
+                        $class .= $token[1];
+                    } else {
+                        $as .= $token[1];
+                    }
                 }
             }
 
@@ -222,5 +212,23 @@ class Reflector
         }
 
         return self::$reflectionClassUseStatements[$className];
+    }
+
+    /**
+     * @param class-string $className
+     */
+    public static function typeResolver(string $className, string $typeName): ReflectionType|null
+    {
+        if (!isset(self::$reflectionClassTypesResolved[$className][$typeName])) {
+            $useStatements = self::createReflectionClassUseStatements($className);
+
+            foreach ($useStatements as $useStatement) {
+                if ($useStatement->getAs() === $typeName) {
+                    self::$reflectionClassTypesResolved[$className][$typeName] = new ReflectionType([$useStatement->getClassName()]);
+                }
+            }
+        }
+
+        return self::$reflectionClassTypesResolved[$className][$typeName] ?? null;
     }
 }

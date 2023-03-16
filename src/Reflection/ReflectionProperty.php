@@ -56,19 +56,46 @@ class ReflectionProperty extends AbstractReflection
     public function getDocTypeNames(): array
     {
         $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
-        $docTypes = preg_replace('/@var\s/', '$1', $annotations);
 
-        assert(is_array($docTypes));
-
-        if (!count($docTypes)) {
+        if (!count($annotations)) {
             return [];
         }
 
-        if (count($docTypes) > 1) {
+        if (count($annotations) > 1) {
             throw new ReflectionException('Invalid PHPDoc annotation');
         }
 
-        return explode('|', array_pop($docTypes));
+        $varAnnotation = array_pop($annotations);
+
+        $docTypes = preg_replace('/@var\s/', '$1', $varAnnotation);
+
+        assert(is_string($docTypes));
+
+        $docTypesList = explode('|', $docTypes);
+        $docTypesListResolved = [];
+
+        foreach ($docTypesList as $docType) {
+            $isArray = false;
+
+            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
+
+            if ($matches) {
+                $docType = $matches['group1'] . $matches['group2'];
+                $isArray = true;
+            }
+
+            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+                $docType = $resolved->getTypeNames()[0];
+            }
+
+            if ($isArray) {
+                $docType .= '[]';
+            }
+
+            $docTypesListResolved[] = $docType;
+        }
+
+        return $docTypesListResolved;
     }
 
     public function getTypeExtended(): ReflectionTypeExtended
