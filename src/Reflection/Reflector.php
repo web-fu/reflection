@@ -24,11 +24,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (!isset(self::$reflectionClasses[$name])) {
-            self::$reflectionClasses[$name] = new ReflectionClass($name);
-        }
-
-        return self::$reflectionClasses[$name];
+        return self::$reflectionClasses[$name] ??= new ReflectionClass($name);
     }
 
     public static function getClassName(object|string $objectOrClass): string
@@ -52,11 +48,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrMethod);
 
-        if (!isset(self::$reflectionMethods[$name][$method])) {
-            self::$reflectionMethods[$name][$method] = new ReflectionMethod($name, $method);
-        }
-
-        return self::$reflectionMethods[$name][$method];
+        return self::$reflectionMethods[$name][$method] ??= new ReflectionMethod($name, $method);
     }
 
     public static function createReflectionFunction(\Closure $closure): ReflectionFunction
@@ -92,11 +84,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (!isset(self::$reflectionProperties[$name][$property])) {
-            self::$reflectionProperties[$name][$property] = new ReflectionProperty($name, $property);
-        }
-
-        return self::$reflectionProperties[$name][$property];
+        return self::$reflectionProperties[$name][$property] ??= new ReflectionProperty($name, $property);
     }
 
     public static function createReflectionClassConstant(object|string $objectOrClass, string $constant): ReflectionClassConstant
@@ -104,11 +92,7 @@ class Reflector
         /** @var class-string $name */
         $name = self::getClassName($objectOrClass);
 
-        if (!isset(self::$reflectionClassConstants[$name][$constant])) {
-            self::$reflectionClassConstants[$name][$constant] = new ReflectionClassConstant($name, $constant);
-        }
-
-        return self::$reflectionClassConstants[$name][$constant];
+        return self::$reflectionClassConstants[$name][$constant] ??= new ReflectionClassConstant($name, $constant);
     }
 
     /**
