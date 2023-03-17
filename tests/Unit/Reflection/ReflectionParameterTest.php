@@ -9,6 +9,7 @@ use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionParameterTest extends TestCase
 {
@@ -37,6 +38,10 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'noDocComments'], 'noDocComments');
 
         $this->assertEquals([], $reflectionParameter->getDocTypeNames());
+
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setUseStatementDocComment'], 'param');
+
+        $this->assertEquals([GenericClass::class . '[]'], $reflectionParameter->getDocTypeNames());
     }
 
     public function testGetTypeExtended(): void

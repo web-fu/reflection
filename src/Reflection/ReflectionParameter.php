@@ -102,13 +102,37 @@ class ReflectionParameter extends AbstractReflection
             throw new ReflectionException('Invalid PHPDoc annotation');
         }
 
-        $docType = array_pop($docTypes);
+        $paramAnnotation = array_pop($docTypes);
 
-        preg_match('/@param\s(?<param>.+)\s\$'.$this->getName().'/', $docType, $matches);
+        preg_match('/@param\s(?<param>.+)\s\$'.$this->getName().'/', $paramAnnotation, $matches);
 
-        $name = $matches['param'] ?? '';
+        $docTypes = $matches['param'] ?? '';
 
-        return explode('|', $name);
+        $docTypesList = explode('|', $docTypes);
+        $docTypesListResolved = [];
+
+        foreach ($docTypesList as $docType) {
+            $isArray = false;
+
+            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
+
+            if ($matches) {
+                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $isArray = true;
+            }
+
+            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+                $docType = $resolved->getTypeNames()[0];
+            }
+
+            if ($isArray) {
+                $docType .= '[]';
+            }
+
+            $docTypesListResolved[] = $docType;
+        }
+
+        return $docTypesListResolved;
     }
 
     public function getTypeExtended(): ReflectionTypeExtended

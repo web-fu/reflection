@@ -49,6 +49,14 @@ class ClassWithDocComments
         return $this->useStatementDocComment;
     }
 
+    /**
+     * @param array<GC> $param
+     */
+    public function setUseStatementDocComment(array $param)
+    {
+        $this->useStatementDocComment = $param;
+    }
+
     public function noDocComments(string $noDocComments): void
     {
     }
