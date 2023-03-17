@@ -9,6 +9,7 @@ use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionParameterTest extends TestCase
@@ -27,6 +28,17 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
 
         $this->assertEquals(new ReflectionType(['string']), $reflectionParameter->getType());
+    }
+
+    public function testGetTypeNames(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithTypes::class, 'methodWithTypedParam'], 'string');
+
+        $this->assertEquals(['string'], $reflectionParameter->getTypeNames());
+
+        $reflectionParameter = new ReflectionParameter([ClassWithTypes::class, 'methodWithoutTypedParam'], 'param');
+
+        $this->assertEquals(['mixed'], $reflectionParameter->getTypeNames());
     }
 
     public function testGetDocTypeName(): void

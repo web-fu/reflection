@@ -67,7 +67,7 @@ class Reflector
     public static function getTypeNames(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): array
     {
         if (null === $type) {
-            return ['null'];
+            return ['mixed'];
         }
 
         if ($type instanceof \ReflectionNamedType) {

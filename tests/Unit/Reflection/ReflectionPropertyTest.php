@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
+use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionPropertyTest extends TestCase
@@ -28,6 +30,21 @@ class ReflectionPropertyTest extends TestCase
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');
 
         $this->assertEquals(new ReflectionType(['string']), $reflectionProperty->getType());
+    }
+
+    public function testGetTypeNames(): void
+    {
+        $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'simple');
+
+        $this->assertEquals(['int'], $reflectionProperty->getTypeNames());
+
+        $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'union');
+
+        $this->assertEquals(['string', 'int'], $reflectionProperty->getTypeNames());
+
+        $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'noType');
+
+        $this->assertEquals(['mixed'], $reflectionProperty->getTypeNames());
     }
 
     public function testGetDocTypeName(): void
