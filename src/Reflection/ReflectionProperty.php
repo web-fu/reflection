@@ -80,7 +80,7 @@ class ReflectionProperty extends AbstractReflection
             preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
 
             if ($matches) {
-                $docType = $matches['group1'] . $matches['group2'];
+                $docType = $matches['group1'] . ($matches['group2'] ?? '');
                 $isArray = true;
             }
 

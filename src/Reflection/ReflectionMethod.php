@@ -57,6 +57,59 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         return Reflector::createReflectionMethod($method->getDeclaringClass(), $method->getName());
     }
 
+    public function getReturnTypeExtended(): ReflectionTypeExtended
+    {
+        return new ReflectionTypeExtended($this->getReturnTypeNames(), $this->getReturnDocTypeNames());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getReturnDocTypeNames(): array
+    {
+        $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@return'));
+
+        if (!count($docTypes)) {
+            return [];
+        }
+
+        if (count($docTypes) > 1) {
+            throw new ReflectionException('Invalid PHPDoc annotation');
+        }
+
+        $returnAnnotation = array_pop($docTypes);
+
+        preg_match('/@return\s(?<return>.+)/', $returnAnnotation, $matches);
+
+        $docTypes = $matches['return'] ?? '';
+
+        $docTypesList = explode('|', $docTypes);
+        $docTypesListResolved = [];
+
+        foreach ($docTypesList as $docType) {
+            $isArray = false;
+
+            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
+
+            if ($matches) {
+                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $isArray = true;
+            }
+
+            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+                $docType = $resolved->getTypeNames()[0];
+            }
+
+            if ($isArray) {
+                $docType .= '[]';
+            }
+
+            $docTypesListResolved[] = $docType;
+        }
+
+        return $docTypesListResolved;
+    }
+
     public function hasPrototype(): bool
     {
         return $this->reflectionFunction->hasReturnType();

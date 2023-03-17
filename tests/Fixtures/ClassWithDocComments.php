@@ -41,6 +41,14 @@ class ClassWithDocComments
         return $this;
     }
 
+    /**
+     * @return array<GC>
+     */
+    public function getUseStatementDocComment()
+    {
+        return $this->useStatementDocComment;
+    }
+
     public function noDocComments(string $noDocComments): void
     {
     }

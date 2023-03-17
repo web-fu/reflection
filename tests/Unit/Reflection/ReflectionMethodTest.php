@@ -10,6 +10,7 @@ use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithMethods;
+use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionMethodTest extends TestCase
 {
@@ -78,6 +79,10 @@ class ReflectionMethodTest extends TestCase
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'noDocComments');
 
         $this->assertEquals([], $reflectionMethod->getReturnDocTypeNames());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getUseStatementDocComment');
+
+        $this->assertEquals([GenericClass::class . '[]'], $reflectionMethod->getReturnDocTypeNames());
     }
 
     public function testGetReturnTypeExtended(): void
