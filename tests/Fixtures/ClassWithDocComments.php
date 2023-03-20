@@ -21,6 +21,8 @@ class ClassWithDocComments
     /** @var GC[] */
     private array $useStatementDocComment;
 
+    private GenericClass $genericClass;
+
     /**
      * @depends-annotations Test
      * @return class-string

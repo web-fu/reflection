@@ -25,6 +25,10 @@ class ReflectorTest extends TestCase
 
         $this->assertEquals(GenericClass::class, $reflectionType?->getTypeNames()[0]);
 
+        $reflectionType = Reflector::typeResolver(ClassWithDocComments::class, 'GenericClass');
+
+        $this->assertEquals(GenericClass::class, $reflectionType?->getTypeNames()[0]);
+
         $reflectionType = Reflector::typeResolver(ClassWithDocComments::class, 'foo');
 
         $this->assertNull($reflectionType);

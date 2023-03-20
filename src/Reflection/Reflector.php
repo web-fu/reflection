@@ -110,15 +110,15 @@ class Reflector
     public static function createReflectionClassUseStatements(string $className): array
     {
         if (!isset(self::$reflectionClassUseStatements[$className])) {
-            $class = self::createReflectionClass($className);
+            $reflectionClass = self::createReflectionClass($className);
 
-            if (!$class->getFileName()) {
+            if (!$reflectionClass->getFileName()) {
                 throw new ReflectionException('Unable to retrieve filename for class ' . $className);
             }
 
-            $source = file_get_contents($class->getFileName());
+            $source = file_get_contents($reflectionClass->getFileName());
             if (!$source) {
-                throw new ReflectionException('Could not open file ' . $class->getFileName());
+                throw new ReflectionException('Could not open file ' . $reflectionClass->getFileName());
             }
 
             $tokens = token_get_all($source);
@@ -203,16 +203,19 @@ class Reflector
      */
     public static function typeResolver(string $className, string $typeName): ReflectionType|null
     {
-        if (!isset(self::$reflectionClassTypesResolved[$className][$typeName])) {
-            $useStatements = self::createReflectionClassUseStatements($className);
+        $reflectionClass = self::createReflectionClass($className);
 
-            foreach ($useStatements as $useStatement) {
-                if ($useStatement->getAs() === $typeName) {
-                    self::$reflectionClassTypesResolved[$className][$typeName] = new ReflectionType([$useStatement->getClassName()]);
-                }
+        foreach ($reflectionClass->getUseStatements() as $useStatement) {
+            if ($useStatement->getAs() === $typeName) {
+                return new ReflectionType([$useStatement->getClassName()]);
             }
         }
 
-        return self::$reflectionClassTypesResolved[$className][$typeName] ?? null;
+        $maybeClass = $reflectionClass->getNamespaceName() . '\\' . $typeName;
+        if (class_exists($maybeClass)) {
+            return new ReflectionType([$maybeClass]);
+        }
+
+        return null;
     }
 }

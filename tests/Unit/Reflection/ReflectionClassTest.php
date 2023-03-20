@@ -13,6 +13,7 @@ use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithStaticProperties;
 use WebFu\Tests\Fixtures\ClassWithUseStatements;
+use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionClassTest extends TestCase
 {
@@ -93,6 +94,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithUseStatements::class);
         $this->assertEquals([
+            new ReflectionUseStatement(GenericClass::class, GenericClass::class),
             new ReflectionUseStatement(\DateTime::class, 'DT'),
         ], $reflectionClass->getUseStatements());
     }
