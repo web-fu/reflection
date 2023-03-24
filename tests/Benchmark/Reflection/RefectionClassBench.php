@@ -11,18 +11,20 @@ use WebFu\Tests\Fixtures\ClassWithDocComments;
 class RefectionClassBench
 {
     /**
-     * @Revs(1000)
+     * @Revs(10000)
      */
     public function benchReflector(): void
     {
-        Reflector::createReflectionClass(ClassWithDocComments::class);
+        $reflectionClass = Reflector::createReflectionClass(ClassWithDocComments::class);
+        $reflectionClass->getUseStatements();
     }
 
     /**
-     * @Revs(1000)
+     * @Revs(10000)
      */
     public function benchConstructor(): void
     {
-        new ReflectionClass(ClassWithDocComments::class);
+        $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
+        $reflectionClass->getUseStatements();
     }
 }
