@@ -57,7 +57,7 @@ class ReflectionClass extends AbstractReflection
             return null;
         }
 
-        return Reflector::createReflectionMethod($constructor->getDeclaringClass(), $constructor->getName());
+        return new ReflectionMethod($constructor->getDeclaringClass(), $constructor->getName());
     }
 
     /**
@@ -106,12 +106,12 @@ class ReflectionClass extends AbstractReflection
      */
     public function getInterfaces(): array
     {
-        return array_map(fn (\ReflectionClass $class) => Reflector::createReflectionClass($class), $this->reflectionClass->getInterfaces());
+        return array_map(fn (\ReflectionClass $class) => new self($class->getName()), $this->reflectionClass->getInterfaces());
     }
 
     public function getMethod(string $name): ReflectionMethod
     {
-        return Reflector::createReflectionMethod($this, $this->reflectionClass->getMethod($name)->getName());
+        return new ReflectionMethod($this->reflectionClass->getName(), $this->reflectionClass->getMethod($name)->getName());
     }
 
     /**
@@ -120,7 +120,7 @@ class ReflectionClass extends AbstractReflection
     public function getMethods(int|null $filter = null): array
     {
         return array_map(fn (\ReflectionMethod $method) =>
-            Reflector::createReflectionMethod($this, $method->getName()), $this->reflectionClass->getMethods($filter));
+            $this->getMethod($method->getName()), $this->reflectionClass->getMethods($filter));
     }
 
     public function getModifiers(): int
@@ -149,7 +149,7 @@ class ReflectionClass extends AbstractReflection
             return null;
         }
 
-        return Reflector::createReflectionClass($parentClass);
+        return new self($parentClass->getName());
     }
 
     /**
@@ -157,7 +157,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getProperties(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionProperty $reflectionProperty) => Reflector::createReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
+        return array_map(fn (\ReflectionProperty $reflectionProperty) => new ReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
     }
 
     public function getProperty(string $name): ReflectionProperty|null
@@ -165,7 +165,7 @@ class ReflectionClass extends AbstractReflection
         if (!$this->reflectionClass->hasProperty($name)) {
             return null;
         }
-        return Reflector::createReflectionProperty($this->reflectionClass->getName(), $name);
+        return new ReflectionProperty($this->reflectionClass->getName(), $name);
     }
 
     public function getReflectionConstant(string $name): ReflectionClassConstant|null
@@ -173,7 +173,7 @@ class ReflectionClass extends AbstractReflection
         if (!$this->reflectionClass->hasConstant($name)) {
             return null;
         }
-        return Reflector::createReflectionClassConstant($this->reflectionClass->getName(), $name);
+        return new ReflectionClassConstant($this->reflectionClass->getName(), $name);
     }
 
     /**
@@ -181,7 +181,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getReflectionConstants(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => Reflector::createReflectionClassConstant($this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
+        return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => new ReflectionClassConstant($this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
     }
 
     public function getShortName(): string
@@ -228,7 +228,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getTraits(): array
     {
-        return array_map(fn (\ReflectionClass $reflectionClass) => Reflector::createReflectionClass($reflectionClass), $this->reflectionClass->getTraits());
+        return array_map(fn (\ReflectionClass $reflectionClass) => new self($reflectionClass->getName()), $this->reflectionClass->getTraits());
     }
 
     /**

@@ -29,7 +29,7 @@ class ReflectionProperty extends AbstractReflection
 
     public function getDeclaringClass(): ReflectionClass
     {
-        return Reflector::createReflectionClass($this->reflectionProperty->getDeclaringClass());
+        return new ReflectionClass($this->reflectionProperty->getDeclaringClass()->getName());
     }
 
     public function getDefaultValue(): mixed

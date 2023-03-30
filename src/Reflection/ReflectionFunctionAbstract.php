@@ -21,7 +21,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         if (!$closureScopeClass = $this->reflectionFunction->getClosureScopeClass()) {
             return null;
         }
-        return Reflector::createReflectionClass($closureScopeClass);
+        return new ReflectionClass($closureScopeClass->getName());
     }
 
     public function getClosureThis(): object|null

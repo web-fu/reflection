@@ -30,7 +30,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
-        return Reflector::createReflectionClass($this->reflectionFunction->getDeclaringClass());
+        return new ReflectionClass($this->reflectionFunction->getDeclaringClass()->getName());
     }
 
     public function getModifiers(): int
@@ -46,7 +46,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     public function getParameters(): array
     {
         $closure = [$this->getDeclaringClass()->getName(), $this->reflectionFunction->getName()];
-        return array_map(fn (\ReflectionParameter $reflectionParameter) => Reflector::createReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
+        return array_map(fn (\ReflectionParameter $reflectionParameter) => new ReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
     }
 
     public function getPrototype(): ReflectionMethod
@@ -54,7 +54,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $method = $this->reflectionFunction->getPrototype();
-        return Reflector::createReflectionMethod($method->getDeclaringClass(), $method->getName());
+        return new ReflectionMethod($method->getDeclaringClass(), $method->getName());
     }
 
     public function getReturnTypeExtended(): ReflectionTypeExtended

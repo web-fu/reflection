@@ -40,14 +40,14 @@ class ReflectionParameter extends AbstractReflection
             return null;
         }
 
-        return Reflector::createReflectionClass($object);
+        return new ReflectionClass($object);
     }
 
     public function getDeclaringFunction(): ReflectionFunctionAbstract
     {
         $method = $this->reflectionParameter->getDeclaringFunction();
         if ($method instanceof \ReflectionMethod) {
-            return Reflector::createReflectionMethod($method->getDeclaringClass(), $method->getName());
+            return new ReflectionMethod($method->getDeclaringClass()->getName(), $method->getName());
         }
 
         $closure = $method->getClosureThis();
@@ -55,7 +55,7 @@ class ReflectionParameter extends AbstractReflection
             throw new ReflectionException('Impossible to get closure');
         }
 
-        return Reflector::createReflectionFunction($closure);
+        return new ReflectionFunction($closure);
     }
 
     public function getDefaultValue(): mixed

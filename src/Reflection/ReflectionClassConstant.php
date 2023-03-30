@@ -29,7 +29,7 @@ class ReflectionClassConstant extends AbstractReflection
 
     public function getDeclaringClass(): ReflectionClass
     {
-        return Reflector::createReflectionClass($this->reflectionClassConstant->getDeclaringClass());
+        return new ReflectionClass($this->reflectionClassConstant->getDeclaringClass()->getName());
     }
 
     public function getDocComment(): string|null

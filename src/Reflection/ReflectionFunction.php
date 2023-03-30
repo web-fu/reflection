@@ -44,7 +44,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function getParameters(): array
     {
-        return []; //TODO
+        return array_map(fn (\ReflectionParameter $reflectionParameter): ReflectionParameter => new ReflectionParameter($reflectionParameter->getDeclaringFunction()->getName(), $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
     }
 
     public function __toString(): string

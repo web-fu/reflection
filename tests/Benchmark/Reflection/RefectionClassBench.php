@@ -13,15 +13,6 @@ class RefectionClassBench
     /**
      * @Revs(10000)
      */
-    public function benchReflector(): void
-    {
-        $reflectionClass = Reflector::createReflectionClass(ClassWithDocComments::class);
-        $reflectionClass->getUseStatements();
-    }
-
-    /**
-     * @Revs(10000)
-     */
     public function benchConstructor(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
