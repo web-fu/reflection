@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
-use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;

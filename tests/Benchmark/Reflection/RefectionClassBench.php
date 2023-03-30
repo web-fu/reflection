@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebFu\Tests\Benchmark\Reflection;
 
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\Reflector;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 
 class RefectionClassBench

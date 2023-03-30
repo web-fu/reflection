@@ -11,7 +11,6 @@ use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
-use WebFu\Tests\Fixtures\ClassInvokable;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
@@ -84,6 +83,12 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setUseStatementDocComment'], 'param');
 
         $this->assertEquals([GenericClass::class . '[]'], $reflectionParameter->getDocTypeNames());
+
+        require_once __DIR__ . '/../../Fixtures/example.php';
+
+        $reflectionParameter = new ReflectionParameter('example', 'param');
+
+        $this->assertEquals(['class-string'], $reflectionParameter->getDocTypeNames());
     }
 
     public function testGetTypeExtended(): void

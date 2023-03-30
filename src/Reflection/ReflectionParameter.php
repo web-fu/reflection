@@ -8,7 +8,7 @@ class ReflectionParameter extends AbstractReflection
 {
     private \ReflectionParameter $reflectionParameter;
     private ReflectionClass|null $declaringClass = null;
-    private ReflectionFunctionAbstract|null $declaringFunction = null;
+    private ReflectionFunctionAbstract $declaringFunction;
 
     /**
      * @param string|string[]|object $functionOrMethod
@@ -18,6 +18,7 @@ class ReflectionParameter extends AbstractReflection
         $this->reflectionParameter = new \ReflectionParameter($functionOrMethod, $param);
 
         if (is_array($functionOrMethod)) {
+            /** @var class-string $className */
             list($className, $methodName) = $functionOrMethod;
             $this->declaringClass = new ReflectionClass($className);
             $this->declaringFunction = new ReflectionMethod($className, $methodName);
@@ -51,7 +52,7 @@ class ReflectionParameter extends AbstractReflection
         return $this->declaringClass;
     }
 
-    public function getDeclaringFunction(): ReflectionFunctionAbstract|null
+    public function getDeclaringFunction(): ReflectionFunctionAbstract
     {
         return $this->declaringFunction;
     }
@@ -119,7 +120,10 @@ class ReflectionParameter extends AbstractReflection
                 $isArray = true;
             }
 
-            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+            if (
+                $this->getDeclaringClass()
+                && $resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)
+            ) {
                 $docType = $resolved->getTypeNames()[0];
             }
 
