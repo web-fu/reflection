@@ -7,13 +7,25 @@ namespace WebFu\Reflection;
 class ReflectionParameter extends AbstractReflection
 {
     private \ReflectionParameter $reflectionParameter;
+    private ReflectionClass|null $declaringClass = null;
+    private ReflectionFunctionAbstract|null $declaringFunction = null;
 
     /**
-     * @param string|string[]|object $function
+     * @param string|string[]|object $functionOrMethod
      */
-    public function __construct(string|array|object $function, int|string $param)
+    public function __construct(string|array|object $functionOrMethod, int|string $param)
     {
-        $this->reflectionParameter = new \ReflectionParameter($function, $param);
+        $this->reflectionParameter = new \ReflectionParameter($functionOrMethod, $param);
+
+        if (is_array($functionOrMethod)) {
+            list($className, $methodName) = $functionOrMethod;
+            $this->declaringClass = new ReflectionClass($className);
+            $this->declaringFunction = new ReflectionMethod($className, $methodName);
+        }
+
+        if (is_string($functionOrMethod) && function_exists($functionOrMethod)) {
+            $this->declaringFunction = new ReflectionFunction($functionOrMethod);
+        }
     }
 
     public function allowsNull(): bool
@@ -36,26 +48,12 @@ class ReflectionParameter extends AbstractReflection
 
     public function getDeclaringClass(): ReflectionClass|null
     {
-        if (!$object = $this->reflectionParameter->getDeclaringClass()) {
-            return null;
-        }
-
-        return new ReflectionClass($object);
+        return $this->declaringClass;
     }
 
-    public function getDeclaringFunction(): ReflectionFunctionAbstract
+    public function getDeclaringFunction(): ReflectionFunctionAbstract|null
     {
-        $method = $this->reflectionParameter->getDeclaringFunction();
-        if ($method instanceof \ReflectionMethod) {
-            return new ReflectionMethod($method->getDeclaringClass()->getName(), $method->getName());
-        }
-
-        $closure = $method->getClosureThis();
-        if (!$closure instanceof \Closure) {
-            throw new ReflectionException('Impossible to get closure');
-        }
-
-        return new ReflectionFunction($closure);
+        return $this->declaringFunction;
     }
 
     public function getDefaultValue(): mixed
