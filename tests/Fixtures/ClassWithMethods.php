@@ -6,6 +6,10 @@ namespace WebFu\Tests\Fixtures;
 
 class ClassWithMethods
 {
+    public function __construct()
+    {
+    }
+
     public function methodWithoutParameters(): void
     {
     }

@@ -9,6 +9,6 @@ use DateTime as DT;
 
 class ClassWithUseStatements
 {
-    private DT $dateTime;
-    private GenericClass $genericClass;
+    public DT $dateTime;
+    public GenericClass $genericClass;
 }
