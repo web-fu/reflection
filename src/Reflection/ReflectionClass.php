@@ -16,11 +16,6 @@ class ReflectionClass extends AbstractReflection
         $this->reflectionClass = new \ReflectionClass($objectOrClass);
     }
 
-    public function getNativeReflectionClass(): \ReflectionClass
-    {
-        return $this->reflectionClass;
-    }
-
     /**
      * @return \ReflectionAttribute[]
      */
@@ -53,15 +48,15 @@ class ReflectionClass extends AbstractReflection
 
     public function getConstructor(): ReflectionMethod|null
     {
-        if (! $constructor = $this->reflectionClass->getConstructor()) {
+        if (! $this->reflectionClass->getConstructor()) {
             return null;
         }
 
-        return new ReflectionMethod($constructor->getDeclaringClass(), $constructor->getName());
+        return new ReflectionMethod($this->getName(), '__construct');
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getDefaultProperties(): array
     {
@@ -102,7 +97,7 @@ class ReflectionClass extends AbstractReflection
     }
 
     /**
-     * @return self[]
+     * @return array<string, self>
      */
     public function getInterfaces(): array
     {
@@ -195,7 +190,7 @@ class ReflectionClass extends AbstractReflection
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, mixed>
      */
     public function getStaticProperties(): ?array
     {
@@ -204,11 +199,15 @@ class ReflectionClass extends AbstractReflection
 
     public function getStaticPropertyValue(string $propertyName, mixed $default = null): mixed
     {
+        if (!$this->hasProperty($propertyName)) {
+            throw new ReflectionException('Undefined property name: ' . $propertyName);
+        }
+
         return $this->reflectionClass->getStaticPropertyValue($propertyName, $default);
     }
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     public function getTraitAliases(): array
     {
@@ -319,13 +318,11 @@ class ReflectionClass extends AbstractReflection
         return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isReadOnly();
     }
 
-    public function isSubclassOf(self|string $objectOrClass): bool
+    public function isSubclassOf(object|string $objectOrClass): bool
     {
-        if ($objectOrClass instanceof self) {
-            return $this->reflectionClass->isSubclassOf($objectOrClass->getNativeReflectionClass());
-        }
+        $reflection = new self($objectOrClass);
 
-        return $this->reflectionClass->isSubclassOf($objectOrClass);
+        return $this->reflectionClass->isSubclassOf($reflection->getName());
     }
 
     public function isTrait(): bool
