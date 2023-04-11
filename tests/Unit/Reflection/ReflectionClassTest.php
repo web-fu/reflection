@@ -10,17 +10,20 @@ use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionUseStatement;
-use WebFu\Tests\Fixtures\ChildClass;
+use WebFu\Tests\Fixtures\ClassFinal;
+use WebFu\Tests\Fixtures\ClassNonClonable;
+use WebFu\Tests\Fixtures\ClassReadonly;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\ClassWithInterfaces;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\ClassWithProperties;
 use WebFu\Tests\Fixtures\ClassWithUseStatements;
 use WebFu\Tests\Fixtures\GenericClass;
 use WebFu\Tests\Fixtures\GenericInterface;
 use WebFu\Tests\Fixtures\GenericTrait;
-use WebFu\Tests\Fixtures\ParentClass;
+use WebFu\Tests\Fixtures\AbstractClass;
 
 class ReflectionClassTest extends TestCase
 {
@@ -199,7 +202,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertEquals(0, $reflectionClass->getModifiers());
 
-        $reflectionClass = new ReflectionClass(ParentClass::class);
+        $reflectionClass = new ReflectionClass(AbstractClass::class);
 
         $this->assertEquals(\ReflectionClass::IS_EXPLICIT_ABSTRACT, $reflectionClass->getModifiers());
     }
@@ -224,9 +227,9 @@ class ReflectionClassTest extends TestCase
 
         $this->assertNull($reflectionClass->getParentClass());
 
-        $reflectionClass = new ReflectionClass(ChildClass::class);
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
 
-        $this->assertEquals(new ReflectionClass(ParentClass::class), $reflectionClass->getParentClass());
+        $this->assertEquals(new ReflectionClass(AbstractClass::class), $reflectionClass->getParentClass());
     }
 
     public function testGetProperties(): void
@@ -316,7 +319,7 @@ class ReflectionClassTest extends TestCase
 
     public function testGetTraitAliases(): void
     {
-        $reflectionClass = new ReflectionClass(ChildClass::class);
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
 
         $this->assertEquals(
             [
@@ -326,7 +329,7 @@ class ReflectionClassTest extends TestCase
 
     public function testGetTraitNames(): void
     {
-        $reflectionClass = new ReflectionClass(ChildClass::class);
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
 
         $this->assertEquals([
             GenericTrait::class,
@@ -335,7 +338,7 @@ class ReflectionClassTest extends TestCase
 
     public function testGetTraits(): void
     {
-        $reflectionClass = new ReflectionClass(ChildClass::class);
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
 
         $this->assertEquals([
             GenericTrait::class => new ReflectionClass(GenericTrait::class),
@@ -365,5 +368,178 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->hasProperty('public'));
         $this->assertFalse($reflectionClass->hasProperty('doesNotExist'));
+    }
+
+    public function testImplementsInterface(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithInterfaces::class);
+
+        $this->assertTrue($reflectionClass->implementsInterface(GenericInterface::class));
+    }
+
+    public function testInNamespace(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->inNamespace());
+    }
+
+    public function testIsAbstract(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isAbstract());
+
+        $reflectionClass = new ReflectionClass(AbstractClass::class);
+
+        $this->assertTrue($reflectionClass->isAbstract());
+    }
+
+    public function testIsCloneable(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->isCloneable());
+
+        $reflectionClass = new ReflectionClass(ClassNonClonable::class);
+
+        $this->assertFalse($reflectionClass->isCloneable());
+    }
+
+    public function testIsFinal(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isFinal());
+
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
+
+        $this->assertTrue($reflectionClass->isFinal());
+    }
+
+    public function testIsInstance(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->isInstance(new GenericClass()));
+        $this->assertFalse($reflectionClass->isInstance(new \stdClass()));
+    }
+
+    public function testIsInstantiable(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->isInstantiable());
+
+        $reflectionClass = new ReflectionClass(AbstractClass::class);
+
+        $this->assertFalse($reflectionClass->isInstantiable());
+    }
+
+    public function testIsInterface(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isInterface());
+
+        $reflectionClass = new ReflectionClass(GenericInterface::class);
+
+        $this->assertTrue($reflectionClass->isInterface());
+    }
+
+    public function testIsInternal(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isInternal());
+
+        $reflectionClass = new ReflectionClass(\DateTime::class);
+
+        $this->assertTrue($reflectionClass->isInternal());
+    }
+
+    public function testIsIterable(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isIterable());
+
+        $reflectionClass = new ReflectionClass(\ArrayObject::class);
+
+        $this->assertTrue($reflectionClass->isIterable());
+    }
+
+    public function testIsReadonly(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isReadonly());
+
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Readonly is only available in PHP 8.2+');
+        }
+
+        $reflectionClass = new ReflectionClass(ClassReadonly::class);
+
+        $this->assertTrue($reflectionClass->isReadonly());
+    }
+
+    public function testIsSubclassOf(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassFinal::class);
+
+        $this->assertTrue($reflectionClass->isSubclassOf(AbstractClass::class));
+        $this->assertFalse($reflectionClass->isSubclassOf(\DateTime::class));
+    }
+
+    public function testIsTrait(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isTrait());
+
+        $reflectionClass = new ReflectionClass(GenericTrait::class);
+
+        $this->assertTrue($reflectionClass->isTrait());
+    }
+
+    public function testIsUserDefined(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->isUserDefined());
+
+        $reflectionClass = new ReflectionClass(\DateTime::class);
+
+        $this->assertFalse($reflectionClass->isUserDefined());
+    }
+
+    public function testNewInstance(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertInstanceOf(GenericClass::class, $reflectionClass->newInstance());
+    }
+
+    public function testNewInstanceArgs(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithMethods::class);
+
+        $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceArgs([1, 'foo']));
+    }
+
+    public function testNewInstanceWithoutConstructor(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithMethods::class);
+
+        $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceWithoutConstructor());
+    }
+
+    public function testSetStaticPropertyValue(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $reflectionClass->setStaticPropertyValue('staticPublic', 2);
+        $this->assertEquals(2, ClassWithProperties::$staticPublic);
     }
 }

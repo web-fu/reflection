@@ -253,9 +253,11 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->hasProperty($name);
     }
 
-    public function implementsInterface(\ReflectionClass|string $interface): bool
+    public function implementsInterface(object|string $objectOrClass): bool
     {
-        return $this->reflectionClass->implementsInterface($interface);
+        $reflection = new self($objectOrClass);
+
+        return $this->reflectionClass->implementsInterface($reflection->getName());
     }
 
     public function inNamespace(): bool

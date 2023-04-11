@@ -6,7 +6,7 @@ namespace WebFu\Tests\Fixtures;
 
 class ClassWithMethods
 {
-    public function __construct()
+    public function __construct(int $param1, string $param2 = 'string')
     {
     }
 
