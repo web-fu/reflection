@@ -168,6 +168,7 @@ class ReflectionClass extends AbstractReflection
         if (!$this->reflectionClass->hasConstant($name)) {
             return null;
         }
+
         return new ReflectionClassConstant($this->reflectionClass->getName(), $name);
     }
 

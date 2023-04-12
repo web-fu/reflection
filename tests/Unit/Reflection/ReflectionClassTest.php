@@ -20,6 +20,7 @@ use WebFu\Tests\Fixtures\ClassWithInterfaces;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\ClassWithProperties;
 use WebFu\Tests\Fixtures\ClassWithUseStatements;
+use WebFu\Tests\Fixtures\EnumClass;
 use WebFu\Tests\Fixtures\GenericClass;
 use WebFu\Tests\Fixtures\GenericInterface;
 use WebFu\Tests\Fixtures\GenericTrait;
@@ -95,6 +96,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
 
         $this->assertEquals(new ReflectionMethod(ClassWithMethods::class, '__construct'), $reflectionClass->getConstructor());
+
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertNull($reflectionClass->getConstructor());
     }
 
     public function testGetDefaultProperties(): void
@@ -362,6 +367,16 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasConstant('DOES_NOT_EXIST'));
     }
 
+    public function testHasMethod(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithMethods::class);
+
+        $this->assertTrue($reflectionClass->hasMethod('public'));
+        $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
+    }
+
+
+
     public function testHasProperty(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -395,6 +410,17 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isAbstract());
     }
 
+    public function testIsAnonymous(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isAnonymous());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertTrue($reflectionClass->isAnonymous());
+    }
+
     public function testIsCloneable(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -404,6 +430,21 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassNonClonable::class);
 
         $this->assertFalse($reflectionClass->isCloneable());
+    }
+
+    public function testIsEnum(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->isEnum());
+
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Enum is only available in PHP 8.1+');
+        }
+
+        $reflectionClass = new ReflectionClass(EnumClass::class);
+
+        $this->assertTrue($reflectionClass->isEnum());
     }
 
     public function testIsFinal(): void
