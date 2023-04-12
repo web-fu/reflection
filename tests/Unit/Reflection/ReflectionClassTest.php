@@ -88,6 +88,8 @@ class ReflectionClassTest extends TestCase
             'PUBLIC' => 1,
             'PROTECTED' => 2,
             'PRIVATE' => 3,
+            'PUBLIC_WITH_ATTRIBUTE' => 4,
+            'PUBLIC_WITH_DOC_COMMENT' => 5,
         ], $reflectionClass->getConstants());
     }
 
@@ -371,7 +373,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
 
-        $this->assertTrue($reflectionClass->hasMethod('public'));
+        $this->assertTrue($reflectionClass->hasMethod('methodWithoutParameters'));
         $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
     }
 
