@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
+use WebFu\Tests\Fixtures\AbstractClass;
+use WebFu\Tests\Fixtures\ClassFinal;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\GenericClass;
@@ -90,5 +92,117 @@ class ReflectionMethodTest extends TestCase
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
         $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionMethod->getReturnTypeExtended());
+    }
+
+    public function testGetPrototype(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassFinal::class, 'publicFunction');
+
+        $this->assertEquals(new ReflectionMethod(AbstractClass::class, 'publicFunction'), $reflectionMethod->getPrototype());
+    }
+
+    public function testHasPrototype(): void
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('PHP 8.2+ only');
+        }
+
+        $reflectionMethod = new ReflectionMethod(ClassFinal::class, 'publicFunction');
+        $this->assertTrue($reflectionMethod->hasPrototype());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->hasPrototype());
+    }
+
+    public function testInvoke(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithAllMandatoryParameters');
+
+        $this->assertEquals([
+            'param1' => 1,
+            'param2' => 'string',
+        ], $reflectionMethod->invoke(new ClassWithMethods(), 1, 'string'));
+    }
+
+    public function testInvokeArgs(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithAllMandatoryParameters');
+
+        $this->assertEquals([
+            'param1' => 1,
+            'param2' => 'string',
+        ], $reflectionMethod->invokeArgs(new ClassWithMethods(), [1, 'string']));
+    }
+
+    public function testIsAbstract(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isAbstract());
+
+        $reflectionMethod = new ReflectionMethod(AbstractClass::class, 'publicFunction');
+        $this->assertTrue($reflectionMethod->isAbstract());
+    }
+
+    public function testIsConstructor(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isConstructor());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, '__construct');
+        $this->assertTrue($reflectionMethod->isConstructor());
+    }
+
+    public function testIsDestructor(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isDestructor());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, '__destruct');
+        $this->assertTrue($reflectionMethod->isDestructor());
+    }
+
+    public function testIsFinal(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isFinal());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'finalMethod');
+        $this->assertTrue($reflectionMethod->isFinal());
+    }
+
+    public function testIsPrivate(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isPrivate());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'privateMethod');
+        $this->assertTrue($reflectionMethod->isPrivate());
+    }
+
+    public function testIsProtected(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isProtected());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'protectedMethod');
+        $this->assertTrue($reflectionMethod->isProtected());
+    }
+
+    public function testIsPublic(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertTrue($reflectionMethod->isPublic());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'privateMethod');
+        $this->assertFalse($reflectionMethod->isPublic());
+    }
+
+    public function testMethodIsStatic(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $this->assertFalse($reflectionMethod->isStatic());
+
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'staticMethod');
+        $this->assertTrue($reflectionMethod->isStatic());
     }
 }

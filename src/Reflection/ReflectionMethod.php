@@ -54,7 +54,8 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $method = $this->reflectionFunction->getPrototype();
-        return new ReflectionMethod($method->getDeclaringClass(), $method->getName());
+
+        return new ReflectionMethod($method->getDeclaringClass()->getName(), $method->getName());
     }
 
     public function getReturnTypeExtended(): ReflectionTypeExtended
@@ -112,7 +113,11 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function hasPrototype(): bool
     {
-        return $this->reflectionFunction->hasReturnType();
+        if (PHP_VERSION_ID < 80200) {
+            return false;
+        }
+
+        return $this->reflectionFunction->hasPropotype();
     }
 
     public function invoke(object|null $object, mixed ...$args): mixed
@@ -129,7 +134,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
-        return $this->reflectionFunction->invoke($object, $args);
+        return $this->reflectionFunction->invokeArgs($object, $args);
     }
 
     public function isAbstract(): bool

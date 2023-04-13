@@ -200,6 +200,11 @@ class ReflectionClassTest extends TestCase
             new ReflectionMethod(ClassWithMethods::class, 'methodWithAllMandatoryParameters'),
             new ReflectionMethod(ClassWithMethods::class, 'methodWithAllDefaultParameters'),
             new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters'),
+            new ReflectionMethod(ClassWithMethods::class, 'protectedMethod'),
+            new ReflectionMethod(ClassWithMethods::class, 'privateMethod'),
+            new ReflectionMethod(ClassWithMethods::class, 'staticMethod'),
+            new ReflectionMethod(ClassWithMethods::class, 'finalMethod'),
+            new ReflectionMethod(ClassWithMethods::class, '__destruct'),
         ], $reflectionClass->getMethods());
     }
 

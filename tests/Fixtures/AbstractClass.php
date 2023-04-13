@@ -6,4 +6,5 @@ namespace WebFu\Tests\Fixtures;
 
 abstract class AbstractClass
 {
+    abstract public function publicFunction(): void;
 }
