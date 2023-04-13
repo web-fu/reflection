@@ -17,6 +17,11 @@ use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionParameterTest extends TestCase
 {
+    public function setUp(): void
+    {
+        require_once __DIR__ . '/../../Fixtures/example.php';
+    }
+
     public function testGetAnnotation(): void
     {
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
@@ -32,8 +37,6 @@ class ReflectionParameterTest extends TestCase
 
         $this->assertEquals(new ReflectionClass(ClassWithDocComments::class), $reflectionParameter->getDeclaringClass());
 
-        require_once __DIR__ . '/../../Fixtures/example.php';
-
         $reflectionParameter = new ReflectionParameter('example', 'param');
 
         $this->assertNull($reflectionParameter->getDeclaringClass());
@@ -41,8 +44,6 @@ class ReflectionParameterTest extends TestCase
 
     public function testGetDeclaringFunction(): void
     {
-        require_once __DIR__ . '/../../Fixtures/example.php';
-
         $reflectionParameter = new ReflectionParameter('example', 'param');
 
         $this->assertEquals(new ReflectionFunction('example'), $reflectionParameter->getDeclaringFunction());
@@ -83,8 +84,6 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setUseStatementDocComment'], 'param');
 
         $this->assertEquals([GenericClass::class . '[]'], $reflectionParameter->getDocTypeNames());
-
-        require_once __DIR__ . '/../../Fixtures/example.php';
 
         $reflectionParameter = new ReflectionParameter('example', 'param');
 
