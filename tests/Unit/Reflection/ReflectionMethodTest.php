@@ -16,6 +16,177 @@ use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionMethodTest extends TestCase
 {
+    public function testGetAttributes(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
+
+        $this->assertEquals([], $reflectionMethod->getAttributes());
+    }
+
+    public function testGetClosureScopeClass(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
+
+        $this->assertEquals(null, $reflectionMethod->getClosureScopeClass());
+    }
+
+    public function testGetClosureThis(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
+
+        $this->assertEquals(null, $reflectionMethod->getClosureThis());
+    }
+
+    public function testGetClosureUsedVariables(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
+
+        $this->assertEquals([], $reflectionMethod->getClosureUsedVariables());
+    }
+
+    public function testGetDocComment(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals('/**
+     * @depends-annotations Test
+     * @return class-string
+     */', $reflectionMethod->getDocComment());
+    }
+
+    public function testGetEndLine(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(33, $reflectionMethod->getEndLine());
+    }
+
+    public function testGetExtension(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(null, $reflectionMethod->getExtension());
+    }
+
+    public function testGetExtensionName(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(null, $reflectionMethod->getExtensionName());
+    }
+
+    public function testGetFileName(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals('/app/reflection/tests/Fixtures/ClassWithDocComments.php', $reflectionMethod->getFileName());
+    }
+
+    public function testGetName(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals('getProperty', $reflectionMethod->getName());
+    }
+
+    public function testGetNamespaceName(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals('', $reflectionMethod->getNamespaceName());
+    }
+
+    public function getShortName(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals('getProperty', $reflectionMethod->getShortName());
+    }
+
+    public function testGetStartLine(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(30, $reflectionMethod->getStartLine());
+    }
+
+    public function testGetStaticVariables(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals([], $reflectionMethod->getStaticVariables());
+    }
+
+    public function testGetTentativeReturnType(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(null, $reflectionMethod->getTentativeReturnType());
+    }
+
+    public function testHasReturnType(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(true, $reflectionMethod->hasReturnType());
+    }
+
+    public function testInNameSpace(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertFalse($reflectionMethod->inNamespace());
+    }
+
+    public function testIsClosure(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->isClosure());
+    }
+
+    public function testIsDeprecated(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->isDeprecated());
+    }
+
+    public function testIsGenerator(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->isGenerator());
+    }
+
+    public function testIsInternal(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->isInternal());
+    }
+
+    public function testIsUserDefined(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(true, $reflectionMethod->isUserDefined());
+    }
+
+    public function testIsVariadic(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->isVariadic());
+    }
+
+    public function testReturnsReference(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
+
+        $this->assertEquals(false, $reflectionMethod->returnsReference());
+    }
+
     public function testGetAnnotation(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
