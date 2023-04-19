@@ -6,6 +6,8 @@ namespace WebFu\Tests\Fixtures;
 
 class ClassWithMethods
 {
+    public const PARAM1 = 1;
+
     public function __construct(int $param1 = 1, string $param2 = 'string')
     {
     }
@@ -22,7 +24,7 @@ class ClassWithMethods
         ];
     }
 
-    public function methodWithAllDefaultParameters(int $param1 = 1, string $param2 = 'string'): void
+    public function methodWithAllDefaultParameters(int $param1 = self::PARAM1, string $param2 = 'string'): void
     {
     }
 
