@@ -40,16 +40,16 @@ class ClassWithMethods
     {
     }
 
-    static function staticMethod(): void
+    public static function staticMethod(): void
     {
     }
 
-    final function finalMethod(): void
+    final public function finalMethod(): void
     {
     }
 
     public function __destruct()
     {
-        echo "Called __destruct()";
+        echo 'Called __destruct()';
     }
 }

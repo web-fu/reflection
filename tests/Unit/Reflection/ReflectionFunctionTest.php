@@ -47,7 +47,7 @@ class ReflectionFunctionTest extends TestCase
     {
         $reflectionFunction = new ReflectionFunction('example');
 
-        $this->assertEquals("/** @param class-string \$param */", $reflectionFunction->getDocComment());
+        $this->assertEquals('/** @param class-string $param */', $reflectionFunction->getDocComment());
     }
 
     public function testGetEndLine(): void
@@ -186,6 +186,8 @@ class ReflectionFunctionTest extends TestCase
     public function testGetClosure(): void
     {
         $reflectionFunction = new ReflectionFunction('example');
+
+        assert($reflectionFunction->getClosure() instanceof \Closure);
 
         $this->assertEquals('example', $reflectionFunction->getClosure()->__invoke('example'));
     }

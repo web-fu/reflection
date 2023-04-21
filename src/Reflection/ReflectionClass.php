@@ -254,6 +254,9 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->hasProperty($name);
     }
 
+    /**
+     * @param object|class-string $objectOrClass
+     */
     public function implementsInterface(object|string $objectOrClass): bool
     {
         $reflection = new self($objectOrClass);
@@ -321,6 +324,9 @@ class ReflectionClass extends AbstractReflection
         return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isReadOnly();
     }
 
+    /**
+     * @param object|class-string $objectOrClass
+     */
     public function isSubclassOf(object|string $objectOrClass): bool
     {
         $reflection = new self($objectOrClass);

@@ -6,6 +6,7 @@ namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
+use WebFu\Reflection\ReflectionClassConstant;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionProperty;
@@ -270,6 +271,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals($expected, $reflectionClass->getProperty($name));
     }
 
+    /**
+     * @return iterable<array{name:string, expected:ReflectionProperty|null}>
+     */
     public function propertyProvider(): iterable
     {
         yield ['name' => 'public', 'expected' => new ReflectionProperty(ClassWithProperties::class, 'public')];
@@ -282,15 +286,25 @@ class ReflectionClassTest extends TestCase
         yield ['name' => 'iDoNotExist', 'expected' => null];
     }
 
-    public function testGetReflectionConstant(): void
+    /**
+     * @dataProvider reflectionConstantProvider
+     */
+    public function testGetReflectionConstant(string $name, ReflectionClassConstant|null $expected): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
 
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-
         $this->assertEquals($expected, $reflectionClass->getReflectionConstant($name));
+    }
+
+    /**
+     * @return iterable<array{name: string, expected: ReflectionClassConstant|null}>
+     */
+    public function reflectionConstantProvider(): iterable
+    {
+        yield ['name' => 'PUBLIC', 'expected' => new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC')];
+        yield ['name' => 'PROTECTED', 'expected' => new ReflectionClassConstant(ClassWithConstants::class, 'PROTECTED')];
+        yield ['name' => 'PRIVATE', 'expected' => new ReflectionClassConstant(ClassWithConstants::class, 'PRIVATE')];
+        yield ['name' => 'iDoNotExist', 'expected' => null];
     }
 
     public function testGetReflectionConstants(): void
@@ -339,7 +353,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(
             [
             'traitFunction' => GenericTrait::class . '::publicTraitFunction',
-        ], $reflectionClass->getTraitAliases());
+        ],
+            $reflectionClass->getTraitAliases()
+        );
     }
 
     public function testGetTraitNames(): void
@@ -385,8 +401,6 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
     }
 
-
-
     public function testHasProperty(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -426,7 +440,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertFalse($reflectionClass->isAnonymous());
 
-        $reflectionClass = new ReflectionClass(new class() {});
+        $reflectionClass = new ReflectionClass(new class () {});
 
         $this->assertTrue($reflectionClass->isAnonymous());
     }

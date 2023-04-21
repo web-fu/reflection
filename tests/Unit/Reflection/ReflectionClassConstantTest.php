@@ -93,7 +93,7 @@ class ReflectionClassConstantTest extends TestCase
 
         $this->assertTrue($reflectionClassConstant->isEnumCase());
     }
-    
+
     public function testIsFinal(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
