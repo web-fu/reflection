@@ -256,6 +256,9 @@ class ReflectionClassTest extends TestCase
             new ReflectionProperty(ClassWithProperties::class, 'staticPublic'),
             new ReflectionProperty(ClassWithProperties::class, 'staticProtected'),
             new ReflectionProperty(ClassWithProperties::class, 'staticPrivate'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPropertyWithoutDefault'),
+            new ReflectionProperty(ClassWithProperties::class, 'propertyWithAttribute'),
+            new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment'),
         ], $reflectionClass->getProperties());
     }
 
