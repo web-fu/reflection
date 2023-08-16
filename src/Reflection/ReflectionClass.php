@@ -321,7 +321,7 @@ class ReflectionClass extends AbstractReflection
 
     public function isReadOnly(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isReadOnly();
+        return PHP_VERSION_ID >= 80200 && $this->reflectionClass->isReadOnly();
     }
 
     /**

@@ -79,7 +79,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals('/app/reflection/tests/Fixtures/ClassWithDocComments.php', $reflectionMethod->getFileName());
+        $this->assertStringContainsString('reflection/tests/Fixtures/ClassWithDocComments.php', $reflectionMethod->getFileName());
     }
 
     public function testGetName(): void

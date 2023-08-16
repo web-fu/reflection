@@ -39,7 +39,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
     {
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
-        return PHP_VERSION_ID >= 80100 && $this->reflectionFunction->isAnonymous();
+        return PHP_VERSION_ID >= 80200 && $this->reflectionFunction->isAnonymous();
     }
 
     public function getParameters(): array

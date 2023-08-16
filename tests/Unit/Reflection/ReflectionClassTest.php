@@ -163,7 +163,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
-        $this->assertEquals('/app/reflection/tests/Fixtures/GenericClass.php', $reflectionClass->getFileName());
+        $this->assertStringContainsString('reflection/tests/Fixtures/GenericClass.php', $reflectionClass->getFileName());
 
         $reflectionClass = new ReflectionClass(\DateTime::class);
 

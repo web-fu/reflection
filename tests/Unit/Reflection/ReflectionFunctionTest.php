@@ -75,7 +75,7 @@ class ReflectionFunctionTest extends TestCase
     {
         $reflectionFunction = new ReflectionFunction('example');
 
-        $this->assertEquals('/app/reflection/tests/Fixtures/example.php', $reflectionFunction->getFileName());
+        $this->assertStringContainsString('reflection/tests/Fixtures/example.php', $reflectionFunction->getFileName());
     }
 
     public function testGetName(): void
@@ -219,7 +219,7 @@ class ReflectionFunctionTest extends TestCase
 
         $this->assertFalse($reflectionFunction->isAnonymous());
 
-        if (PHP_VERSION_ID < 80100) {
+        if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Anonymous functions are available in PHP 8.1+');
         }
 
