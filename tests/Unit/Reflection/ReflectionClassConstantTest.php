@@ -62,7 +62,7 @@ class ReflectionClassConstantTest extends TestCase
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_FINAL');
 
-        $this->assertSame(ReflectionClassConstant::IS_PUBLIC & ReflectionClassConstant::IS_FINAL, $reflectionClassConstant->getModifiers());
+        $this->assertSame(33, $reflectionClassConstant->getModifiers());
     }
 
     public function testGetName(): void

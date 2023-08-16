@@ -91,6 +91,7 @@ class ReflectionClassTest extends TestCase
             'PRIVATE' => 3,
             'PUBLIC_WITH_ATTRIBUTE' => 4,
             'PUBLIC_WITH_DOC_COMMENT' => 5,
+            'PUBLIC_FINAL' => 6,
         ], $reflectionClass->getConstants());
     }
 
