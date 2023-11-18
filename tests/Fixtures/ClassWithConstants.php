@@ -18,5 +18,5 @@ class ClassWithConstants
      */
     public const PUBLIC_WITH_DOC_COMMENT = 5;
 
-    public final const PUBLIC_FINAL = 6;
+    final public const PUBLIC_FINAL = 6;
 }

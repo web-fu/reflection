@@ -50,6 +50,5 @@ class ClassWithMethods
 
     public function __destruct()
     {
-        echo 'Called __destruct()';
     }
 }

@@ -54,12 +54,18 @@ class ReflectionClassConstant extends AbstractReflection
 
     public function isEnumCase(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClassConstant->isEnumCase();
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('isEnumCase() is only available in PHP 8.1 or higher.');
+        }
+        return $this->reflectionClassConstant->isEnumCase();
     }
 
     public function isFinal(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClassConstant->isFinal();
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('isFinal() is only available in PHP 8.1 or higher.');
+        }
+        return $this->reflectionClassConstant->isFinal();
     }
 
     public function isPrivate(): bool

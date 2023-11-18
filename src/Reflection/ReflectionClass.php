@@ -286,7 +286,10 @@ class ReflectionClass extends AbstractReflection
 
     public function isEnum(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isEnum();
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('isEnum() is available only from PHP 8.1.0');
+        }
+        return $this->reflectionClass->isEnum();
     }
 
     public function isFinal(): bool
@@ -321,7 +324,11 @@ class ReflectionClass extends AbstractReflection
 
     public function isReadOnly(): bool
     {
-        return PHP_VERSION_ID >= 80200 && $this->reflectionClass->isReadOnly();
+        if (PHP_VERSION_ID < 80200) {
+            throw new ReflectionException('isReadOnly() is available only from PHP 8.2.0');
+        }
+
+        return $this->reflectionClass->isReadOnly();
     }
 
     /**

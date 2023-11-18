@@ -39,7 +39,10 @@ class ReflectionFunction extends ReflectionFunctionAbstract
     {
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
-        return PHP_VERSION_ID >= 80200 && $this->reflectionFunction->isAnonymous();
+        if (PHP_VERSION_ID < 80200) {
+            throw new ReflectionException('isAnonymous() is only available in PHP 8.2 or higher.');
+        }
+        return $this->reflectionFunction->isAnonymous();
     }
 
     public function getParameters(): array

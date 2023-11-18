@@ -165,7 +165,11 @@ class ReflectionProperty extends AbstractReflection
 
     public function isReadOnly(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionProperty->isReadOnly();
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('isReadOnly() is only available in PHP 8.1 or higher.');
+        }
+
+        return $this->reflectionProperty->isReadOnly();
     }
 
     public function isStatic(): bool

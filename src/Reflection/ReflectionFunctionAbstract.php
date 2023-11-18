@@ -34,7 +34,10 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      */
     public function getClosureUsedVariables(): array
     {
-        return PHP_VERSION_ID >= 80100 ? $this->reflectionFunction->getClosureUsedVariables() : [];
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('getClosureUsedVariables() is only available in PHP 8.1 or higher.');
+        }
+        return $this->reflectionFunction->getClosureUsedVariables();
     }
 
     public function getDocComment(): string|null
@@ -124,6 +127,11 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
             return null;
         }
 
+        if (!$this->reflectionFunction->hasTentativeReturnType()) {
+            return null;
+        }
+        var_dump($this->reflectionFunction->getTentativeReturnType());
+
         return Reflector::createReflectionType($this->reflectionFunction->getTentativeReturnType());
     }
 
@@ -134,7 +142,10 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function hasTentativeReturnType(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionFunction->hasTentativeReturnType();
+        if (PHP_VERSION_ID < 80100) {
+            throw new ReflectionException('hasTentativeReturnType() is only available in PHP 8.1 or higher.');
+        }
+        return $this->reflectionFunction->hasTentativeReturnType();
     }
 
     public function inNamespace(): bool
