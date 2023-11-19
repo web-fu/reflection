@@ -114,7 +114,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     public function hasPrototype(): bool
     {
         if (PHP_VERSION_ID < 80200) {
-            throw new ReflectionException('hasPrototype() is only available in PHP 8.2 or higher.');
+            throw new WrongPhpVersionException('hasPrototype() is not available for PHP versions lower than 8.2.0');
         }
 
         return $this->reflectionFunction->hasPropotype();

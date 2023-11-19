@@ -57,7 +57,7 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertSame(ReflectionClassConstant::IS_PRIVATE, $reflectionClassConstant->getModifiers());
 
         if (PHP_VERSION_ID < 80100) {
-            $this->markTestSkipped('Final constants are only available in PHP 8.1+');
+            $this->markTestSkipped('Final constants are not available for PHP versions lower than 8.1.0');
         }
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_FINAL');
@@ -82,7 +82,7 @@ class ReflectionClassConstantTest extends TestCase
     public function testIsEnumCase(): void
     {
         if (PHP_VERSION_ID < 80100) {
-            self::markTestSkipped('Enum constants are only available in PHP 8.1+');
+            self::markTestSkipped('Enum constants are not available for PHP versions lower than 8.1.0');
         }
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');

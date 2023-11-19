@@ -273,7 +273,7 @@ class ReflectionMethodTest extends TestCase
     public function testHasPrototype(): void
     {
         if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('PHP 8.2+ only');
+            $this->markTestSkipped('hasPrototype is not available for PHP version lower than 8.2.0');
         }
 
         $reflectionMethod = new ReflectionMethod(ClassFinal::class, 'publicFunction');

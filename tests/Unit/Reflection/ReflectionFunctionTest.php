@@ -213,13 +213,13 @@ class ReflectionFunctionTest extends TestCase
 
     public function testIsAnonymous(): void
     {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Anonymous functions are not available for PHP version lower than 8.2.0');
+        }
+
         $reflectionFunction = new ReflectionFunction('example');
 
         $this->assertFalse($reflectionFunction->isAnonymous());
-
-        if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('Anonymous functions are available in PHP 8.1+');
-        }
 
         $reflectionFunction = new ReflectionFunction(fn () => null);
 

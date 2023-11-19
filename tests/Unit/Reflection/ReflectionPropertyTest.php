@@ -186,7 +186,7 @@ class ReflectionPropertyTest extends TestCase
     public function testIsReadonly(): void
     {
         if (PHP_VERSION_ID < 80100) {
-            $this->markTestSkipped('Readonly properties are only available in PHP 8.1 and above.');
+            $this->markTestSkipped('Readonly properties are not available for PHP version lower than 8.1.0');
         }
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');

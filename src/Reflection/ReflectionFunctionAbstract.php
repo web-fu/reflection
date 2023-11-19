@@ -35,7 +35,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     public function getClosureUsedVariables(): array
     {
         if (PHP_VERSION_ID < 80100) {
-            throw new ReflectionException('getClosureUsedVariables() is only available in PHP 8.1 or higher.');
+            throw new WrongPhpVersionException('getClosureUsedVariables() is not available for PHP versions lower than 8.1.0');
         }
         return $this->reflectionFunction->getClosureUsedVariables();
     }
@@ -143,7 +143,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     public function hasTentativeReturnType(): bool
     {
         if (PHP_VERSION_ID < 80100) {
-            throw new ReflectionException('hasTentativeReturnType() is only available in PHP 8.1 or higher.');
+            throw new WrongPhpVersionException('hasTentativeReturnType() is not available for PHP versions lower than 8.1.0');
         }
         return $this->reflectionFunction->hasTentativeReturnType();
     }

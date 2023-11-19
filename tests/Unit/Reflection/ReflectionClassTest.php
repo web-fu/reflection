@@ -459,13 +459,13 @@ class ReflectionClassTest extends TestCase
 
     public function testIsEnum(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Enum are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertFalse($reflectionClass->isEnum());
-
-        if (PHP_VERSION_ID < 80100) {
-            $this->markTestSkipped('Enum is only available in PHP 8.1+');
-        }
 
         $reflectionClass = new ReflectionClass(EnumClass::class);
 
@@ -537,13 +537,12 @@ class ReflectionClassTest extends TestCase
 
     public function testIsReadonly(): void
     {
-        $reflectionClass = new ReflectionClass(GenericClass::class);
-
-        $this->assertFalse($reflectionClass->isReadonly());
-
         if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('Readonly is only available in PHP 8.2+');
+            $this->markTestSkipped('Readonly keyword are not available for PHP versions lower than 8.2.0');
         }
+
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+        $this->assertFalse($reflectionClass->isReadonly());
 
         $reflectionClass = new ReflectionClass(ClassReadonly::class);
 
