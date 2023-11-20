@@ -342,9 +342,21 @@ class ReflectionClassTest extends TestCase
 
     public function testGetStaticPropertyValue(): void
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->assertEquals(1, $reflectionClass->getStaticPropertyValue('staticPublic'));
+        $this->assertEquals(2, $reflectionClass->getStaticPropertyValue('staticProtected'));
+        $this->assertEquals(3, $reflectionClass->getStaticPropertyValue('staticPrivate'));
+    }
+
+    public function testGetStaticPropertyValueException(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->expectException(ReflectionException::class);
+        $this->expectExceptionMessage('Undefined static property: WebFu\Tests\Fixtures\ClassWithProperties::$iDoNotExist');
+
+        $reflectionClass->getStaticPropertyValue('iDoNotExist');
     }
 
     public function testGetTraitAliases(): void

@@ -21,4 +21,22 @@ class ReflectionEnum extends ReflectionClass
     {
         return $this->reflectionEnum->getCase($caseName);
     }
+
+    /**
+     * @return array<string, \ReflectionEnumUnitCase>
+     */
+    public function getCases(): array
+    {
+        return $this->reflectionEnum->getCases();
+    }
+
+    public function hasCase(string $caseName): bool
+    {
+        return $this->reflectionEnum->hasCase($caseName);
+    }
+
+    public function isBacked(): bool
+    {
+        return $this->reflectionEnum->isBacked();
+    }
 }

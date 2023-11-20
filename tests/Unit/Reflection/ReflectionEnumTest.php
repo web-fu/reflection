@@ -59,16 +59,27 @@ class ReflectionEnumTest extends TestCase
 
     public function testGetCases(): void
     {
-        $this->markTestIncomplete();
+        $reflectionEnum = new ReflectionEnum(BackedEnum::class);
+        $actual = $reflectionEnum->getCases();
+
+        $this->assertCount(1, $actual);
+        $this->assertEquals(new \ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $actual[0]);
     }
 
-    public function testHasCases(): void
+    public function testHasCase(): void
     {
-        $this->markTestIncomplete();
+        $reflectionEnum = new ReflectionEnum(BackedEnum::class);
+
+        $this->assertTrue($reflectionEnum->hasCase('ONE'));
+        $this->assertFalse($reflectionEnum->hasCase('TWO'));
     }
 
     public function testIsBacked(): void
     {
-        $this->markTestIncomplete();
+        $backedEnum = new ReflectionEnum(BackedEnum::class);
+        $basicEnum = new ReflectionEnum(BasicEnum::class);
+
+        $this->assertTrue($backedEnum->isBacked());
+        $this->assertFalse($basicEnum->isBacked());
     }
 }
