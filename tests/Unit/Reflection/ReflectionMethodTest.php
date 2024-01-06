@@ -119,7 +119,10 @@ class ReflectionMethodTest extends TestCase
 
     public function testGetTentativeReturnType(): void
     {
-        $this->markTestIncomplete();
+        $reflectionMethod = new ReflectionMethod(\ArrayAccess::class, 'offsetGet');
+        $actual = $reflectionMethod->getTentativeReturnType();
+
+        $this->assertEquals(new ReflectionType(['mixed']), $actual);
     }
 
     public function testHasReturnType(): void

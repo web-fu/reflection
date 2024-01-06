@@ -201,7 +201,7 @@ class ReflectionClass extends AbstractReflection
     public function getStaticPropertyValue(string $propertyName, mixed $default = null): mixed
     {
         if (!$this->hasProperty($propertyName)) {
-            throw new ReflectionException('Undefined property name: ' . $propertyName);
+            throw new ReflectionException('Undefined static property: ' . $this->getName() . '::$' . $propertyName);
         }
 
         return $this->reflectionClass->getStaticPropertyValue($propertyName, $default);

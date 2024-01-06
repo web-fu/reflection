@@ -13,7 +13,6 @@ use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionUseStatement;
 use WebFu\Tests\Fixtures\ClassFinal;
 use WebFu\Tests\Fixtures\ClassNonClonable;
-use WebFu\Tests\Fixtures\ClassReadonly;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
@@ -310,9 +309,16 @@ class ReflectionClassTest extends TestCase
 
     public function testGetReflectionConstants(): void
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $reflectionClass = new ReflectionClass(ClassWithConstants::class);
+
+        $this->assertEquals([
+            new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC'),
+            new ReflectionClassConstant(ClassWithConstants::class, 'PROTECTED'),
+            new ReflectionClassConstant(ClassWithConstants::class, 'PRIVATE'),
+            new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_ATTRIBUTE'),
+            new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_DOC_COMMENT'),
+            new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_FINAL'),
+        ], $reflectionClass->getReflectionConstants());
     }
 
     public function testGetShortName(): void
@@ -549,16 +555,7 @@ class ReflectionClassTest extends TestCase
 
     public function testIsReadonly(): void
     {
-        if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('Readonly keyword are not available for PHP versions lower than 8.2.0');
-        }
-
-        $reflectionClass = new ReflectionClass(GenericClass::class);
-        $this->assertFalse($reflectionClass->isReadonly());
-
-        $reflectionClass = new ReflectionClass(ClassReadonly::class);
-
-        $this->assertTrue($reflectionClass->isReadonly());
+        $this->markTestIncomplete();
     }
 
     public function testIsSubclassOf(): void

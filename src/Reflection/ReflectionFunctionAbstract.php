@@ -124,13 +124,12 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     public function getTentativeReturnType(): ReflectionType|null
     {
         if (PHP_VERSION_ID < 80100) {
-            return null;
+            throw new WrongPhpVersionException('getTentativeReturnType() is not available for PHP versions lower than 8.1.0');
         }
 
         if (!$this->reflectionFunction->hasTentativeReturnType()) {
             return null;
         }
-        var_dump($this->reflectionFunction->getTentativeReturnType());
 
         return Reflector::createReflectionType($this->reflectionFunction->getTentativeReturnType());
     }
