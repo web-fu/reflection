@@ -2,15 +2,26 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionAttribute;
 
 class ReflectionProperty extends AbstractReflection
 {
-    public const IS_STATIC = \ReflectionProperty::IS_STATIC;
-    public const IS_READONLY = 128;
-    public const IS_PUBLIC = \ReflectionProperty::IS_PUBLIC;
+    public const IS_STATIC    = \ReflectionProperty::IS_STATIC;
+    public const IS_READONLY  = 128;
+    public const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
     public const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
-    public const IS_PRIVATE = \ReflectionProperty::IS_PRIVATE;
+    public const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
 
     private \ReflectionProperty $reflectionProperty;
 
@@ -19,8 +30,13 @@ class ReflectionProperty extends AbstractReflection
         $this->reflectionProperty = new \ReflectionProperty($class, $property);
     }
 
+    public function __toString(): string
+    {
+        return $this->reflectionProperty->__toString();
+    }
+
     /**
-     * @return \ReflectionAttribute[]
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -71,7 +87,7 @@ class ReflectionProperty extends AbstractReflection
 
         assert(is_string($docTypes));
 
-        $docTypesList = explode('|', $docTypes);
+        $docTypesList         = explode('|', $docTypes);
         $docTypesListResolved = [];
 
         foreach ($docTypesList as $docType) {
@@ -80,7 +96,7 @@ class ReflectionProperty extends AbstractReflection
             preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
 
             if ($matches) {
-                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $docType = $matches['group1'].($matches['group2'] ?? '');
                 $isArray = true;
             }
 
@@ -185,10 +201,5 @@ class ReflectionProperty extends AbstractReflection
     public function setValue(object $object, mixed $value): void
     {
         $this->reflectionProperty->setValue($object, $value);
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionProperty->__toString();
     }
 }

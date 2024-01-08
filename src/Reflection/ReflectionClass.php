@@ -2,7 +2,19 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionAttribute;
+use ReflectionExtension;
 
 class ReflectionClass extends AbstractReflection
 {
@@ -16,8 +28,13 @@ class ReflectionClass extends AbstractReflection
         $this->reflectionClass = new \ReflectionClass($objectOrClass);
     }
 
+    public function __toString(): string
+    {
+        return $this->reflectionClass->__toString();
+    }
+
     /**
-     * @return \ReflectionAttribute[]
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -31,7 +48,7 @@ class ReflectionClass extends AbstractReflection
                 return $constant->getValue();
             }
         }
-        throw new ReflectionException('Undefined constant name: ' . $name);
+        throw new ReflectionException('Undefined constant name: '.$name);
     }
 
     /**
@@ -43,12 +60,13 @@ class ReflectionClass extends AbstractReflection
         foreach ($this->getReflectionConstants($filter) as $constant) {
             $result[$constant->getName()] = $constant->getValue();
         }
+
         return $result;
     }
 
     public function getConstructor(): ReflectionMethod|null
     {
-        if (! $this->reflectionClass->getConstructor()) {
+        if (!$this->reflectionClass->getConstructor()) {
             return null;
         }
 
@@ -73,7 +91,7 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->getEndLine() ?: null;
     }
 
-    public function getExtension(): \ReflectionExtension|null
+    public function getExtension(): ReflectionExtension|null
     {
         return $this->reflectionClass->getExtension();
     }
@@ -114,8 +132,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getMethods(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionMethod $method) =>
-            $this->getMethod($method->getName()), $this->reflectionClass->getMethods($filter));
+        return array_map(fn (\ReflectionMethod $method) => $this->getMethod($method->getName()), $this->reflectionClass->getMethods($filter));
     }
 
     public function getModifiers(): int
@@ -160,6 +177,7 @@ class ReflectionClass extends AbstractReflection
         if (!$this->reflectionClass->hasProperty($name)) {
             return null;
         }
+
         return new ReflectionProperty($this->reflectionClass->getName(), $name);
     }
 
@@ -201,7 +219,7 @@ class ReflectionClass extends AbstractReflection
     public function getStaticPropertyValue(string $propertyName, mixed $default = null): mixed
     {
         if (!$this->hasProperty($propertyName)) {
-            throw new ReflectionException('Undefined static property: ' . $this->getName() . '::$' . $propertyName);
+            throw new ReflectionException('Undefined static property: '.$this->getName().'::$'.$propertyName);
         }
 
         return $this->reflectionClass->getStaticPropertyValue($propertyName, $default);
@@ -289,6 +307,7 @@ class ReflectionClass extends AbstractReflection
         if (PHP_VERSION_ID < 80100) {
             throw new WrongPhpVersionException('isEnum() is not available for PHP versions lower than 8.1.0');
         }
+
         return $this->reflectionClass->isEnum();
     }
 
@@ -372,10 +391,5 @@ class ReflectionClass extends AbstractReflection
     public function setStaticPropertyValue(string $name, mixed $value): void
     {
         $this->reflectionClass->setStaticPropertyValue($name, $value);
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionClass->__toString();
     }
 }

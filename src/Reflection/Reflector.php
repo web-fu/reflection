@@ -2,11 +2,23 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 class Reflector
 {
-    public static function createReflectionType(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): ReflectionType
+    public static function createReflectionType(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $type): ReflectionType
     {
         return new ReflectionType(self::getTypeNames($type));
     }
@@ -14,23 +26,24 @@ class Reflector
     /**
      * @return string[]
      */
-    public static function getTypeNames(\ReflectionType|\ReflectionNamedType|\ReflectionUnionType|null $type): array
+    public static function getTypeNames(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $type): array
     {
         if (null === $type) {
             return ['mixed'];
         }
 
-        if ($type instanceof \ReflectionNamedType) {
+        if ($type instanceof ReflectionNamedType) {
             return [$type->getName()];
         }
 
-        assert($type instanceof \ReflectionUnionType);
+        assert($type instanceof ReflectionUnionType);
 
-        return array_map(fn (\ReflectionNamedType $type): string => $type->getName(), $type->getTypes());
+        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $type->getTypes());
     }
 
     /**
      * @param class-string $className
+     *
      * @return ReflectionUseStatement[]
      */
     public static function createReflectionClassUseStatements(string $className): array
@@ -38,43 +51,43 @@ class Reflector
         $reflectionClass = new ReflectionClass($className);
 
         if (!$reflectionClass->getFileName()) {
-            throw new ReflectionException('Unable to retrieve filename for class ' . $className);
+            throw new ReflectionException('Unable to retrieve filename for class '.$className);
         }
 
         $source = file_get_contents($reflectionClass->getFileName());
         if (!$source) {
-            throw new ReflectionException('Could not open file ' . $reflectionClass->getFileName());
+            throw new ReflectionException('Could not open file '.$reflectionClass->getFileName());
         }
 
         $tokens = token_get_all($source);
 
-        $builtNamespace = '';
-        $useStatements = [];
-        $class = '';
-        $as = '';
+        $builtNamespace    = '';
+        $useStatements     = [];
+        $class             = '';
+        $as                = '';
         $buildingNamespace = false;
-        $buildingUse = false;
-        $buildingAs = false;
+        $buildingUse       = false;
+        $buildingAs        = false;
 
         foreach ($tokens as $token) {
             if (is_array($token)) {
-                if ($token[0] === T_NAMESPACE) {
+                if (T_NAMESPACE === $token[0]) {
                     $buildingNamespace = true;
                 }
 
-                if ($token[0] === T_USE) {
+                if (T_USE === $token[0]) {
                     $buildingUse = true;
                 }
 
-                if ($token[0] === T_AS) {
+                if (T_AS === $token[0]) {
                     $buildingAs = true;
                 }
             }
 
-            if ($token === ';') {
+            if (';' === $token) {
                 $buildingNamespace = false;
-                $buildingUse = false;
-                $buildingAs = false;
+                $buildingUse       = false;
+                $buildingAs        = false;
 
                 if ($builtNamespace) {
                     $builtNamespace = trim($builtNamespace);
@@ -82,16 +95,16 @@ class Reflector
 
                 if ($class) {
                     /** @var class-string $class */
-                    $class = trim($class);
-                    $as = $as ? trim($as) : $class;
+                    $class           = trim($class);
+                    $as              = $as ? trim($as) : $class;
                     $useStatements[] = new ReflectionUseStatement($class, $as);
-                    $class = '';
-                    $as = '';
+                    $class           = '';
+                    $as              = '';
                 }
             }
 
             if ($buildingNamespace) {
-                if ($token[0] === T_NAMESPACE) {
+                if (T_NAMESPACE === $token[0]) {
                     continue;
                 }
 
@@ -101,15 +114,15 @@ class Reflector
             }
 
             if ($buildingUse) {
-                if ($token[0] === T_USE) {
+                if (T_USE === $token[0]) {
                     continue;
                 }
 
-                if ($token[0] === T_AS) {
+                if (T_AS === $token[0]) {
                     continue;
                 }
 
-                if (! $buildingAs) {
+                if (!$buildingAs) {
                     $class .= $token[1];
                 } else {
                     $as .= $token[1];
@@ -133,7 +146,7 @@ class Reflector
             }
         }
 
-        $maybeClass = $reflectionClass->getNamespaceName() . '\\' . $typeName;
+        $maybeClass = $reflectionClass->getNamespaceName().'\\'.$typeName;
         if (class_exists($maybeClass)) {
             return new ReflectionType([$maybeClass]);
         }

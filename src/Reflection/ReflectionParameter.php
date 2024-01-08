@@ -2,7 +2,18 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionAttribute;
 
 class ReflectionParameter extends AbstractReflection
 {
@@ -19,14 +30,19 @@ class ReflectionParameter extends AbstractReflection
 
         if (is_array($functionOrMethod)) {
             /** @var class-string $className */
-            list($className, $methodName) = $functionOrMethod;
-            $this->declaringClass = new ReflectionClass($className);
-            $this->declaringFunction = new ReflectionMethod($className, $methodName);
+            [$className, $methodName] = $functionOrMethod;
+            $this->declaringClass     = new ReflectionClass($className);
+            $this->declaringFunction  = new ReflectionMethod($className, $methodName);
         }
 
         if (is_string($functionOrMethod) && function_exists($functionOrMethod)) {
             $this->declaringFunction = new ReflectionFunction($functionOrMethod);
         }
+    }
+
+    public function __toString(): string
+    {
+        return $this->reflectionParameter->__toString();
     }
 
     public function allowsNull(): bool
@@ -40,7 +56,7 @@ class ReflectionParameter extends AbstractReflection
     }
 
     /**
-     * @return \ReflectionAttribute[]
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -75,6 +91,7 @@ class ReflectionParameter extends AbstractReflection
     public function getAnnotations(): array
     {
         $functionAnnotations = parent::getAnnotations();
+
         return array_filter($functionAnnotations, fn (string $annotation) => str_contains($annotation, $this->getName()));
     }
 
@@ -107,7 +124,7 @@ class ReflectionParameter extends AbstractReflection
 
         $docTypes = $matches['param'] ?? '';
 
-        $docTypesList = explode('|', $docTypes);
+        $docTypesList         = explode('|', $docTypes);
         $docTypesListResolved = [];
 
         foreach ($docTypesList as $docType) {
@@ -116,7 +133,7 @@ class ReflectionParameter extends AbstractReflection
             preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
 
             if ($matches) {
-                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $docType = $matches['group1'].($matches['group2'] ?? '');
                 $isArray = true;
             }
 
@@ -185,10 +202,5 @@ class ReflectionParameter extends AbstractReflection
     public function isVariadic(): bool
     {
         return $this->reflectionParameter->isVariadic();
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionParameter->__toString();
     }
 }

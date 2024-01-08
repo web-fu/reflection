@@ -2,16 +2,27 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use Closure;
 
 class ReflectionMethod extends ReflectionFunctionAbstract
 {
-    public const IS_STATIC = \ReflectionMethod::IS_STATIC;
-    public const IS_PUBLIC = \ReflectionMethod::IS_PUBLIC;
+    public const IS_STATIC    = \ReflectionMethod::IS_STATIC;
+    public const IS_PUBLIC    = \ReflectionMethod::IS_PUBLIC;
     public const IS_PROTECTED = \ReflectionMethod::IS_PROTECTED;
-    public const IS_PRIVATE = \ReflectionMethod::IS_PRIVATE;
-    public const IS_ABSTRACT = \ReflectionMethod::IS_ABSTRACT;
-    public const IS_FINAL = \ReflectionMethod::IS_FINAL;
+    public const IS_PRIVATE   = \ReflectionMethod::IS_PRIVATE;
+    public const IS_ABSTRACT  = \ReflectionMethod::IS_ABSTRACT;
+    public const IS_FINAL     = \ReflectionMethod::IS_FINAL;
 
     /* Methods */
     public function __construct(object|string $objectOrMethod, string $method)
@@ -19,7 +30,12 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         $this->reflectionFunction = new \ReflectionMethod($objectOrMethod, $method);
     }
 
-    public function getClosure(object|null $object = null): \Closure|null
+    public function __toString(): string
+    {
+        return $this->reflectionFunction->__toString();
+    }
+
+    public function getClosure(object|null $object = null): Closure|null
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
@@ -46,16 +62,17 @@ class ReflectionMethod extends ReflectionFunctionAbstract
     public function getParameters(): array
     {
         $closure = [$this->getDeclaringClass()->getName(), $this->reflectionFunction->getName()];
+
         return array_map(fn (\ReflectionParameter $reflectionParameter) => new ReflectionParameter($closure, $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
     }
 
-    public function getPrototype(): ReflectionMethod
+    public function getPrototype(): self
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $method = $this->reflectionFunction->getPrototype();
 
-        return new ReflectionMethod($method->getDeclaringClass()->getName(), $method->getName());
+        return new self($method->getDeclaringClass()->getName(), $method->getName());
     }
 
     public function getReturnTypeExtended(): ReflectionTypeExtended
@@ -84,7 +101,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
         $docTypes = $matches['return'] ?? '';
 
-        $docTypesList = explode('|', $docTypes);
+        $docTypesList         = explode('|', $docTypes);
         $docTypesListResolved = [];
 
         foreach ($docTypesList as $docType) {
@@ -93,7 +110,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
             preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
 
             if ($matches) {
-                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $docType = $matches['group1'].($matches['group2'] ?? '');
                 $isArray = true;
             }
 
@@ -191,10 +208,5 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $this->reflectionFunction->setAccessible($accessible);
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionFunction->__toString();
     }
 }
