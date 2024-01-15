@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Tests\Unit\Reflection;
 
+use Fixtures\ClassWithFinals;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
@@ -39,6 +40,10 @@ class ReflectionMethodTest extends TestCase
 
     public function testGetClosureUsedVariables(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Closures are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
 
         $this->assertEquals([], $reflectionMethod->getClosureUsedVariables());
@@ -119,6 +124,10 @@ class ReflectionMethodTest extends TestCase
 
     public function testGetTentativeReturnType(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Tentative return types are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionMethod = new ReflectionMethod(\ArrayAccess::class, 'offsetGet');
         $actual = $reflectionMethod->getTentativeReturnType();
 
@@ -335,10 +344,14 @@ class ReflectionMethodTest extends TestCase
 
     public function testIsFinal(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Final keyword is not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
         $this->assertFalse($reflectionMethod->isFinal());
 
-        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'finalMethod');
+        $reflectionMethod = new ReflectionMethod(ClassWithFinals::class, 'finalMethod');
         $this->assertTrue($reflectionMethod->isFinal());
     }
 

@@ -100,7 +100,18 @@ class ReflectionParameter extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        return Reflector::getTypeNames($this->reflectionParameter->getType());
+        $reflectionType = $this->reflectionParameter->getType();
+
+        if (!$reflectionType) {
+            return ['mixed'];
+        }
+
+        /** @var \ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+            ? $reflectionType->getTypes()
+            : [$reflectionType];
+
+        return array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
     }
 
     /**

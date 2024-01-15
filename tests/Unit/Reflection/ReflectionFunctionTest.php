@@ -38,6 +38,10 @@ class ReflectionFunctionTest extends TestCase
 
     public function testGetClosureUsedVariables(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Function closures are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionFunction = new ReflectionFunction('example');
 
         $this->assertEquals([], $reflectionFunction->getClosureUsedVariables());

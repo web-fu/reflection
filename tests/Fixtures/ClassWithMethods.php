@@ -44,10 +44,6 @@ class ClassWithMethods
     {
     }
 
-    final public function finalMethod(): void
-    {
-    }
-
     public function __destruct()
     {
     }

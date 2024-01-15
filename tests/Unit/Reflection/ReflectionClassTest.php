@@ -90,7 +90,6 @@ class ReflectionClassTest extends TestCase
             'PRIVATE' => 3,
             'PUBLIC_WITH_ATTRIBUTE' => 4,
             'PUBLIC_WITH_DOC_COMMENT' => 5,
-            'PUBLIC_FINAL' => 6,
         ], $reflectionClass->getConstants());
     }
 
@@ -204,7 +203,6 @@ class ReflectionClassTest extends TestCase
             new ReflectionMethod(ClassWithMethods::class, 'protectedMethod'),
             new ReflectionMethod(ClassWithMethods::class, 'privateMethod'),
             new ReflectionMethod(ClassWithMethods::class, 'staticMethod'),
-            new ReflectionMethod(ClassWithMethods::class, 'finalMethod'),
             new ReflectionMethod(ClassWithMethods::class, '__destruct'),
         ], $reflectionClass->getMethods());
     }
@@ -317,7 +315,6 @@ class ReflectionClassTest extends TestCase
             new ReflectionClassConstant(ClassWithConstants::class, 'PRIVATE'),
             new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_ATTRIBUTE'),
             new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_DOC_COMMENT'),
-            new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_FINAL'),
         ], $reflectionClass->getReflectionConstants());
     }
 

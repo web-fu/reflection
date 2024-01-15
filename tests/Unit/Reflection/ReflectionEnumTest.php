@@ -18,6 +18,10 @@ class ReflectionEnumTest extends TestCase
      */
     public function testGetBackingType(string $className, array $expected): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionEnum = new ReflectionEnum($className);
 
         $this->assertSame($expected, $reflectionEnum->getBackingType()->getTypeNames());
@@ -38,27 +42,22 @@ class ReflectionEnumTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider caseNameProvider
-     */
-    public function testGetCase(string $className, string $case, mixed $expected): void
+    public function testGetCase(): void
     {
-        $reflectionEnum = new ReflectionEnum($className);
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
 
-        $this->assertSame($expected, $reflectionEnum->getCase($case)->getValue());
-    }
-
-    public function caseNameProvider(): iterable
-    {
-        yield 'one' => [
-          'className' => BackedEnum::class,
-          'case' => 'ONE',
-          'expected' => BackedEnum::ONE,
-        ];
+        $reflectionEnum = new ReflectionEnum(BackedEnum::class);
+        $this->assertSame(1, $reflectionEnum->getCase('ONE')->getValue());
     }
 
     public function testGetCases(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
         $actual = $reflectionEnum->getCases();
 
@@ -68,6 +67,10 @@ class ReflectionEnumTest extends TestCase
 
     public function testHasCase(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
 
         $this->assertTrue($reflectionEnum->hasCase('ONE'));
@@ -76,6 +79,10 @@ class ReflectionEnumTest extends TestCase
 
     public function testIsBacked(): void
     {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
         $backedEnum = new ReflectionEnum(BackedEnum::class);
         $basicEnum = new ReflectionEnum(BasicEnum::class);
 

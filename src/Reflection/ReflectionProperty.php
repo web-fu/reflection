@@ -17,11 +17,11 @@ use ReflectionAttribute;
 
 class ReflectionProperty extends AbstractReflection
 {
-    public const IS_STATIC    = \ReflectionProperty::IS_STATIC;
+    public const IS_STATIC    = 16;
     public const IS_READONLY  = 128;
-    public const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
-    public const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
-    public const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
+    public const IS_PUBLIC    = 1;
+    public const IS_PROTECTED = 2;
+    public const IS_PRIVATE   = 4;
 
     private \ReflectionProperty $reflectionProperty;
 
@@ -63,7 +63,18 @@ class ReflectionProperty extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        return Reflector::getTypeNames($this->reflectionProperty->getType());
+        $reflectionType = $this->reflectionProperty->getType();
+
+        if (!$reflectionType) {
+            return ['mixed'];
+        }
+
+        /** @var \ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+            ? $reflectionType->getTypes()
+            : [$reflectionType];
+
+        return array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
     }
 
     /**

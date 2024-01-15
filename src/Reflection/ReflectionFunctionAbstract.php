@@ -116,7 +116,18 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      */
     public function getReturnTypeNames(): array
     {
-        return Reflector::getTypeNames($this->reflectionFunction->getReturnType());
+        $reflectionType = $this->reflectionFunction->getReturnType();
+
+        if (!$reflectionType) {
+            return ['mixed'];
+        }
+
+        /** @var \ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+            ? $reflectionType->getTypes()
+            : [$reflectionType];
+
+        return array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
     }
 
     public function getShortName(): string

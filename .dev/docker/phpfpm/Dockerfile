@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm AS dev_phpfpm
+FROM php:8.0.30-fpm AS dev_phpfpm
 WORKDIR /var/www/html
 
 # update the system

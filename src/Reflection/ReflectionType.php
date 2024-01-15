@@ -42,6 +42,6 @@ class ReflectionType
      */
     public function getTypeNames(): array
     {
-        return $this->types;
+        return (empty($this->types)) ? ['mixed'] : $this->types;
     }
 }

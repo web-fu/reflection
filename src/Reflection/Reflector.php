@@ -18,27 +18,20 @@ use ReflectionUnionType;
 
 class Reflector
 {
-    public static function createReflectionType(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $type): ReflectionType
+    public static function createReflectionType(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $reflectionType): ReflectionType
     {
-        return new ReflectionType(self::getTypeNames($type));
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function getTypeNames(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $type): array
-    {
-        if (null === $type) {
-            return ['mixed'];
+        if (!$reflectionType) {
+            return new ReflectionType(['mixed']);
         }
 
-        if ($type instanceof ReflectionNamedType) {
-            return [$type->getName()];
-        }
+        /** @var \ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+            ? $reflectionType->getTypes()
+            : [$reflectionType];
 
-        assert($type instanceof ReflectionUnionType);
+        $typeNames = array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
 
-        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $type->getTypes());
+        return new ReflectionType($typeNames);
     }
 
     /**
