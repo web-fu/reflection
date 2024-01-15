@@ -1,8 +1,7 @@
 <?php
 
 $finder = (new PhpCsFixer\Finder())
-    ->exclude(__DIR__ . '/tests/Fixtures')
-    ->in(__DIR__);
+    ->in(__DIR__.'/src');
 
 return (new PhpCsFixer\Config())
     ->setRules([
@@ -24,7 +23,7 @@ return (new PhpCsFixer\Config())
         'combine_consecutive_unsets'                       => true,
         'combine_nested_dirname'                           => true,
         'comment_to_phpdoc'                                => true,
-        'compact_nullable_typehint'                        => true,
+        'compact_nullable_type_declaration'                => true,
         'declare_strict_types'                             => true,
         'dir_constant'                                     => true,
         'doctrine_annotation_array_assignment'             => ['operator' => '='],

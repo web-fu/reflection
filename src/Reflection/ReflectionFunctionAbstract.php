@@ -15,6 +15,8 @@ namespace WebFu\Reflection;
 
 use ReflectionAttribute;
 use ReflectionExtension;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 abstract class ReflectionFunctionAbstract extends AbstractReflection
 {
@@ -122,12 +124,12 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
             return ['mixed'];
         }
 
-        /** @var \ReflectionNamedType[] $reflectionTypes */
-        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+        /** @var ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof ReflectionUnionType
             ? $reflectionType->getTypes()
             : [$reflectionType];
 
-        return array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
+        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
     }
 
     public function getShortName(): string

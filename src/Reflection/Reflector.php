@@ -24,12 +24,12 @@ class Reflector
             return new ReflectionType(['mixed']);
         }
 
-        /** @var \ReflectionNamedType[] $reflectionTypes */
-        $reflectionTypes = $reflectionType instanceof \ReflectionUnionType
+        /** @var ReflectionNamedType[] $reflectionTypes */
+        $reflectionTypes = $reflectionType instanceof ReflectionUnionType
             ? $reflectionType->getTypes()
             : [$reflectionType];
 
-        $typeNames = array_map(fn (\ReflectionNamedType $type):string => $type->getName(), $reflectionTypes);
+        $typeNames = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
 
         return new ReflectionType($typeNames);
     }
