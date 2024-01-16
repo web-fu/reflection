@@ -1,6 +1,6 @@
 <?php
 
-namespace Fixtures;
+namespace WebFu\Tests\Fixtures;
 
 class ClassWithFinals
 {
