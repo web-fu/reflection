@@ -73,7 +73,7 @@ class ReflectionEnumTest extends TestCase
         }
 
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
-        $this->assertSame(1, $reflectionEnum->getCase('ONE')->getValue());
+        $this->assertEquals(new \ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $reflectionEnum->getCase('ONE'));
     }
 
     /**
