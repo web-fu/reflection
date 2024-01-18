@@ -254,7 +254,87 @@ class ReflectionClass extends AbstractReflection
      */
     public function getUseStatements(): array
     {
-        return Reflector::createReflectionClassUseStatements($this->getName());
+        if (!$filename = $this->getFileName()) {
+            throw new ReflectionException('Unable to retrieve filename for class '.$this->getName());
+        }
+
+        $source = file_get_contents($filename);
+        if (!$source) {
+            throw new ReflectionException('Could not open file '.$filename);
+        }
+
+        $tokens = token_get_all($source);
+
+        $builtNamespace    = '';
+        $useStatements     = [];
+        $class             = '';
+        $as                = '';
+        $buildingNamespace = false;
+        $buildingUse       = false;
+        $buildingAs        = false;
+
+        foreach ($tokens as $token) {
+            if (is_array($token)) {
+                if (T_NAMESPACE === $token[0]) {
+                    $buildingNamespace = true;
+                }
+
+                if (T_USE === $token[0]) {
+                    $buildingUse = true;
+                }
+
+                if (T_AS === $token[0]) {
+                    $buildingAs = true;
+                }
+            }
+
+            if (';' === $token) {
+                $buildingNamespace = false;
+                $buildingUse       = false;
+                $buildingAs        = false;
+
+                if ($builtNamespace) {
+                    $builtNamespace = trim($builtNamespace);
+                }
+
+                if ($class) {
+                    /** @var class-string $class */
+                    $class           = trim($class);
+                    $as              = $as ? trim($as) : $class;
+                    $useStatements[] = new ReflectionUseStatement($class, $as);
+                    $class           = '';
+                    $as              = '';
+                }
+            }
+
+            if ($buildingNamespace) {
+                if (T_NAMESPACE === $token[0]) {
+                    continue;
+                }
+
+                $builtNamespace .= $token[1];
+
+                continue;
+            }
+
+            if ($buildingUse) {
+                if (T_USE === $token[0]) {
+                    continue;
+                }
+
+                if (T_AS === $token[0]) {
+                    continue;
+                }
+
+                if (!$buildingAs) {
+                    $class .= $token[1];
+                } else {
+                    $as .= $token[1];
+                }
+            }
+        }
+
+        return $useStatements;
     }
 
     public function hasConstant(string $name): bool

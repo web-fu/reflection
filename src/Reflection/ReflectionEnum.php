@@ -30,7 +30,7 @@ class ReflectionEnum extends ReflectionClass
 
     public function getBackingType(): ReflectionType|null
     {
-        return Reflector::createReflectionType($this->reflectionEnum->getBackingType());
+        return reflection_type_create($this->reflectionEnum->getBackingType());
     }
 
     public function getCase(string $caseName): ReflectionEnumUnitCase

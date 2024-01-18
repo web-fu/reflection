@@ -114,7 +114,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
                 $isArray = true;
             }
 
-            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+            if ($resolved = reflection_type_resolver($this->getDeclaringClass()->getName(), $docType)) {
                 $docType = $resolved->getTypeNames()[0];
             }
 

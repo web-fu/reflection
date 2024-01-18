@@ -113,7 +113,7 @@ class ReflectionProperty extends AbstractReflection
                 $isArray = true;
             }
 
-            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+            if ($resolved = reflection_type_resolver($this->getDeclaringClass()->getName(), $docType)) {
                 $docType = $resolved->getTypeNames()[0];
             }
 
@@ -144,7 +144,7 @@ class ReflectionProperty extends AbstractReflection
 
     public function getType(): ReflectionType
     {
-        return Reflector::createReflectionType($this->reflectionProperty->getType());
+        return reflection_type_create($this->reflectionProperty->getType());
     }
 
     public function getValue(object|null $object = null): mixed

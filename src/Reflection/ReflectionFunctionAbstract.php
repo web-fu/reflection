@@ -110,7 +110,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function getReturnType(): ReflectionType
     {
-        return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
+        return reflection_type_create($this->reflectionFunction->getReturnType());
     }
 
     /**
@@ -160,7 +160,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
             return null;
         }
 
-        return Reflector::createReflectionType($this->reflectionFunction->getTentativeReturnType());
+        return reflection_type_create($this->reflectionFunction->getTentativeReturnType());
     }
 
     public function hasReturnType(): bool

@@ -152,7 +152,7 @@ class ReflectionParameter extends AbstractReflection
 
             if (
                 $this->getDeclaringClass()
-                && $resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)
+                && $resolved = reflection_type_resolver($this->getDeclaringClass()->getName(), $docType)
             ) {
                 $docType = $resolved->getTypeNames()[0];
             }
@@ -184,7 +184,7 @@ class ReflectionParameter extends AbstractReflection
 
     public function getType(): ReflectionType
     {
-        return Reflector::createReflectionType($this->reflectionParameter->getType());
+        return reflection_type_create($this->reflectionParameter->getType());
     }
 
     public function hasType(): bool

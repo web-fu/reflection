@@ -19,7 +19,11 @@
   "autoload": {
     "psr-4": {
       "WebFu\\": "src/"
-    }
+    },
+    "files": [
+      "src/Reflection/reflection_type_resolver.php",
+      "src/Reflection/reflection_type_create.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
