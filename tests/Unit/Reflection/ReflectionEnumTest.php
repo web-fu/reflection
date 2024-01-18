@@ -6,12 +6,14 @@ namespace WebFu\Tests\Unit\Reflection;
 
 use WebFu\Reflection\ReflectionEnum;
 use PHPUnit\Framework\TestCase;
+use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\BackedEnum;
 use WebFu\Tests\Fixtures\BasicEnum;
 
 class ReflectionEnumTest extends TestCase
 {
     /**
+     * @covers \WebFu\Reflection\ReflectionEnum::getBackingType
      * @dataProvider backingTypeProvider
      * @param class-string $className
      * @param string[] $expected
@@ -19,6 +21,10 @@ class ReflectionEnumTest extends TestCase
     public function testGetBackingType(string $className, array $expected): void
     {
         if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('Enums are not available for PHP versions lower than 8.1.0');
+
+            new ReflectionEnum($className);
             self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
         }
 
@@ -42,6 +48,9 @@ class ReflectionEnumTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionEnum::getCase
+     */
     public function testGetCase(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -52,6 +61,9 @@ class ReflectionEnumTest extends TestCase
         $this->assertSame(1, $reflectionEnum->getCase('ONE')->getValue());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionEnum::getCases
+     */
     public function testGetCases(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -65,6 +77,9 @@ class ReflectionEnumTest extends TestCase
         $this->assertEquals(new \ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $actual[0]);
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionEnum::hasCase
+     */
     public function testHasCase(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -77,6 +92,9 @@ class ReflectionEnumTest extends TestCase
         $this->assertFalse($reflectionEnum->hasCase('TWO'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionEnum::isBacked
+     */
     public function testIsBacked(): void
     {
         if (PHP_VERSION_ID < 80100) {

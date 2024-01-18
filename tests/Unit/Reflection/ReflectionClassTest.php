@@ -11,8 +11,10 @@ use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionUseStatement;
+use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\ClassFinal;
 use WebFu\Tests\Fixtures\ClassNonClonable;
+use WebFu\Tests\Fixtures\ClassReadOnly;
 use WebFu\Tests\Fixtures\ClassWithAttributes;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
@@ -28,6 +30,9 @@ use WebFu\Tests\Fixtures\AbstractClass;
 
 class ReflectionClassTest extends TestCase
 {
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getAnnotations
+     */
     public function testGetAnnotation(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
@@ -35,6 +40,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(['@template Test'], $reflectionClass->getAnnotations());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getAttributes
+     */
     public function testGetAttributes(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithAttributes::class);
@@ -43,6 +51,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
+     * @covers \WebFu\Reflection\ReflectionClass::getConstant
      * @dataProvider constantProvider
      */
     public function testGetConstant(int $expected, string $name): void
@@ -70,6 +79,9 @@ class ReflectionClassTest extends TestCase
         ];
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getConstant
+     */
     public function testGetConstantFail(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
@@ -80,6 +92,9 @@ class ReflectionClassTest extends TestCase
         $reflectionClass->getConstant('FOO');
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getConstants
+     */
     public function testGetConstants(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
@@ -93,6 +108,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getConstants());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getConstructor
+     */
     public function testGetConstructor(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -104,6 +122,9 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getConstructor());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getDefaultProperties
+     */
     public function testGetDefaultProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -118,6 +139,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getDefaultProperties());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getDocComment
+     */
     public function testDocComment(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
@@ -129,6 +153,9 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getDocComment());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getEndLine
+     */
     public function testGetEndLine(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -136,6 +163,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(9, $reflectionClass->getEndLine());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getExtension
+     */
     public function testExtension(): void
     {
         $reflectionClass = new ReflectionClass(\ReflectionClass::class);
@@ -147,6 +177,9 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getExtension());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getExtensionName
+     */
     public function testExtensionName(): void
     {
         $reflectionClass = new ReflectionClass(\ReflectionClass::class);
@@ -158,6 +191,9 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getExtensionName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getFileName
+     */
     public function testGetFileName(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -169,6 +205,9 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getFileName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getInterfaceNames
+     */
     public function testGetInterfaceNames(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -176,6 +215,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals([GenericInterface::class], $reflectionClass->getInterfaceNames());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getInterfaces
+     */
     public function testGetInterfaces(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -183,6 +225,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals([GenericInterface::class => new ReflectionClass(GenericInterface::class)], $reflectionClass->getInterfaces());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getMethod
+     */
     public function testGetMethod(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -190,6 +235,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters'), $reflectionClass->getMethod('methodWithoutParameters'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getMethods
+     */
     public function testGetMethods(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -207,6 +255,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getMethods());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getModifiers
+     */
     public function testGetModifiers(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -218,6 +269,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(\ReflectionClass::IS_EXPLICIT_ABSTRACT, $reflectionClass->getModifiers());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getName
+     */
     public function testGetName(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -225,6 +279,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(GenericClass::class, $reflectionClass->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getNamespaceName
+     */
     public function testGetNamespaceName(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -232,6 +289,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals('WebFu\Tests\Fixtures', $reflectionClass->getNamespaceName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getParentClass
+     */
     public function testGetParentClass(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -243,6 +303,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(new ReflectionClass(AbstractClass::class), $reflectionClass->getParentClass());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getProperties
+     */
     public function testGetProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -261,7 +324,10 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getProperties());
     }
 
-    /** @dataProvider propertyProvider */
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getProperty
+     * @dataProvider propertyProvider
+     */
     public function testGetProperty(string $name, ReflectionProperty|null $expected): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -285,6 +351,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
+     * @covers \WebFu\Reflection\ReflectionClass::getReflectionConstant
      * @dataProvider reflectionConstantProvider
      */
     public function testGetReflectionConstant(string $name, ReflectionClassConstant|null $expected): void
@@ -305,6 +372,9 @@ class ReflectionClassTest extends TestCase
         yield ['name' => 'iDoNotExist', 'expected' => null];
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getReflectionConstants
+     */
     public function testGetReflectionConstants(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
@@ -318,6 +388,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getReflectionConstants());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getShortName
+     */
     public function testGetShortName(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -325,6 +398,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals('GenericClass', $reflectionClass->getShortName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getStartLine
+     */
     public function testGetStartLine(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -332,6 +408,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(7, $reflectionClass->getStartLine());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getStaticProperties
+     */
     public function testGetStaticProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -343,6 +422,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getStaticProperties());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getStaticPropertyValue
+     */
     public function testGetStaticPropertyValue(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -352,6 +434,9 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(3, $reflectionClass->getStaticPropertyValue('staticPrivate'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getStaticPropertyValue
+     */
     public function testGetStaticPropertyValueException(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -362,6 +447,9 @@ class ReflectionClassTest extends TestCase
         $reflectionClass->getStaticPropertyValue('iDoNotExist');
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getTraitAliases
+     */
     public function testGetTraitAliases(): void
     {
         $reflectionClass = new ReflectionClass(ClassFinal::class);
@@ -374,6 +462,9 @@ class ReflectionClassTest extends TestCase
         );
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getTraitNames
+     */
     public function testGetTraitNames(): void
     {
         $reflectionClass = new ReflectionClass(ClassFinal::class);
@@ -383,6 +474,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getTraitNames());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getTraits
+     */
     public function testGetTraits(): void
     {
         $reflectionClass = new ReflectionClass(ClassFinal::class);
@@ -392,6 +486,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getTraits());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::getUseStatements
+     */
     public function testGetUseStatements(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithUseStatements::class);
@@ -401,6 +498,9 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getUseStatements());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::hasConstant
+     */
     public function testHasConstant(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
@@ -409,6 +509,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasConstant('DOES_NOT_EXIST'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::hasMethod
+     */
     public function testHasMethod(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -417,6 +520,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::hasProperty
+     */
     public function testHasProperty(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
@@ -425,6 +531,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasProperty('doesNotExist'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::implementsInterface
+     */
     public function testImplementsInterface(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithInterfaces::class);
@@ -432,6 +541,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->implementsInterface(GenericInterface::class));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::inNamespace
+     */
     public function testInNamespace(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -439,6 +551,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->inNamespace());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isAbstract
+     */
     public function testIsAbstract(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -450,6 +565,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isAbstract());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isAnonymous
+     */
     public function testIsAnonymous(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -461,6 +579,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isAnonymous());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isCloneable
+     */
     public function testIsCloneable(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -472,9 +593,18 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->isCloneable());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isEnum
+     */
     public function testIsEnum(): void
     {
         if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isEnum() is not available for PHP versions lower than 8.1.0');
+
+            $reflectionClass = new ReflectionClass(GenericClass::class);
+            $reflectionClass->isEnum();
+
             $this->markTestSkipped('Enum are not available for PHP versions lower than 8.1.0');
         }
 
@@ -487,6 +617,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isEnum());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isFinal
+     */
     public function testIsFinal(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -498,6 +631,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isFinal());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isInstance
+     */
     public function testIsInstance(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -506,6 +642,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->isInstance(new \stdClass()));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isInstantiable
+     */
     public function testIsInstantiable(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -517,6 +656,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->isInstantiable());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isInterface
+     */
     public function testIsInterface(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -528,6 +670,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isInterface());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isInternal
+     */
     public function testIsInternal(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -539,6 +684,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isInternal());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isIterable
+     */
     public function testIsIterable(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -550,11 +698,31 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isIterable());
     }
 
-    public function testIsReadonly(): void
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isReadOnly
+     */
+    public function testIsReadOnly(): void
     {
-        $this->markTestIncomplete();
+        if (PHP_VERSION_ID < 80200) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isReadOnly() is not available for PHP versions lower than 8.2.0');
+
+            $reflectionClass = new ReflectionClass(GenericClass::class);
+            $reflectionClass->isReadOnly();
+
+            $this->markTestSkipped('isReadOnly() is not available for PHP versions lower than 8.2.0');
+        }
+
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+        $this->assertFalse($reflectionClass->isReadOnly());
+
+        $reflectionClass = new ReflectionClass(ClassReadOnly::class);
+        $this->assertTrue($reflectionClass->isReadOnly());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isSubclassOf
+     */
     public function testIsSubclassOf(): void
     {
         $reflectionClass = new ReflectionClass(ClassFinal::class);
@@ -563,6 +731,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->isSubclassOf(\DateTime::class));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isTrait
+     */
     public function testIsTrait(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -574,6 +745,9 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->isTrait());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::isUserDefined
+     */
     public function testIsUserDefined(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -585,6 +759,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->isUserDefined());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::newInstance
+     */
     public function testNewInstance(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
@@ -592,6 +769,9 @@ class ReflectionClassTest extends TestCase
         $this->assertInstanceOf(GenericClass::class, $reflectionClass->newInstance());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::newInstanceArgs
+     */
     public function testNewInstanceArgs(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -599,6 +779,9 @@ class ReflectionClassTest extends TestCase
         $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceArgs([1, 'foo']));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::newInstanceWithoutConstructor
+     */
     public function testNewInstanceWithoutConstructor(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
@@ -606,6 +789,9 @@ class ReflectionClassTest extends TestCase
         $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceWithoutConstructor());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass::setStaticPropertyValue
+     */
     public function testSetStaticPropertyValue(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);

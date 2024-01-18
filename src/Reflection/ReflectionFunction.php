@@ -56,7 +56,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
         if (PHP_VERSION_ID < 80200) {
-            throw new WrongPhpVersionException('isAnonymous() is not available for PHP versions lower than 8.2.0');
+            throw new WrongPhpVersionException('Anonymous functions are not available for PHP versions lower than 8.2.0');
         }
 
         return $this->reflectionFunction->isAnonymous();

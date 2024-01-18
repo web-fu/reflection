@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace WebFu\Tests\Unit\Reflection;
 
-use Fixtures\ClassWithFinals;
+use WebFu\Reflection\WrongPhpVersionException;
+use WebFu\Tests\Fixtures\ClassWithFinals;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
@@ -17,6 +18,9 @@ use WebFu\Tests\Fixtures\GenericClass;
 
 class ReflectionMethodTest extends TestCase
 {
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getAttributes
+     */
     public function testGetAttributes(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
@@ -24,6 +28,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals([], $reflectionMethod->getAttributes());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getClosureScopeClass
+     */
     public function testGetClosureScopeClass(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
@@ -31,6 +38,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(null, $reflectionMethod->getClosureScopeClass());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getClosureThis
+     */
     public function testGetClosureThis(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
@@ -38,6 +48,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(null, $reflectionMethod->getClosureThis());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getClosureUsedVariables
+     */
     public function testGetClosureUsedVariables(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -49,6 +62,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals([], $reflectionMethod->getClosureUsedVariables());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getDocComment
+     */
     public function testGetDocComment(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -59,6 +75,9 @@ class ReflectionMethodTest extends TestCase
      */', $reflectionMethod->getDocComment());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getEndLine
+     */
     public function testGetEndLine(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -66,6 +85,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(33, $reflectionMethod->getEndLine());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getExtension
+     */
     public function testGetExtension(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -73,6 +95,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(null, $reflectionMethod->getExtension());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getExtensionName
+     */
     public function testGetExtensionName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -80,6 +105,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(null, $reflectionMethod->getExtensionName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getFileName
+     */
     public function testGetFileName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -87,6 +115,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertStringContainsString('/Fixtures/ClassWithDocComments.php', $reflectionMethod->getFileName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getName
+     */
     public function testGetName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -94,6 +125,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals('getProperty', $reflectionMethod->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getNamespaceName
+     */
     public function testGetNamespaceName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -101,6 +135,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals('', $reflectionMethod->getNamespaceName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getShortName
+     */
     public function getShortName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -108,6 +145,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals('getProperty', $reflectionMethod->getShortName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getStartLine
+     */
     public function testGetStartLine(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -115,6 +155,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(30, $reflectionMethod->getStartLine());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getStaticVariables
+     */
     public function testGetStaticVariables(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -122,6 +165,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals([], $reflectionMethod->getStaticVariables());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getTentativeReturnType
+     */
     public function testGetTentativeReturnType(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -134,6 +180,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(new ReflectionType(['mixed']), $actual);
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::hasReturnType
+     */
     public function testHasReturnType(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -141,41 +190,59 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(true, $reflectionMethod->hasReturnType());
     }
 
-    public function testInNameSpace(): void
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::inNamespace
+     */
+    public function testInNamespace(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
         $this->assertFalse($reflectionMethod->inNamespace());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isClosure
+     */
     public function testIsClosure(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->isClosure());
+        $this->assertFalse( $reflectionMethod->isClosure());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isDeprecated
+     */
     public function testIsDeprecated(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->isDeprecated());
+        $this->assertFalse( $reflectionMethod->isDeprecated());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isGenerator
+     */
     public function testIsGenerator(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->isGenerator());
+        $this->assertFalse( $reflectionMethod->isGenerator());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isInternal
+     */
     public function testIsInternal(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->isInternal());
+        $this->assertFalse( $reflectionMethod->isInternal());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isUserDefined
+     */
     public function testIsUserDefined(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -183,20 +250,29 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(true, $reflectionMethod->isUserDefined());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isVariadic
+     */
     public function testIsVariadic(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->isVariadic());
+        $this->assertFalse( $reflectionMethod->isVariadic());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::returnsReference
+     */
     public function testReturnsReference(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(false, $reflectionMethod->returnsReference());
+        $this->assertFalse( $reflectionMethod->returnsReference());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getAnnotations
+     */
     public function testGetAnnotation(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -207,6 +283,9 @@ class ReflectionMethodTest extends TestCase
         ], $reflectionMethod->getAnnotations());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getNumberOfParameters
+     */
     public function testGetNumberOfParameters(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -222,6 +301,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(2, $reflectionMethod->getNumberOfParameters());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getNumberOfRequiredParameters
+     */
     public function testGetNumberOfRequiredParameters(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -237,6 +319,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(1, $reflectionMethod->getNumberOfRequiredParameters());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getParameters
+     */
     public function testGetParameters(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
@@ -246,6 +331,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(new ReflectionType(['string']), $parameters[1]->getType());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getReturnType
+     */
     public function testGetReturnType(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -253,6 +341,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(new ReflectionType(['string']), $reflectionMethod->getReturnType());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getReturnDocTypeNames
+     */
     public function testGetReturnDocTypeName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -268,6 +359,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals([GenericClass::class . '[]'], $reflectionMethod->getReturnDocTypeNames());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getReturnTypeExtended
+     */
     public function testGetReturnTypeExtended(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
@@ -275,6 +369,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionMethod->getReturnTypeExtended());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::getPrototype
+     */
     public function testGetPrototype(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassFinal::class, 'publicFunction');
@@ -282,10 +379,19 @@ class ReflectionMethodTest extends TestCase
         $this->assertEquals(new ReflectionMethod(AbstractClass::class, 'publicFunction'), $reflectionMethod->getPrototype());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::hasPrototype
+     */
     public function testHasPrototype(): void
     {
         if (PHP_VERSION_ID < 80200) {
-            $this->markTestSkipped('hasPrototype is not available for PHP version lower than 8.2.0');
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('hasPrototype() is not available for PHP versions lower than 8.2.0');
+
+            $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+            $reflectionMethod->hasPrototype();
+
+            $this->markTestSkipped('hasPrototype() is not available for PHP versions lower than 8.2.0');
         }
 
         $reflectionMethod = new ReflectionMethod(ClassFinal::class, 'publicFunction');
@@ -295,6 +401,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertFalse($reflectionMethod->hasPrototype());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::invoke
+     */
     public function testInvoke(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithAllMandatoryParameters');
@@ -305,6 +414,9 @@ class ReflectionMethodTest extends TestCase
         ], $reflectionMethod->invoke(new ClassWithMethods(), 1, 'string'));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::invokeArgs
+     */
     public function testInvokeArgs(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithAllMandatoryParameters');
@@ -315,6 +427,9 @@ class ReflectionMethodTest extends TestCase
         ], $reflectionMethod->invokeArgs(new ClassWithMethods(), [1, 'string']));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isAbstract
+     */
     public function testIsAbstract(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -324,6 +439,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isAbstract());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isConstructor
+     */
     public function testIsConstructor(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -333,6 +451,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isConstructor());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isDestructor
+     */
     public function testIsDestructor(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -342,9 +463,18 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isDestructor());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isFinal
+     */
     public function testIsFinal(): void
     {
         if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isFinal is not available for PHP versions lower than 8.1.0');
+
+            $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+            $reflectionMethod->isFinal();
+
             $this->markTestSkipped('Final keyword is not available for PHP versions lower than 8.1.0');
         }
 
@@ -355,6 +485,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isFinal());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isPrivate
+     */
     public function testIsPrivate(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -364,6 +497,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isPrivate());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isProtected
+     */
     public function testIsProtected(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -373,6 +509,9 @@ class ReflectionMethodTest extends TestCase
         $this->assertTrue($reflectionMethod->isProtected());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isPublic
+     */
     public function testIsPublic(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
@@ -382,7 +521,10 @@ class ReflectionMethodTest extends TestCase
         $this->assertFalse($reflectionMethod->isPublic());
     }
 
-    public function testMethodIsStatic(): void
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::isStatic
+     */
+    public function testIsStatic(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
         $this->assertFalse($reflectionMethod->isStatic());

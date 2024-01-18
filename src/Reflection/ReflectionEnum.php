@@ -21,6 +21,10 @@ class ReflectionEnum extends ReflectionClass
 
     public function __construct(object|string $objectOrClass)
     {
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
         $this->reflectionEnum = new \ReflectionEnum($objectOrClass);
     }
 

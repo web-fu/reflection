@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace WebFu\Tests\Unit\Reflection;
 
-use Fixtures\ClassWithFinals;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionClassConstant;
+use WebFu\Reflection\ReflectionException;
+use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\Attribute;
 use WebFu\Tests\Fixtures\ClassWithConstants;
+use WebFu\Tests\Fixtures\ClassWithFinals;
 use WebFu\Tests\Fixtures\EnumClass;
 
 class ReflectionClassConstantTest extends TestCase
 {
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getAttributes
+     */
     public function testGetAttributes(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_ATTRIBUTE');
@@ -23,6 +28,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertSame(Attribute::class, $attributes[0]->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getDeclaringClass
+     */
     public function testGetDeclaringClass(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -30,6 +38,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertEquals(new ReflectionClass(ClassWithConstants::class), $reflectionClassConstant->getDeclaringClass());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getDocComment
+     */
     public function testGetDocComment(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -43,6 +54,9 @@ class ReflectionClassConstantTest extends TestCase
      */', $reflectionClassConstant->getDocComment());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getModifiers
+     */
     public function testGetModifiers(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -61,11 +75,14 @@ class ReflectionClassConstantTest extends TestCase
             $this->markTestSkipped('Final constants are not available for PHP versions lower than 8.1.0');
         }
 
-        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_FINAL');
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithFinals::class, 'PUBLIC_FINAL');
 
         $this->assertSame(33, $reflectionClassConstant->getModifiers());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getName
+     */
     public function testGetName(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -73,6 +90,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertSame('PUBLIC', $reflectionClassConstant->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getValue
+     */
     public function testGetValue(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -80,6 +100,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertSame(1, $reflectionClassConstant->getValue());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::isEnumCase
+     */
     public function testIsEnumCase(): void
     {
         if (PHP_VERSION_ID < 80100) {
@@ -95,9 +118,18 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertTrue($reflectionClassConstant->isEnumCase());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::isFinal
+     */
     public function testIsFinal(): void
     {
         if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isFinal() is not available for PHP versions lower than 8.1.0');
+
+            $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+            $this->assertFalse($reflectionClassConstant->isFinal());
+
             self::markTestSkipped('Final keyword is not available for PHP versions lower than 8.1.0');
         }
 
@@ -108,6 +140,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertTrue($reflectionClassConstant->isFinal());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::isPrivate
+     */
     public function testIsPublic(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -117,6 +152,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertFalse($reflectionClassConstant->isPublic());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::isProtected
+     */
     public function testIsProtected(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
@@ -126,6 +164,9 @@ class ReflectionClassConstantTest extends TestCase
         $this->assertTrue($reflectionClassConstant->isProtected());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::isPrivate
+     */
     public function testIsPrivate(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');

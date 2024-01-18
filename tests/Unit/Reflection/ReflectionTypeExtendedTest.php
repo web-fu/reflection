@@ -14,6 +14,9 @@ class ReflectionTypeExtendedTest extends TestCase
         require_once __DIR__ . '/../../Fixtures/example.php';
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionTypeExtended::getTypeNames
+     */
     public function testGetTypeNames(): void
     {
         $reflectionType = new ReflectionTypeExtended(['string'], ['class-string']);
@@ -21,6 +24,9 @@ class ReflectionTypeExtendedTest extends TestCase
         $this->assertEquals(['string'], $reflectionType->getTypeNames());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionTypeExtended::getDocBlockTypeNames
+     */
     public function testGetDocBlockTypeNames(): void
     {
         $reflectionType = new ReflectionTypeExtended(['string'], ['class-string']);
