@@ -2,18 +2,29 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionClassConstant;
-use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\Attribute;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithFinals;
 use WebFu\Tests\Fixtures\EnumClass;
 
+/**
+ * @coversNothing
+ */
 class ReflectionClassConstantTest extends TestCase
 {
     /**
@@ -22,7 +33,7 @@ class ReflectionClassConstantTest extends TestCase
     public function testGetAttributes(): void
     {
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_ATTRIBUTE');
-        $attributes = $reflectionClassConstant->getAttributes();
+        $attributes              = $reflectionClassConstant->getAttributes();
 
         $this->assertCount(1, $attributes);
         $this->assertSame(Attribute::class, $attributes[0]->getName());

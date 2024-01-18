@@ -2,20 +2,33 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
-use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\ClassWithFinals;
+use ArrayAccess;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\ReflectionTypeExtended;
+use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\AbstractClass;
 use WebFu\Tests\Fixtures\ClassFinal;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Tests\Fixtures\ClassWithFinals;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\GenericClass;
 
+/**
+ * @coversNothing
+ */
 class ReflectionMethodTest extends TestCase
 {
     /**
@@ -35,7 +48,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
 
-        $this->assertEquals(null, $reflectionMethod->getClosureScopeClass());
+        $this->assertNull($reflectionMethod->getClosureScopeClass());
     }
 
     /**
@@ -45,7 +58,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
 
-        $this->assertEquals(null, $reflectionMethod->getClosureThis());
+        $this->assertNull($reflectionMethod->getClosureThis());
     }
 
     /**
@@ -92,7 +105,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(null, $reflectionMethod->getExtension());
+        $this->assertNull($reflectionMethod->getExtension());
     }
 
     /**
@@ -102,7 +115,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(null, $reflectionMethod->getExtensionName());
+        $this->assertNull($reflectionMethod->getExtensionName());
     }
 
     /**
@@ -174,8 +187,8 @@ class ReflectionMethodTest extends TestCase
             self::markTestSkipped('Tentative return types are not available for PHP versions lower than 8.1.0');
         }
 
-        $reflectionMethod = new ReflectionMethod(\ArrayAccess::class, 'offsetGet');
-        $actual = $reflectionMethod->getTentativeReturnType();
+        $reflectionMethod = new ReflectionMethod(ArrayAccess::class, 'offsetGet');
+        $actual           = $reflectionMethod->getTentativeReturnType();
 
         $this->assertEquals(new ReflectionType(['mixed']), $actual);
     }
@@ -187,7 +200,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(true, $reflectionMethod->hasReturnType());
+        $this->assertTrue($reflectionMethod->hasReturnType());
     }
 
     /**
@@ -207,7 +220,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->isClosure());
+        $this->assertFalse($reflectionMethod->isClosure());
     }
 
     /**
@@ -217,7 +230,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->isDeprecated());
+        $this->assertFalse($reflectionMethod->isDeprecated());
     }
 
     /**
@@ -227,7 +240,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->isGenerator());
+        $this->assertFalse($reflectionMethod->isGenerator());
     }
 
     /**
@@ -237,7 +250,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->isInternal());
+        $this->assertFalse($reflectionMethod->isInternal());
     }
 
     /**
@@ -247,7 +260,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(true, $reflectionMethod->isUserDefined());
+        $this->assertTrue($reflectionMethod->isUserDefined());
     }
 
     /**
@@ -257,7 +270,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->isVariadic());
+        $this->assertFalse($reflectionMethod->isVariadic());
     }
 
     /**
@@ -267,7 +280,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertFalse( $reflectionMethod->returnsReference());
+        $this->assertFalse($reflectionMethod->returnsReference());
     }
 
     /**
@@ -325,7 +338,7 @@ class ReflectionMethodTest extends TestCase
     public function testGetParameters(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
-        $parameters = $reflectionMethod->getParameters();
+        $parameters       = $reflectionMethod->getParameters();
 
         $this->assertEquals(new ReflectionType(['int']), $parameters[0]->getType());
         $this->assertEquals(new ReflectionType(['string']), $parameters[1]->getType());
@@ -356,7 +369,7 @@ class ReflectionMethodTest extends TestCase
 
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getUseStatementDocComment');
 
-        $this->assertEquals([GenericClass::class . '[]'], $reflectionMethod->getReturnDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionMethod->getReturnDocTypeNames());
     }
 
     /**

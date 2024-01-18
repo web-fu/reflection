@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
@@ -16,11 +25,14 @@ use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
+/**
+ * @coversNothing
+ */
 class ReflectionParameterTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
-        require_once __DIR__ . '/../../Fixtures/example.php';
+        require_once __DIR__.'/../../Fixtures/example.php';
     }
 
     /**
@@ -142,7 +154,7 @@ class ReflectionParameterTest extends TestCase
 
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setUseStatementDocComment'], 'param');
 
-        $this->assertEquals([GenericClass::class . '[]'], $reflectionParameter->getDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionParameter->getDocTypeNames());
 
         $reflectionParameter = new ReflectionParameter('example', 'param');
 

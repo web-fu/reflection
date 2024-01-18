@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
@@ -17,6 +26,9 @@ use WebFu\Tests\Fixtures\ClassWithReadOnly;
 use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
+/**
+ * @coversNothing
+ */
 class ReflectionPropertyTest extends TestCase
 {
     /**
@@ -38,7 +50,7 @@ class ReflectionPropertyTest extends TestCase
     public function testGetAttributes(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithAttribute');
-        $attributes = $reflectionProperty->getAttributes();
+        $attributes         = $reflectionProperty->getAttributes();
 
         $this->assertCount(1, $attributes);
         $this->assertEquals(Attribute::class, $attributes[0]->getName());
@@ -120,7 +132,7 @@ class ReflectionPropertyTest extends TestCase
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'useStatementDocComment');
 
-        $this->assertEquals([GenericClass::class . '[]'], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionProperty->getDocTypeNames());
     }
 
     /**
@@ -158,7 +170,7 @@ class ReflectionPropertyTest extends TestCase
      */
     public function testGetValue(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'public');
 
         $this->assertEquals(1, $reflectionProperty->getValue($object));
@@ -181,7 +193,7 @@ class ReflectionPropertyTest extends TestCase
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
 
-        $this->assertEquals(true, $reflectionProperty->hasType());
+        $this->assertTrue($reflectionProperty->hasType());
     }
 
     /**
@@ -191,7 +203,7 @@ class ReflectionPropertyTest extends TestCase
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
 
-        $this->assertEquals(true, $reflectionProperty->isDefault());
+        $this->assertTrue($reflectionProperty->isDefault());
     }
 
     /**
@@ -199,7 +211,7 @@ class ReflectionPropertyTest extends TestCase
      */
     public function testIsInitialized(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'public');
 
         $this->assertTrue($reflectionProperty->isInitialized($object));
@@ -282,7 +294,7 @@ class ReflectionPropertyTest extends TestCase
      */
     public function testSetAccessible(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'private');
         $reflectionProperty->setAccessible(true);
 
@@ -294,7 +306,7 @@ class ReflectionPropertyTest extends TestCase
      */
     public function testSetValue(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'private');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, 6);

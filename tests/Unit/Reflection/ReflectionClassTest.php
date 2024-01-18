@@ -2,9 +2,22 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
+use ArrayObject;
+use DateTime;
 use PHPUnit\Framework\TestCase;
+use ReflectionExtension;
+use stdClass;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionClassConstant;
 use WebFu\Reflection\ReflectionException;
@@ -12,6 +25,7 @@ use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionUseStatement;
 use WebFu\Reflection\WrongPhpVersionException;
+use WebFu\Tests\Fixtures\AbstractClass;
 use WebFu\Tests\Fixtures\ClassFinal;
 use WebFu\Tests\Fixtures\ClassNonClonable;
 use WebFu\Tests\Fixtures\ClassReadOnly;
@@ -26,8 +40,10 @@ use WebFu\Tests\Fixtures\EnumClass;
 use WebFu\Tests\Fixtures\GenericClass;
 use WebFu\Tests\Fixtures\GenericInterface;
 use WebFu\Tests\Fixtures\GenericTrait;
-use WebFu\Tests\Fixtures\AbstractClass;
 
+/**
+ * @coversNothing
+ */
 class ReflectionClassTest extends TestCase
 {
     /**
@@ -52,6 +68,7 @@ class ReflectionClassTest extends TestCase
 
     /**
      * @covers \WebFu\Reflection\ReflectionClass::getConstant
+     *
      * @dataProvider constantProvider
      */
     public function testGetConstant(int $expected, string $name): void
@@ -67,15 +84,15 @@ class ReflectionClassTest extends TestCase
     {
         yield 'public' => [
             'expected' => 1,
-            'name' => 'PUBLIC',
+            'name'     => 'PUBLIC',
         ];
         yield 'protected' => [
             'expected' => 2,
-            'name' => 'PROTECTED',
+            'name'     => 'PROTECTED',
         ];
         yield 'private' => [
             'expected' => 3,
-            'name' => 'PRIVATE',
+            'name'     => 'PRIVATE',
         ];
     }
 
@@ -100,10 +117,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
 
         $this->assertEquals([
-            'PUBLIC' => 1,
-            'PROTECTED' => 2,
-            'PRIVATE' => 3,
-            'PUBLIC_WITH_ATTRIBUTE' => 4,
+            'PUBLIC'                  => 1,
+            'PROTECTED'               => 2,
+            'PRIVATE'                 => 3,
+            'PUBLIC_WITH_ATTRIBUTE'   => 4,
             'PUBLIC_WITH_DOC_COMMENT' => 5,
         ], $reflectionClass->getConstants());
     }
@@ -130,12 +147,12 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
         $this->assertEquals([
-            'public' => 1,
-            'protected' => 2,
-            'private' => 3,
-            'staticPublic' => 1,
+            'public'          => 1,
+            'protected'       => 2,
+            'private'         => 3,
+            'staticPublic'    => 1,
             'staticProtected' => 2,
-            'staticPrivate' => 3,
+            'staticPrivate'   => 3,
         ], $reflectionClass->getDefaultProperties());
     }
 
@@ -146,7 +163,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
 
-        $this->assertEquals('/**' . PHP_EOL . ' * @template Test' . PHP_EOL . ' */', $reflectionClass->getDocComment());
+        $this->assertEquals('/**'.PHP_EOL.' * @template Test'.PHP_EOL.' */', $reflectionClass->getDocComment());
 
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
@@ -170,7 +187,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(\ReflectionClass::class);
 
-        $this->assertEquals(new \ReflectionExtension('Reflection'), $reflectionClass->getExtension());
+        $this->assertEquals(new ReflectionExtension('Reflection'), $reflectionClass->getExtension());
 
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
@@ -200,7 +217,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertStringContainsString('/Fixtures/GenericClass.php', $reflectionClass->getFileName());
 
-        $reflectionClass = new ReflectionClass(\DateTime::class);
+        $reflectionClass = new ReflectionClass(DateTime::class);
 
         $this->assertNull($reflectionClass->getFileName());
     }
@@ -326,6 +343,7 @@ class ReflectionClassTest extends TestCase
 
     /**
      * @covers \WebFu\Reflection\ReflectionClass::getProperty
+     *
      * @dataProvider propertyProvider
      */
     public function testGetProperty(string $name, ReflectionProperty|null $expected): void
@@ -352,6 +370,7 @@ class ReflectionClassTest extends TestCase
 
     /**
      * @covers \WebFu\Reflection\ReflectionClass::getReflectionConstant
+     *
      * @dataProvider reflectionConstantProvider
      */
     public function testGetReflectionConstant(string $name, ReflectionClassConstant|null $expected): void
@@ -416,9 +435,9 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
         $this->assertEquals([
-            'staticPublic' => 1,
+            'staticPublic'    => 1,
             'staticProtected' => 2,
-            'staticPrivate' => 3,
+            'staticPrivate'   => 3,
         ], $reflectionClass->getStaticProperties());
     }
 
@@ -456,7 +475,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertEquals(
             [
-            'traitFunction' => GenericTrait::class . '::publicTraitFunction',
+            'traitFunction' => GenericTrait::class.'::publicTraitFunction',
         ],
             $reflectionClass->getTraitAliases()
         );
@@ -494,7 +513,7 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithUseStatements::class);
         $this->assertEquals([
             new ReflectionUseStatement(GenericClass::class, GenericClass::class),
-            new ReflectionUseStatement(\DateTime::class, 'DT'),
+            new ReflectionUseStatement(DateTime::class, 'DT'),
         ], $reflectionClass->getUseStatements());
     }
 
@@ -574,7 +593,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertFalse($reflectionClass->isAnonymous());
 
-        $reflectionClass = new ReflectionClass(new class () {});
+        $reflectionClass = new ReflectionClass(new class() {});
 
         $this->assertTrue($reflectionClass->isAnonymous());
     }
@@ -639,7 +658,7 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertTrue($reflectionClass->isInstance(new GenericClass()));
-        $this->assertFalse($reflectionClass->isInstance(new \stdClass()));
+        $this->assertFalse($reflectionClass->isInstance(new stdClass()));
     }
 
     /**
@@ -679,7 +698,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertFalse($reflectionClass->isInternal());
 
-        $reflectionClass = new ReflectionClass(\DateTime::class);
+        $reflectionClass = new ReflectionClass(DateTime::class);
 
         $this->assertTrue($reflectionClass->isInternal());
     }
@@ -693,7 +712,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertFalse($reflectionClass->isIterable());
 
-        $reflectionClass = new ReflectionClass(\ArrayObject::class);
+        $reflectionClass = new ReflectionClass(ArrayObject::class);
 
         $this->assertTrue($reflectionClass->isIterable());
     }
@@ -728,7 +747,7 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassFinal::class);
 
         $this->assertTrue($reflectionClass->isSubclassOf(AbstractClass::class));
-        $this->assertFalse($reflectionClass->isSubclassOf(\DateTime::class));
+        $this->assertFalse($reflectionClass->isSubclassOf(DateTime::class));
     }
 
     /**
@@ -754,7 +773,7 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->isUserDefined());
 
-        $reflectionClass = new ReflectionClass(\DateTime::class);
+        $reflectionClass = new ReflectionClass(DateTime::class);
 
         $this->assertFalse($reflectionClass->isUserDefined());
     }

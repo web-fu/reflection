@@ -2,21 +2,36 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
-use WebFu\Reflection\ReflectionEnum;
 use PHPUnit\Framework\TestCase;
+use ReflectionEnumBackedCase;
+use WebFu\Reflection\ReflectionEnum;
 use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\BackedEnum;
 use WebFu\Tests\Fixtures\BasicEnum;
 
+/**
+ * @coversNothing
+ */
 class ReflectionEnumTest extends TestCase
 {
     /**
      * @covers \WebFu\Reflection\ReflectionEnum::getBackingType
+     *
      * @dataProvider backingTypeProvider
+     *
      * @param class-string $className
-     * @param string[] $expected
+     * @param string[]     $expected
      */
     public function testGetBackingType(string $className, array $expected): void
     {
@@ -40,11 +55,11 @@ class ReflectionEnumTest extends TestCase
     {
         yield 'backed-enum' => [
             'className' => BackedEnum::class,
-            'expected' => ['int'],
+            'expected'  => ['int'],
         ];
         yield 'basic-enum' => [
             'className' => BasicEnum::class,
-            'expected' => ['mixed'],
+            'expected'  => ['mixed'],
         ];
     }
 
@@ -71,10 +86,10 @@ class ReflectionEnumTest extends TestCase
         }
 
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
-        $actual = $reflectionEnum->getCases();
+        $actual         = $reflectionEnum->getCases();
 
         $this->assertCount(1, $actual);
-        $this->assertEquals(new \ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $actual[0]);
+        $this->assertEquals(new ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $actual[0]);
     }
 
     /**
@@ -102,7 +117,7 @@ class ReflectionEnumTest extends TestCase
         }
 
         $backedEnum = new ReflectionEnum(BackedEnum::class);
-        $basicEnum = new ReflectionEnum(BasicEnum::class);
+        $basicEnum  = new ReflectionEnum(BasicEnum::class);
 
         $this->assertTrue($backedEnum->isBacked());
         $this->assertFalse($basicEnum->isBacked());

@@ -1,7 +1,11 @@
 <?php
 
 $finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__.'/src');
+    ->in(__DIR__.'/src')
+    ->in(__DIR__.'/tests/Benchmark')
+    ->in(__DIR__.'/tests/Integration')
+    ->in(__DIR__.'/tests/Unit')
+;
 
 return (new PhpCsFixer\Config())
     ->setRules([
