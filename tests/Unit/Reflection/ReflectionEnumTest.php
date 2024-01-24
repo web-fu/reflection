@@ -21,7 +21,7 @@ use WebFu\Tests\Fixtures\BackedEnum;
 use WebFu\Tests\Fixtures\BasicEnum;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionEnum
  */
 class ReflectionEnumTest extends TestCase
 {
@@ -73,7 +73,7 @@ class ReflectionEnumTest extends TestCase
         }
 
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
-        $this->assertEquals(new \ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $reflectionEnum->getCase('ONE'));
+        $this->assertEquals(new ReflectionEnumBackedCase(BackedEnum::class, 'ONE'), $reflectionEnum->getCase('ONE'));
     }
 
     /**
