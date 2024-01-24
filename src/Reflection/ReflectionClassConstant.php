@@ -17,15 +17,13 @@ use ReflectionAttribute;
 
 class ReflectionClassConstant extends AbstractReflection
 {
-    /* Constants */
-    public const IS_PUBLIC    = \ReflectionClassConstant::IS_PUBLIC;
-    public const IS_PROTECTED = \ReflectionClassConstant::IS_PROTECTED;
-    public const IS_PRIVATE   = \ReflectionClassConstant::IS_PRIVATE;
+    public const IS_PUBLIC    = 1;
+    public const IS_PROTECTED = 2;
+    public const IS_PRIVATE   = 4;
     public const IS_FINAL     = 5;
 
     private \ReflectionClassConstant $reflectionClassConstant;
 
-    /* Methods */
     public function __construct(object|string $class, string $constant)
     {
         $this->reflectionClassConstant = new \ReflectionClassConstant($class, $constant);

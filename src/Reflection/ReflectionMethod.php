@@ -17,12 +17,12 @@ use Closure;
 
 class ReflectionMethod extends ReflectionFunctionAbstract
 {
-    public const IS_STATIC    = \ReflectionMethod::IS_STATIC;
-    public const IS_PUBLIC    = \ReflectionMethod::IS_PUBLIC;
-    public const IS_PROTECTED = \ReflectionMethod::IS_PROTECTED;
-    public const IS_PRIVATE   = \ReflectionMethod::IS_PRIVATE;
-    public const IS_ABSTRACT  = \ReflectionMethod::IS_ABSTRACT;
-    public const IS_FINAL     = \ReflectionMethod::IS_FINAL;
+    public const IS_STATIC    = 16;
+    public const IS_PUBLIC    = 1;
+    public const IS_PROTECTED = 2;
+    public const IS_PRIVATE   = 4;
+    public const IS_ABSTRACT  = 64;
+    public const IS_FINAL     = 32;
 
     /* Methods */
     public function __construct(object|string $objectOrMethod, string $method)
