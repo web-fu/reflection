@@ -110,7 +110,7 @@ class ReflectionPropertyTest extends TestCase
 
         $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'union');
 
-        $this->assertEquals(['string', 'int'], $reflectionProperty->getTypeNames());
+        $this->assertEquals(['int', 'string'], $reflectionProperty->getTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'noType');
 

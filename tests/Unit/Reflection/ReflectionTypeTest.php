@@ -49,7 +49,7 @@ class ReflectionTypeTest extends TestCase
     {
         $reflectionType = new ReflectionType(['string', 'null']);
 
-        $this->assertEquals(['string', 'null'], $reflectionType->getTypeNames());
+        $this->assertEquals(['null', 'string'], $reflectionType->getTypeNames());
     }
 
     /**
@@ -59,6 +59,6 @@ class ReflectionTypeTest extends TestCase
     {
         $reflectionType = new ReflectionType(['string', 'null']);
 
-        $this->assertEquals('string|null', $reflectionType->__toString());
+        $this->assertEquals('null|string', $reflectionType->__toString());
     }
 }

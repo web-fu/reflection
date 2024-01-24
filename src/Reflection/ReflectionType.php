@@ -16,10 +16,17 @@ namespace WebFu\Reflection;
 class ReflectionType
 {
     /**
+     * @var string[]
+     */
+    private array $types = [];
+
+    /**
      * @param string[] $types
      */
-    public function __construct(private array $types = [], private string $separator = '|')
+    public function __construct(array $types = [], private string $separator = '|')
     {
+        sort($types);
+        $this->types = $types;
     }
 
     public function __toString(): string
