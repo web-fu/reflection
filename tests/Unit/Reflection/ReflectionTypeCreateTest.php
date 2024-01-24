@@ -14,37 +14,42 @@ declare(strict_types=1);
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionNamedType;
-use ReflectionUnionType;
+use ReflectionClass;
 
 use function WebFu\Reflection\reflection_type_create;
 
 use WebFu\Reflection\ReflectionType;
+use WebFu\Tests\Fixtures\ClassWithTypes;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\reflection_type_create
  */
 class ReflectionTypeCreateTest extends TestCase
 {
     /**
      * @covers \WebFu\Reflection\reflection_type_create
-     *
-     * @dataProvider typeProvider
      */
-    public function testReflectionTypeCreate(ReflectionType $expected, \ReflectionType|ReflectionNamedType|ReflectionUnionType|null $reflectionType): void
+    public function testReflectionTypeCreate(): void
     {
-        $reflectionType = reflection_type_create($reflectionType);
+        // null
+        $reflectionType = reflection_type_create(null);
 
-        $this->assertEquals($expected, $reflectionType);
+        $this->assertEquals(new ReflectionType(['mixed']), $reflectionType);
 
-        $this->markTestIncomplete('This test must be completed');
-    }
+        // ReflectionNamedType
+        $reflectionClass    = new ReflectionClass(ClassWithTypes::class);
+        $reflectionProperty = $reflectionClass->getProperty('simple');
 
-    public function typeProvider(): iterable
-    {
-        yield 'null' => [
-            new ReflectionType(['mixed']),
-            null,
-        ];
+        $reflectionType = reflection_type_create($reflectionProperty->getType());
+
+        $this->assertEquals(new ReflectionType(['int']), $reflectionType);
+
+        // ReflectionUnionType
+        $reflectionClass    = new ReflectionClass(ClassWithTypes::class);
+        $reflectionProperty = $reflectionClass->getProperty('union');
+
+        $reflectionType = reflection_type_create($reflectionProperty->getType());
+
+        $this->assertEquals(new ReflectionType(['int', 'string']), $reflectionType);
     }
 }

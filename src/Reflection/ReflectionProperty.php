@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace WebFu\Reflection;
 
 use ReflectionAttribute;
-use ReflectionNamedType;
-use ReflectionUnionType;
 
 class ReflectionProperty extends AbstractReflection
 {
@@ -65,24 +63,15 @@ class ReflectionProperty extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        $reflectionType = $this->reflectionProperty->getType();
+        $reflectionType = $this->getType();
 
-        if (!$reflectionType) {
-            return ['mixed'];
-        }
-
-        /** @var ReflectionNamedType[] $reflectionTypes */
-        $reflectionTypes = $reflectionType instanceof ReflectionUnionType
-            ? $reflectionType->getTypes()
-            : [$reflectionType];
-
-        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
+        return $reflectionType->getTypeNames();
     }
 
     /**
      * @return string[]
      */
-    public function getDocTypeNames(): array
+    public function getPhpDocTypeNames(): array
     {
         $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
 
@@ -127,9 +116,9 @@ class ReflectionProperty extends AbstractReflection
         return $docTypesListResolved;
     }
 
-    public function getTypeExtended(): ReflectionTypeExtended
+    public function getPhpDocType(): ReflectionPhpDocType
     {
-        return new ReflectionTypeExtended($this->getTypeNames(), $this->getDocTypeNames());
+        return new ReflectionPhpDocType($this->getTypeNames(), $this->getPhpDocTypeNames());
     }
 
     public function getModifiers(): int

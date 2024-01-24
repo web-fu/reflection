@@ -75,9 +75,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         return new self($method->getDeclaringClass()->getName(), $method->getName());
     }
 
-    public function getReturnTypeExtended(): ReflectionTypeExtended
+    public function getReturnPhpDocType(): ReflectionPhpDocType
     {
-        return new ReflectionTypeExtended($this->getReturnTypeNames(), $this->getReturnDocTypeNames());
+        return new ReflectionPhpDocType($this->getReturnTypeNames(), $this->getReturnDocTypeNames());
     }
 
     /**

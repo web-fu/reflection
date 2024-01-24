@@ -16,8 +16,8 @@ namespace WebFu\Tests\Unit\Reflection;
 use ArrayAccess;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
+use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\AbstractClass;
 use WebFu\Tests\Fixtures\ClassFinal;
@@ -373,13 +373,13 @@ class ReflectionMethodTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionMethod::getReturnTypeExtended
+     * @covers \WebFu\Reflection\ReflectionMethod::getReturnPhpDocType
      */
-    public function testGetReturnTypeExtended(): void
+    public function testGetReturnPhpDocType(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionMethod->getReturnTypeExtended());
+        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionMethod->getReturnPhpDocType());
     }
 
     /**

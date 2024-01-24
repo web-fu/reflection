@@ -15,9 +15,9 @@ namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
+use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\Attribute;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
@@ -118,31 +118,31 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getDocTypeNames
+     * @covers \WebFu\Reflection\ReflectionProperty::getPhpDocTypeNames
      */
     public function testGetDocTypeName(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');
 
-        $this->assertEquals(['class-string'], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals(['class-string'], $reflectionProperty->getPhpDocTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'noDocComments');
 
-        $this->assertEquals([], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals([], $reflectionProperty->getPhpDocTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'useStatementDocComment');
 
-        $this->assertEquals([GenericClass::class.'[]'], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionProperty->getPhpDocTypeNames());
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getTypeExtended
+     * @covers \WebFu\Reflection\ReflectionProperty::getPhpDocType
      */
-    public function testGetTypeExtended(): void
+    public function testGetPhpDocType(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment');
 
-        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionProperty->getTypeExtended());
+        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionProperty->getPhpDocType());
     }
 
     /**

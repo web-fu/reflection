@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-class ReflectionTypeExtended
+class ReflectionPhpDocType
 {
     /**
      * @param string[] $typeNames

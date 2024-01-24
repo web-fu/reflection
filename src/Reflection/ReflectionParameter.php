@@ -119,7 +119,7 @@ class ReflectionParameter extends AbstractReflection
     /**
      * @return string[]
      */
-    public function getDocTypeNames(): array
+    public function getPhpDocTypeNames(): array
     {
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@param'));
 
@@ -167,9 +167,9 @@ class ReflectionParameter extends AbstractReflection
         return $docTypesListResolved;
     }
 
-    public function getTypeExtended(): ReflectionTypeExtended
+    public function getPhpDocType(): ReflectionPhpDocType
     {
-        return new ReflectionTypeExtended($this->getTypeNames(), $this->getDocTypeNames());
+        return new ReflectionPhpDocType($this->getTypeNames(), $this->getPhpDocTypeNames());
     }
 
     public function getName(): string

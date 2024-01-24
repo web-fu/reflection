@@ -18,8 +18,8 @@ use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionFunction;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
+use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\ReflectionTypeExtended;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\ClassWithTypes;
@@ -140,35 +140,35 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDocTypeNames
+     * @covers \WebFu\Reflection\ReflectionParameter::getPhpDocTypeNames
      */
     public function testGetDocTypeNames(): void
     {
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
 
-        $this->assertEquals(['class-string'], $reflectionParameter->getDocTypeNames());
+        $this->assertEquals(['class-string'], $reflectionParameter->getPhpDocTypeNames());
 
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'noDocComments'], 'noDocComments');
 
-        $this->assertEquals([], $reflectionParameter->getDocTypeNames());
+        $this->assertEquals([], $reflectionParameter->getPhpDocTypeNames());
 
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setUseStatementDocComment'], 'param');
 
-        $this->assertEquals([GenericClass::class.'[]'], $reflectionParameter->getDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionParameter->getPhpDocTypeNames());
 
         $reflectionParameter = new ReflectionParameter('example', 'param');
 
-        $this->assertEquals(['class-string'], $reflectionParameter->getDocTypeNames());
+        $this->assertEquals(['class-string'], $reflectionParameter->getPhpDocTypeNames());
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getTypeExtended
+     * @covers \WebFu\Reflection\ReflectionParameter::getPhpDocType
      */
-    public function testGetTypeExtended(): void
+    public function testGetPhpDocType(): void
     {
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
 
-        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionParameter->getTypeExtended());
+        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionParameter->getPhpDocType());
     }
 
     /**
