@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionType;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionType
  */
 class ReflectionTypeTest extends TestCase
 {

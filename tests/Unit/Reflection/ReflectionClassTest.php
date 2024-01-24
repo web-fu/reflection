@@ -42,7 +42,7 @@ use WebFu\Tests\Fixtures\GenericInterface;
 use WebFu\Tests\Fixtures\GenericTrait;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionClass
  */
 class ReflectionClassTest extends TestCase
 {

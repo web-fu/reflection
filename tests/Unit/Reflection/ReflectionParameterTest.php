@@ -26,7 +26,7 @@ use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionParameter
  */
 class ReflectionParameterTest extends TestCase
 {

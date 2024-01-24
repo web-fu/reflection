@@ -27,7 +27,7 @@ use WebFu\Tests\Fixtures\ClassWithMethods;
 use WebFu\Tests\Fixtures\GenericClass;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionMethod
  */
 class ReflectionMethodTest extends TestCase
 {

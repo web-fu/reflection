@@ -23,7 +23,7 @@ use WebFu\Tests\Fixtures\ClassWithFinals;
 use WebFu\Tests\Fixtures\EnumClass;
 
 /**
- * @coversNothing
+ * @covers \WebFu\Reflection\ReflectionClassConstant
  */
 class ReflectionClassConstantTest extends TestCase
 {
