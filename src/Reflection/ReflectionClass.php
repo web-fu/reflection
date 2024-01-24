@@ -16,12 +16,15 @@ namespace WebFu\Reflection;
 use ReflectionAttribute;
 use ReflectionExtension;
 
+/**
+ * @template T of object
+ */
 class ReflectionClass extends AbstractReflection
 {
     private \ReflectionClass $reflectionClass;
 
     /**
-     * @param object|class-string $objectOrClass
+     * @param T|class-string<T> $objectOrClass
      */
     public function __construct(object|string $objectOrClass)
     {
@@ -450,21 +453,32 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->isUserDefined();
     }
 
+    /**
+     * @return T
+     */
     public function newInstance(mixed ...$args): object
     {
+        /** @var T */
         return $this->reflectionClass->newInstance(...$args);
     }
 
     /**
      * @param mixed[] $args
+     *
+     * @return T
      */
     public function newInstanceArgs(array $args = []): object
     {
+        /** @var T */
         return $this->reflectionClass->newInstanceArgs($args);
     }
 
+    /**
+     * @return T
+     */
     public function newInstanceWithoutConstructor(): object
     {
+        /** @var T */
         return $this->reflectionClass->newInstanceWithoutConstructor();
     }
 
