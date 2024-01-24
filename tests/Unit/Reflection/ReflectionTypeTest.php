@@ -14,7 +14,11 @@ declare(strict_types=1);
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
+use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\WrongPhpVersionException;
+use WebFu\Tests\Fixtures\ClassWithIntersectionTypes;
+use WebFu\Tests\Fixtures\ClassWithTypes;
 
 /**
  * @covers \WebFu\Reflection\ReflectionType
@@ -26,7 +30,8 @@ class ReflectionTypeTest extends TestCase
      */
     public function testAllowNull(): void
     {
-        $reflectionType = new ReflectionType(['string', 'null']);
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('nullable')->getType();
 
         $this->assertTrue($reflectionType->allowNull());
     }
@@ -36,10 +41,28 @@ class ReflectionTypeTest extends TestCase
      */
     public function testHasType(): void
     {
-        $reflectionType = new ReflectionType(['string', 'null']);
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
 
-        $this->assertTrue($reflectionType->hasType('string'));
-        $this->assertFalse($reflectionType->hasType('int'));
+        $simpleType = $reflectionClass->getProperty('simple')->getType();
+
+        $this->assertFalse($simpleType->hasType('string'));
+        $this->assertTrue($simpleType->hasType('int'));
+
+        $unionType = $reflectionClass->getProperty('union')->getType();
+
+        $this->assertTrue($unionType->hasType('int'));
+        $this->assertTrue($unionType->hasType('string'));
+
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('hasType() cannot check intersection types for PHP versions lower than 8.1.0');
+        }
+
+        $reflectionClass = new ReflectionClass(ClassWithIntersectionTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('intersection')->getType();
+
+        $this->assertTrue($reflectionType->hasType('\Countable&\Iterator'));
+        $this->assertFalse($reflectionType->hasType('\Countable'));
+        $this->assertFalse($reflectionType->hasType('\Iterator'));
     }
 
     /**
@@ -60,5 +83,32 @@ class ReflectionTypeTest extends TestCase
         $reflectionType = new ReflectionType(['string', 'null']);
 
         $this->assertEquals('null|string', $reflectionType->__toString());
+    }
+
+    public function testIsUnionType(): void
+    {
+        $reflectionType = new ReflectionType(['string', 'null']);
+
+        $this->assertTrue($reflectionType->isUnionType());
+    }
+
+    public function testIsIntersectionType(): void
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isIntersectionType() is not available for PHP versions lower than 8.1.0');
+
+            $reflectionType = new ReflectionType(['string', 'null']);
+            $reflectionType->isIntersectionType();
+
+            $this->markTestSkipped('isIntersectionType() is not available for PHP versions lower than 8.1.0');
+        }
+
+        $reflectionType = new ReflectionType(['string', 'null'], '&');
+
+        $this->assertTrue($reflectionType->isIntersectionType());
+
+        $reflectionType = new ReflectionType(['string', 'null']);
+        $this->assertTrue($reflectionType->isIntersectionType());
     }
 }

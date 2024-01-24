@@ -139,7 +139,7 @@ class ReflectionClassConstantTest extends TestCase
             $this->expectExceptionMessage('isFinal() is not available for PHP versions lower than 8.1.0');
 
             $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
-            $this->assertFalse($reflectionClassConstant->isFinal());
+            $reflectionClassConstant->isFinal();
 
             self::markTestSkipped('Final keyword is not available for PHP versions lower than 8.1.0');
         }

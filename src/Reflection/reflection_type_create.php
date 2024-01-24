@@ -22,12 +22,19 @@ function reflection_type_create(\ReflectionType|ReflectionNamedType|ReflectionUn
         return new ReflectionType(['mixed']);
     }
 
-    /** @var ReflectionNamedType[] $reflectionTypes */
-    $reflectionTypes = $reflectionType instanceof ReflectionUnionType
+    /** @var ReflectionNamedType[] $reflectionNamedTypes */
+    $reflectionNamedTypes = $reflectionType instanceof ReflectionUnionType
         ? $reflectionType->getTypes()
         : [$reflectionType];
 
-    $typeNames = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
+    $typeNames = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionNamedTypes);
+
+    foreach ($reflectionNamedTypes as $reflectionNamedType) {
+        if ($reflectionNamedType->allowsNull()) {
+            $typeNames[] = 'null';
+            break;
+        }
+    }
 
     return new ReflectionType($typeNames);
 }

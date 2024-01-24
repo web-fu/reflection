@@ -51,4 +51,18 @@ class ReflectionType
     {
         return (empty($this->types)) ? ['mixed'] : $this->types;
     }
+
+    public function isUnionType(): bool
+    {
+        return '|' === $this->separator;
+    }
+
+    public function isIntersectionType(): bool
+    {
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('isIntersectionType() is not available for PHP versions lower than 8.1.0');
+        }
+
+        return '&' === $this->separator;
+    }
 }

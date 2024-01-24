@@ -8,8 +8,8 @@ class ClassWithTypes
 {
     public int $simple;
     public int|string $union;
-
     public $noType;
+    public ?int $nullable;
 
     public function methodWithTypedParam(string $string): void
     {
