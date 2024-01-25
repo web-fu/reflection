@@ -36,6 +36,18 @@ class ReflectionProperty extends AbstractReflection
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
+    /**
      * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array

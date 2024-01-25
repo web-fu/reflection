@@ -17,6 +17,13 @@ abstract class AbstractReflection
 {
     abstract public function __toString(): string;
 
+    /**
+     * @return array<string, mixed>
+     */
+    abstract public function __debugInfo(): array;
+
+    abstract public function getName(): string;
+
     abstract public function getDocComment(): string|null;
 
     /**
@@ -31,6 +38,6 @@ abstract class AbstractReflection
         /** @phpstan-ignore-next-line */
         $sanitized = trim(preg_replace('/^\s*\*\s*(.+)/m', '$1', $docComment));
 
-        return explode(PHP_EOL, $sanitized);
+        return array_filter(explode(PHP_EOL, $sanitized));
     }
 }

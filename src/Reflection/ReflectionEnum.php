@@ -28,7 +28,19 @@ class ReflectionEnum extends ReflectionClass
         $this->reflectionEnum = new \ReflectionEnum($objectOrClass);
     }
 
-    public function getBackingType(): ReflectionType|null
+    /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
+    public function getBackingType(): ReflectionType
     {
         return reflection_type_create($this->reflectionEnum->getBackingType());
     }

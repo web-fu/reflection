@@ -818,4 +818,18 @@ class ReflectionClassTest extends TestCase
         $reflectionClass->setStaticPropertyValue('staticPublic', 2);
         $this->assertEquals(2, ClassWithProperties::$staticPublic);
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionClass:__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->assertEquals([
+            'name'        => ClassWithProperties::class,
+            'attributes'  => [],
+            'annotations' => [],
+        ], $reflectionClass->__debugInfo());
+    }
 }

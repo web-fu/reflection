@@ -260,4 +260,34 @@ class ReflectionParameterTest extends TestCase
 
         $this->assertFalse($reflectionParameter->isVariadic());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionParameter::getAnnotations
+     */
+    public function testGetAnnotations(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
+
+        $this->assertEquals([
+            '@param class-string $property',
+        ], $reflectionParameter->getAnnotations());
+    }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionParameter::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
+
+        $this->assertEquals([
+            'name'        => 'property',
+            'class'       => ClassWithDocComments::class,
+            'annotations' => [
+                '@param class-string $property',
+            ],
+            'attributes' => [],
+            'function'   => 'setProperty',
+        ], $reflectionParameter->__debugInfo());
+    }
 }

@@ -336,4 +336,18 @@ class ReflectionFunctionTest extends TestCase
 
         $this->assertTrue($reflectionFunction->isAnonymous());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionFunction::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionFunction = new ReflectionFunction('example');
+
+        $this->assertEquals([
+            'name'        => 'example',
+            'annotations' => ['@param class-string $param'],
+            'attributes'  => [],
+        ], $reflectionFunction->__debugInfo());
+    }
 }

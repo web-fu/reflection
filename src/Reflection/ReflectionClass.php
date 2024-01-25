@@ -37,6 +37,18 @@ class ReflectionClass extends AbstractReflection
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
+    /**
      * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
@@ -458,8 +470,12 @@ class ReflectionClass extends AbstractReflection
      */
     public function newInstance(mixed ...$args): object
     {
-        /** @var T */
-        return $this->reflectionClass->newInstance(...$args);
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstance(...$args);
+
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
     /**
@@ -469,8 +485,12 @@ class ReflectionClass extends AbstractReflection
      */
     public function newInstanceArgs(array $args = []): object
     {
-        /** @var T */
-        return $this->reflectionClass->newInstanceArgs($args);
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstanceArgs($args);
+
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
     /**
@@ -478,8 +498,12 @@ class ReflectionClass extends AbstractReflection
      */
     public function newInstanceWithoutConstructor(): object
     {
-        /** @var T */
-        return $this->reflectionClass->newInstanceWithoutConstructor();
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstanceWithoutConstructor();
+
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
     public function setStaticPropertyValue(string $name, mixed $value): void

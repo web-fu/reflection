@@ -34,6 +34,14 @@ class ReflectionType
         return implode($this->separator, $this->types);
     }
 
+    public function __debugInfo(): array
+    {
+        return [
+            'types'     => $this->types,
+            'separator' => $this->separator,
+        ];
+    }
+
     public function allowNull(): bool
     {
         return in_array('null', $this->types, true);

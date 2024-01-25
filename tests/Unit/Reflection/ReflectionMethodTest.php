@@ -545,4 +545,20 @@ class ReflectionMethodTest extends TestCase
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'staticMethod');
         $this->assertTrue($reflectionMethod->isStatic());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+        $actual           = $reflectionMethod->__debugInfo();
+
+        $this->assertEquals([
+            'name'        => 'methodWithoutParameters',
+            'class'       => ClassWithMethods::class,
+            'attributes'  => [],
+            'annotations' => [],
+        ], $actual);
+    }
 }

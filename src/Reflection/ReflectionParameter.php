@@ -47,6 +47,20 @@ class ReflectionParameter extends AbstractReflection
         return $this->reflectionParameter->__toString();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'class'       => $this->getDeclaringClass()?->getName(),
+            'function'    => $this->getDeclaringFunction()->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
     public function allowsNull(): bool
     {
         return $this->reflectionParameter->allowsNull();

@@ -122,4 +122,18 @@ class ReflectionEnumTest extends TestCase
         $this->assertTrue($backedEnum->isBacked());
         $this->assertFalse($basicEnum->isBacked());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionEnum::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        if (PHP_VERSION_ID < 80100) {
+            self::markTestSkipped('Enums are not available for PHP versions lower than 8.1.0');
+        }
+
+        $reflectionEnum = new ReflectionEnum(BackedEnum::class);
+
+        $this->assertSame(['name' => BackedEnum::class], $reflectionEnum->__debugInfo());
+    }
 }

@@ -186,4 +186,20 @@ class ReflectionClassConstantTest extends TestCase
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PRIVATE');
         $this->assertTrue($reflectionClassConstant->isPrivate());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+
+        $this->assertSame([
+            'name'        => 'PUBLIC',
+            'class'       => ClassWithConstants::class,
+            'value'       => 1,
+            'attributes'  => [],
+            'annotations' => [],
+        ], $reflectionClassConstant->__debugInfo());
+    }
 }

@@ -27,6 +27,18 @@ class ReflectionFunction extends ReflectionFunctionAbstract
         return $this->reflectionFunction->__toString();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
     public function getClosure(): Closure|null
     {
         assert($this->reflectionFunction instanceof \ReflectionFunction);
