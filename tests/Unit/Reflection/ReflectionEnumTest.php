@@ -26,7 +26,7 @@ use WebFu\Tests\Fixtures\BasicEnum;
 class ReflectionEnumTest extends TestCase
 {
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::getBackingType
+     * @covers \WebFu\Reflection\ReflectionEnum::getType
      *
      * @dataProvider backingTypeProvider
      *
@@ -45,7 +45,7 @@ class ReflectionEnumTest extends TestCase
 
         $reflectionEnum = new ReflectionEnum($className);
 
-        $this->assertSame($expected, $reflectionEnum->getBackingType()->getTypeNames());
+        $this->assertSame($expected, $reflectionEnum->getType()->getTypeNames());
     }
 
     /**

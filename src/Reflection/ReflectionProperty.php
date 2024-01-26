@@ -75,9 +75,7 @@ class ReflectionProperty extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        $reflectionType = $this->getType();
-
-        return $reflectionType->getTypeNames();
+        return reflection_type_names($this->reflectionProperty->getType());
     }
 
     /**
@@ -145,7 +143,10 @@ class ReflectionProperty extends AbstractReflection
 
     public function getType(): ReflectionType
     {
-        return reflection_type_create($this->reflectionProperty->getType());
+        return new ReflectionType(
+            types: $this->getTypeNames(),
+            phpDocTypeNames: $this->getPhpDocTypeNames(),
+        );
     }
 
     public function getValue(object|null $object = null): mixed

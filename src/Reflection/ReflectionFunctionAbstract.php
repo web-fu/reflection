@@ -15,8 +15,6 @@ namespace WebFu\Reflection;
 
 use ReflectionAttribute;
 use ReflectionExtension;
-use ReflectionNamedType;
-use ReflectionUnionType;
 
 abstract class ReflectionFunctionAbstract extends AbstractReflection
 {
@@ -110,7 +108,10 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function getReturnType(): ReflectionType
     {
-        return reflection_type_create($this->reflectionFunction->getReturnType());
+        return new ReflectionType(
+            types: $this->getReturnTypeNames(),
+            phpDocTypeNames: $this->getPhpDocReturnTypeNames(),
+        );
     }
 
     /**
@@ -118,18 +119,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      */
     public function getReturnTypeNames(): array
     {
-        $reflectionType = $this->reflectionFunction->getReturnType();
-
-        if (!$reflectionType) {
-            return ['mixed'];
-        }
-
-        /** @var ReflectionNamedType[] $reflectionTypes */
-        $reflectionTypes = $reflectionType instanceof ReflectionUnionType
-            ? $reflectionType->getTypes()
-            : [$reflectionType];
-
-        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
+        return reflection_type_names($this->reflectionFunction->getReturnType());
     }
 
     public function getShortName(): string
@@ -160,7 +150,9 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
             return null;
         }
 
-        return reflection_type_create($this->reflectionFunction->getTentativeReturnType());
+        $tentativeReturnTypeNames = reflection_type_names($this->reflectionFunction->getTentativeReturnType());
+
+        return new ReflectionType($tentativeReturnTypeNames);
     }
 
     public function hasReturnType(): bool
@@ -221,4 +213,9 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     {
         return $this->reflectionFunction->returnsReference();
     }
+
+    /**
+     * @return string[]
+     */
+    abstract public function getPhpDocReturnTypeNames();
 }

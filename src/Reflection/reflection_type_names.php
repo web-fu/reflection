@@ -14,12 +14,18 @@ declare(strict_types=1);
 namespace WebFu\Reflection;
 
 use ReflectionNamedType;
+use ReflectionType;
 use ReflectionUnionType;
 
-function reflection_type_create(\ReflectionType|ReflectionNamedType|ReflectionUnionType|null $reflectionType): ReflectionType
+/**
+ * @internal
+ *
+ * @return string[]
+ */
+function reflection_type_names(ReflectionType|ReflectionNamedType|ReflectionUnionType|null $reflectionType): array
 {
     if (!$reflectionType) {
-        return new ReflectionType(['mixed']);
+        return ['mixed'];
     }
 
     /** @var ReflectionNamedType[] $reflectionNamedTypes */
@@ -36,5 +42,7 @@ function reflection_type_create(\ReflectionType|ReflectionNamedType|ReflectionUn
         }
     }
 
-    return new ReflectionType($typeNames);
+    sort($typeNames);
+
+    return $typeNames;
 }

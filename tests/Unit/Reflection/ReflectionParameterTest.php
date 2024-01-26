@@ -122,7 +122,7 @@ class ReflectionParameterTest extends TestCase
     {
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
 
-        $this->assertEquals(new ReflectionType(['string']), $reflectionParameter->getType());
+        $this->assertEquals(new ReflectionType(types: ['string'], phpDocTypeNames: ['class-string']), $reflectionParameter->getType());
     }
 
     /**

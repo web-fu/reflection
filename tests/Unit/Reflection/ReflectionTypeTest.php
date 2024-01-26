@@ -15,8 +15,8 @@ namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\WrongPhpVersionException;
+use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithIntersectionTypes;
 use WebFu\Tests\Fixtures\ClassWithTypes;
 
@@ -70,9 +70,10 @@ class ReflectionTypeTest extends TestCase
      */
     public function testGetTypeNames(): void
     {
-        $reflectionType = new ReflectionType(['string', 'null']);
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('nullable')->getType();
 
-        $this->assertEquals(['null', 'string'], $reflectionType->getTypeNames());
+        $this->assertEquals(['int', 'null'], $reflectionType->getTypeNames());
     }
 
     /**
@@ -80,35 +81,80 @@ class ReflectionTypeTest extends TestCase
      */
     public function testToString(): void
     {
-        $reflectionType = new ReflectionType(['string', 'null']);
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('nullable')->getType();
 
-        $this->assertEquals('null|string', $reflectionType->__toString());
+        $this->assertEquals('int|null', $reflectionType->__toString());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionType::isUnionType
+     */
     public function testIsUnionType(): void
     {
-        $reflectionType = new ReflectionType(['string', 'null']);
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('union')->getType();
 
         $this->assertTrue($reflectionType->isUnionType());
+
+        $reflectionType = $reflectionClass->getProperty('simple')->getType();
+        $this->assertFalse($reflectionType->isUnionType());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionType::isIntersectionType
+     */
     public function testIsIntersectionType(): void
     {
         if (PHP_VERSION_ID < 80100) {
             $this->expectException(WrongPhpVersionException::class);
             $this->expectExceptionMessage('isIntersectionType() is not available for PHP versions lower than 8.1.0');
 
-            $reflectionType = new ReflectionType(['string', 'null']);
+            $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+            $reflectionType  = $reflectionClass->getProperty('simple')->getType();
             $reflectionType->isIntersectionType();
 
             $this->markTestSkipped('isIntersectionType() is not available for PHP versions lower than 8.1.0');
         }
 
-        $reflectionType = new ReflectionType(['string', 'null'], '&');
+        $reflectionClass = new ReflectionClass(ClassWithIntersectionTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('intersection')->getType();
 
         $this->assertTrue($reflectionType->isIntersectionType());
 
-        $reflectionType = new ReflectionType(['string', 'null']);
-        $this->assertTrue($reflectionType->isIntersectionType());
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('simple')->getType();
+        $this->assertFalse($reflectionType->isIntersectionType());
+    }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionType::getPhpDocTypeNames
+     */
+    public function testGetPhpDocTypeNames(): void
+    {
+        $reflectionClass    = new ReflectionClass(ClassWithDocComments::class);
+        $reflectionProperty = $reflectionClass->getProperty('property');
+
+        $this->assertEquals(['class-string'], $reflectionProperty->getType()->getPhpDocTypeNames());
+
+        $reflectionProperty = $reflectionClass->getProperty('noDocComments');
+        $this->assertEquals([], $reflectionProperty->getType()->getPhpDocTypeNames());
+    }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionType::__debugInfo
+     */
+    public function testDebugInfo(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithTypes::class);
+        $reflectionType  = $reflectionClass->getProperty('nullable')->getType();
+
+        $this->assertEquals(
+            [
+                'types'     => ['int', 'null'],
+                'separator' => '|',
+            ],
+            $reflectionType->__debugInfo()
+        );
     }
 }

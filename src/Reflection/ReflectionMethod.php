@@ -90,13 +90,13 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function getReturnPhpDocType(): ReflectionPhpDocType
     {
-        return new ReflectionPhpDocType($this->getReturnTypeNames(), $this->getReturnDocTypeNames());
+        return new ReflectionPhpDocType($this->getReturnTypeNames(), $this->getPhpDocReturnTypeNames());
     }
 
     /**
      * @return string[]
      */
-    public function getReturnDocTypeNames(): array
+    public function getPhpDocReturnTypeNames(): array
     {
         $docTypes = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@return'));
 

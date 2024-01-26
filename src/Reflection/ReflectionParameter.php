@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace WebFu\Reflection;
 
 use ReflectionAttribute;
-use ReflectionNamedType;
-use ReflectionUnionType;
 
 class ReflectionParameter extends AbstractReflection
 {
@@ -116,18 +114,7 @@ class ReflectionParameter extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        $reflectionType = $this->reflectionParameter->getType();
-
-        if (!$reflectionType) {
-            return ['mixed'];
-        }
-
-        /** @var ReflectionNamedType[] $reflectionTypes */
-        $reflectionTypes = $reflectionType instanceof ReflectionUnionType
-            ? $reflectionType->getTypes()
-            : [$reflectionType];
-
-        return array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionTypes);
+        return reflection_type_names($this->reflectionParameter->getType());
     }
 
     /**
@@ -198,7 +185,10 @@ class ReflectionParameter extends AbstractReflection
 
     public function getType(): ReflectionType
     {
-        return reflection_type_create($this->reflectionParameter->getType());
+        return new ReflectionType(
+            types: $this->getTypeNames(),
+            phpDocTypeNames: $this->getPhpDocTypeNames()
+        );
     }
 
     public function hasType(): bool

@@ -351,25 +351,25 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(new ReflectionType(['string']), $reflectionMethod->getReturnType());
+        $this->assertEquals(new ReflectionType(types: ['string'], phpDocTypeNames: ['class-string']), $reflectionMethod->getReturnType());
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionMethod::getReturnDocTypeNames
+     * @covers \WebFu\Reflection\ReflectionMethod::getPhpDocReturnTypeNames
      */
     public function testGetReturnDocTypeName(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertEquals(['class-string'], $reflectionMethod->getReturnDocTypeNames());
+        $this->assertEquals(['class-string'], $reflectionMethod->getPhpDocReturnTypeNames());
 
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'noDocComments');
 
-        $this->assertEquals([], $reflectionMethod->getReturnDocTypeNames());
+        $this->assertEquals([], $reflectionMethod->getPhpDocReturnTypeNames());
 
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getUseStatementDocComment');
 
-        $this->assertEquals([GenericClass::class.'[]'], $reflectionMethod->getReturnDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionMethod->getPhpDocReturnTypeNames());
     }
 
     /**

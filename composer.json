@@ -21,8 +21,8 @@
       "WebFu\\": "src/"
     },
     "files": [
-      "src/Reflection/reflection_type_resolver.php",
-      "src/Reflection/reflection_type_create.php"
+      "src/Reflection/reflection_type_names.php",
+      "src/Reflection/reflection_type_resolver.php"
     ]
   },
   "autoload-dev": {

@@ -40,9 +40,19 @@ class ReflectionEnum extends ReflectionClass
         ];
     }
 
-    public function getBackingType(): ReflectionType
+    /**
+     * @return string[]
+     */
+    public function getTypeNames(): array
     {
-        return reflection_type_create($this->reflectionEnum->getBackingType());
+        return reflection_type_names($this->reflectionEnum->getBackingType());
+    }
+
+    public function getType(): ReflectionType
+    {
+        return new ReflectionType(
+            types: $this->getTypeNames()
+        );
     }
 
     public function getCase(string $caseName): ReflectionEnumUnitCase

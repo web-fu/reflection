@@ -74,8 +74,19 @@ class ReflectionFunction extends ReflectionFunctionAbstract
         return $this->reflectionFunction->isAnonymous();
     }
 
+    /**
+     * @return ReflectionParameter[]
+     */
     public function getParameters(): array
     {
         return array_map(fn (\ReflectionParameter $reflectionParameter): ReflectionParameter => new ReflectionParameter($reflectionParameter->getDeclaringFunction()->getName(), $reflectionParameter->getName()), $this->reflectionFunction->getParameters());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPhpDocReturnTypeNames(): array
+    {
+        return [];
     }
 }

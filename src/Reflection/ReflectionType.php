@@ -18,15 +18,20 @@ class ReflectionType
     /**
      * @var string[]
      */
-    private array $types = [];
+    private array $types;
+    /**
+     * @var string[]
+     */
+    private array $phpDocTypeNames;
 
     /**
      * @param string[] $types
+     * @param string[] $phpDocTypeNames
      */
-    public function __construct(array $types = [], private string $separator = '|')
+    public function __construct(array $types = [], array $phpDocTypeNames = [], private string $separator = '|')
     {
-        sort($types);
-        $this->types = $types;
+        $this->types           = $types;
+        $this->phpDocTypeNames = $phpDocTypeNames;
     }
 
     public function __toString(): string
@@ -60,9 +65,17 @@ class ReflectionType
         return (empty($this->types)) ? ['mixed'] : $this->types;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getPhpDocTypeNames(): array
+    {
+        return $this->phpDocTypeNames;
+    }
+
     public function isUnionType(): bool
     {
-        return '|' === $this->separator;
+        return '|' === $this->separator && count($this->types) > 1;
     }
 
     public function isIntersectionType(): bool
