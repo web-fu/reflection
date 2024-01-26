@@ -168,11 +168,6 @@ class ReflectionParameter extends AbstractReflection
         return $docTypesListResolved;
     }
 
-    public function getPhpDocType(): ReflectionPhpDocType
-    {
-        return new ReflectionPhpDocType($this->getTypeNames(), $this->getPhpDocTypeNames());
-    }
-
     public function getName(): string
     {
         return $this->reflectionParameter->getName();

@@ -18,7 +18,6 @@ use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionFunction;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
-use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithMethods;
@@ -159,16 +158,6 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter('example', 'param');
 
         $this->assertEquals(['class-string'], $reflectionParameter->getPhpDocTypeNames());
-    }
-
-    /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getPhpDocType
-     */
-    public function testGetPhpDocType(): void
-    {
-        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
-
-        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionParameter->getPhpDocType());
     }
 
     /**

@@ -15,7 +15,6 @@ namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\WrongPhpVersionException;
@@ -133,16 +132,6 @@ class ReflectionPropertyTest extends TestCase
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'useStatementDocComment');
 
         $this->assertEquals([GenericClass::class.'[]'], $reflectionProperty->getPhpDocTypeNames());
-    }
-
-    /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getPhpDocType
-     */
-    public function testGetPhpDocType(): void
-    {
-        $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment');
-
-        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionProperty->getPhpDocType());
     }
 
     /**

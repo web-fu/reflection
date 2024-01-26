@@ -126,11 +126,6 @@ class ReflectionProperty extends AbstractReflection
         return $docTypesListResolved;
     }
 
-    public function getPhpDocType(): ReflectionPhpDocType
-    {
-        return new ReflectionPhpDocType($this->getTypeNames(), $this->getPhpDocTypeNames());
-    }
-
     public function getModifiers(): int
     {
         return $this->reflectionProperty->getModifiers();

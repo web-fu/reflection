@@ -16,7 +16,6 @@ namespace WebFu\Tests\Unit\Reflection;
 use ArrayAccess;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionMethod;
-use WebFu\Reflection\ReflectionPhpDocType;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\AbstractClass;
@@ -370,16 +369,6 @@ class ReflectionMethodTest extends TestCase
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getUseStatementDocComment');
 
         $this->assertEquals([GenericClass::class.'[]'], $reflectionMethod->getPhpDocReturnTypeNames());
-    }
-
-    /**
-     * @covers \WebFu\Reflection\ReflectionMethod::getReturnPhpDocType
-     */
-    public function testGetReturnPhpDocType(): void
-    {
-        $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
-
-        $this->assertEquals(new ReflectionPhpDocType(['string'], ['class-string']), $reflectionMethod->getReturnPhpDocType());
     }
 
     /**
