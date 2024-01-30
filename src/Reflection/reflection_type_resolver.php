@@ -13,23 +13,26 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-/**
- * @param class-string $className
- */
-function reflection_type_resolver(string $className, string $typeName): ReflectionType|null
-{
-    $reflectionClass = new ReflectionClass($className);
+if (!function_exists(__NAMESPACE__ .'\reflection_type_resolver')) {
+    /**
+     * @internal
+     * @param class-string $className
+     */
+    function reflection_type_resolver(string $className, string $typeName): ReflectionType|null
+    {
+        $reflectionClass = new ReflectionClass($className);
 
-    foreach ($reflectionClass->getUseStatements() as $useStatement) {
-        if ($useStatement->getAs() === $typeName) {
-            return new ReflectionType([$useStatement->getClassName()]);
+        foreach ($reflectionClass->getUseStatements() as $useStatement) {
+            if ($useStatement->getAs() === $typeName) {
+                return new ReflectionType([$useStatement->getClassName()]);
+            }
         }
-    }
 
-    $maybeClass = $reflectionClass->getNamespaceName().'\\'.$typeName;
-    if (class_exists($maybeClass)) {
-        return new ReflectionType([$maybeClass]);
-    }
+        $maybeClass = $reflectionClass->getNamespaceName().'\\'.$typeName;
+        if (class_exists($maybeClass)) {
+            return new ReflectionType([$maybeClass]);
+        }
 
-    return null;
+        return null;
+    }
 }
