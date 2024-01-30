@@ -50,6 +50,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function getClosure(object|null $object = null): Closure
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         if (
@@ -71,6 +74,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function getDeclaringClass(): ReflectionClass
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return new ReflectionClass($this->reflectionFunction->getDeclaringClass()->getName());
@@ -78,6 +84,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function getModifiers(): int
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->getModifiers();
@@ -95,6 +104,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function getPrototype(): self
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $method = $this->reflectionFunction->getPrototype();
@@ -156,11 +168,14 @@ class ReflectionMethod extends ReflectionFunctionAbstract
             throw new WrongPhpVersionException('hasPrototype() is not available for PHP versions lower than 8.2.0');
         }
 
-        return $this->reflectionFunction->hasPropotype();
+        return $this->reflectionFunction->hasPrototype();
     }
 
     public function invoke(object|null $object, mixed ...$args): mixed
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->invoke($object, ...$args);
@@ -171,6 +186,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
      */
     public function invokeArgs(object|null $object, array $args): mixed
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->invokeArgs($object, $args);
@@ -178,6 +196,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isAbstract(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isAbstract();
@@ -185,6 +206,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isConstructor(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isConstructor();
@@ -192,6 +216,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isDestructor(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isDestructor();
@@ -199,6 +226,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isFinal(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isFinal();
@@ -206,6 +236,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isPrivate(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isPrivate();
@@ -213,6 +246,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isProtected(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isProtected();
@@ -220,6 +256,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isPublic(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         return $this->reflectionFunction->isPublic();
@@ -227,6 +266,9 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function setAccessible(bool $accessible): void
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionMethod);
 
         $this->reflectionFunction->setAccessible($accessible);

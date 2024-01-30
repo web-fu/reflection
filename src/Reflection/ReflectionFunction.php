@@ -41,6 +41,9 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function getClosure(): Closure|null
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
         return $this->reflectionFunction->getClosure();
@@ -48,6 +51,9 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function invoke(mixed ...$args): mixed
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
         return $this->reflectionFunction->invoke(...$args);
@@ -58,6 +64,9 @@ class ReflectionFunction extends ReflectionFunctionAbstract
      */
     public function invokeArgs(array $args): mixed
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
         return $this->reflectionFunction->invokeArgs($args);
@@ -65,6 +74,9 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function isAnonymous(): bool
     {
+        /**
+         * @infection-ignore-all
+         */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
 
         if (PHP_VERSION_ID < 80200) {
