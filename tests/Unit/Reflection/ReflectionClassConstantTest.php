@@ -37,6 +37,11 @@ class ReflectionClassConstantTest extends TestCase
 
         $this->assertCount(1, $attributes);
         $this->assertSame(Attribute::class, $attributes[0]->getName());
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+        $attributes              = $reflectionClassConstant->getAttributes();
+
+        $this->assertCount(0, $attributes);
     }
 
     /**
