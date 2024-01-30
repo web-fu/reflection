@@ -48,9 +48,23 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         ];
     }
 
-    public function getClosure(object|null $object = null): Closure|null
+    public function getClosure(object|null $object = null): Closure
     {
         assert($this->reflectionFunction instanceof \ReflectionMethod);
+
+        if (
+            $this->isStatic()
+            && null !== $object
+        ) {
+            throw new ReflectionException('Cannot bind an instance to a static closure');
+        }
+
+        if (
+            !$this->isStatic()
+            && null === $object
+        ) {
+            throw new ReflectionException('Cannot create closure for method without object');
+        }
 
         return $this->reflectionFunction->getClosure($object);
     }
