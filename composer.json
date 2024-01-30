@@ -36,6 +36,12 @@
     "friendsofphp/php-cs-fixer": "^3.13",
     "phpstan/phpstan": "^1.9",
     "vimeo/psalm": "^5.4",
-    "phpbench/phpbench": "^1.2"
+    "phpbench/phpbench": "^1.2",
+    "infection/infection": "^0.26.16"
+  },
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
   }
 }
