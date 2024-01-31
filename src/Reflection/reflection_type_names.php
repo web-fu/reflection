@@ -17,7 +17,7 @@ use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
 
-if (!function_exists(__NAMESPACE__.'/reflection_type_names')) {
+if (!function_exists(__NAMESPACE__.'\reflection_type_names')) {
     /**
      * @internal
      *

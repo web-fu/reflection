@@ -146,7 +146,6 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
-        var_dump($reflectionClass->getDefaultProperties());
         $this->assertEquals([
             'public'          => 1,
             'protected'       => 2,
@@ -435,7 +434,6 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
-        var_dump($reflectionClass->getStaticProperties());
         $this->assertEquals([
             'staticPublic'    => 1,
             'staticProtected' => 2,
@@ -450,7 +448,6 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
-        var_dump($reflectionClass->getStaticPropertyValue('staticPublic'));
         $this->assertEquals(1, $reflectionClass->getStaticPropertyValue('staticPublic'));
         $this->assertEquals(2, $reflectionClass->getStaticPropertyValue('staticProtected'));
         $this->assertEquals(3, $reflectionClass->getStaticPropertyValue('staticPrivate'));
