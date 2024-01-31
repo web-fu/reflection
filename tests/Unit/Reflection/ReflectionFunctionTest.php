@@ -350,4 +350,28 @@ class ReflectionFunctionTest extends TestCase
             'attributes'  => [],
         ], $reflectionFunction->__debugInfo());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionFunction::__toString
+     */
+    public function testToString(): void
+    {
+        $reflectionFunction = new ReflectionFunction('example');
+
+        $expected = <<<'EOT'
+            /** @param class-string $param */
+            Function [ <user> function example ] {
+              @@ /var/www/html/tests/Fixtures/example.php 6 - 9
+
+              - Parameters [2] {
+                Parameter #0 [ <required> string $param ]
+                Parameter #1 [ <optional> int $default = 0 ]
+              }
+              - Return [ string ]
+            }
+
+            EOT;
+
+        $this->assertEquals($expected, $reflectionFunction->__toString());
+    }
 }

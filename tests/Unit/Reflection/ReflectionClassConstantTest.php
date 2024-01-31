@@ -207,4 +207,14 @@ class ReflectionClassConstantTest extends TestCase
             'annotations' => [],
         ], $reflectionClassConstant->__debugInfo());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::__toString
+     */
+    public function testToString(): void
+    {
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+
+        $this->assertSame('Constant [ public int PUBLIC ] { 1 }'.PHP_EOL, $reflectionClassConstant->__toString());
+    }
 }

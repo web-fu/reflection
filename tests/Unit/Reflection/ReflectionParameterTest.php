@@ -279,4 +279,14 @@ class ReflectionParameterTest extends TestCase
             'function'   => 'setProperty',
         ], $reflectionParameter->__debugInfo());
     }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionParameter::__toString
+     */
+    public function testToString(): void
+    {
+        $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
+
+        $this->assertEquals('Parameter #0 [ <required> string $property ]', (string) $reflectionParameter);
+    }
 }

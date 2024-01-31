@@ -41,7 +41,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function getClosure(): Closure|null
     {
-        /**
+        /*
          * @infection-ignore-all
          */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
@@ -51,7 +51,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function invoke(mixed ...$args): mixed
     {
-        /**
+        /*
          * @infection-ignore-all
          */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
@@ -64,7 +64,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
      */
     public function invokeArgs(array $args): mixed
     {
-        /**
+        /*
          * @infection-ignore-all
          */
         assert($this->reflectionFunction instanceof \ReflectionFunction);
@@ -74,7 +74,7 @@ class ReflectionFunction extends ReflectionFunctionAbstract
 
     public function isAnonymous(): bool
     {
-        /**
+        /*
          * @infection-ignore-all
          */
         assert($this->reflectionFunction instanceof \ReflectionFunction);

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WebFu\Tests\Unit\Reflection;
 
 use ArrayAccess;
+use Closure;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
@@ -47,13 +48,13 @@ class ReflectionMethodTest extends TestCase
     public function testGetClosure(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
-        $object = new ClassWithMethods();
+        $object           = new ClassWithMethods();
 
-        $this->assertInstanceOf(\Closure::class, $reflectionMethod->getClosure($object));
+        $this->assertInstanceOf(Closure::class, $reflectionMethod->getClosure($object));
 
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'staticMethod');
 
-        $this->assertInstanceOf(\Closure::class, $reflectionMethod->getClosure());
+        $this->assertInstanceOf(Closure::class, $reflectionMethod->getClosure());
 
         $this->expectException(ReflectionException::class);
         $this->expectExceptionMessage('Cannot create closure for method without object');
@@ -215,7 +216,7 @@ class ReflectionMethodTest extends TestCase
         }
 
         $reflectionMethod = new ReflectionMethod(ArrayAccess::class, 'offsetGet');
-        $actual = $reflectionMethod->getTentativeReturnType();
+        $actual           = $reflectionMethod->getTentativeReturnType();
 
         $this->assertEquals(new ReflectionType(['mixed']), $actual);
     }
@@ -365,7 +366,7 @@ class ReflectionMethodTest extends TestCase
     public function testGetParameters(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithSomeDefaultParameters');
-        $parameters = $reflectionMethod->getParameters();
+        $parameters       = $reflectionMethod->getParameters();
 
         $this->assertEquals(new ReflectionType(['int']), $parameters[0]->getType());
         $this->assertEquals(new ReflectionType(['string']), $parameters[1]->getType());
@@ -396,7 +397,7 @@ class ReflectionMethodTest extends TestCase
 
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getUseStatementDocComment');
 
-        $this->assertEquals([GenericClass::class . '[]'], $reflectionMethod->getPhpDocReturnTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionMethod->getPhpDocReturnTypeNames());
     }
 
     /**
@@ -569,13 +570,34 @@ class ReflectionMethodTest extends TestCase
     public function testDebugInfo(): void
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
-        $actual = $reflectionMethod->__debugInfo();
+        $actual           = $reflectionMethod->__debugInfo();
 
         $this->assertEquals([
-            'name' => 'methodWithoutParameters',
-            'class' => ClassWithMethods::class,
-            'attributes' => [],
+            'name'        => 'methodWithoutParameters',
+            'class'       => ClassWithMethods::class,
+            'attributes'  => [],
             'annotations' => [],
         ], $actual);
+    }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionMethod::__toString
+     */
+    public function testToString(): void
+    {
+        $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
+
+        $expected = <<<'EOT'
+            Method [ <user> public method methodWithoutParameters ] {
+              @@ /var/www/html/tests/Fixtures/ClassWithMethods.php 15 - 17
+
+              - Parameters [0] {
+              }
+              - Return [ void ]
+            }
+
+            EOT;
+
+        $this->assertEquals($expected, $reflectionMethod->__toString());
     }
 }

@@ -473,7 +473,7 @@ class ReflectionClass extends AbstractReflection
         /** @var T $instance */
         $instance = $this->reflectionClass->newInstance(...$args);
 
-        /**
+        /*
          * @infection-ignore-all
          */
         assert(get_class($instance) === $this->getName());
@@ -491,7 +491,7 @@ class ReflectionClass extends AbstractReflection
         /** @var T $instance */
         $instance = $this->reflectionClass->newInstanceArgs($args);
 
-        /**
+        /*
          * @infection-ignore-all
          */
         assert(get_class($instance) === $this->getName());
@@ -507,7 +507,7 @@ class ReflectionClass extends AbstractReflection
         /** @var T $instance */
         $instance = $this->reflectionClass->newInstanceWithoutConstructor();
 
-        /**
+        /*
          * @infection-ignore-all
          */
         assert(get_class($instance) === $this->getName());

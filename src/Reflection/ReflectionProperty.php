@@ -97,7 +97,7 @@ class ReflectionProperty extends AbstractReflection
 
         $docTypes = preg_replace('/@var\s/', '$1', $varAnnotation);
 
-        /**
+        /*
          * @infection-ignore-all
          */
         assert(is_string($docTypes));

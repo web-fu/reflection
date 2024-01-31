@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-if (!function_exists(__NAMESPACE__ .'\reflection_type_resolver')) {
+if (!function_exists(__NAMESPACE__.'\reflection_type_resolver')) {
     /**
      * @internal
+     *
      * @param class-string $className
      */
     function reflection_type_resolver(string $className, string $typeName): ReflectionType|null
