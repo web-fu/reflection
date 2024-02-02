@@ -69,7 +69,13 @@ class ReflectionMethod extends ReflectionFunctionAbstract
             throw new ReflectionException('Cannot create closure for method without object');
         }
 
-        return $this->reflectionFunction->getClosure($object);
+        $closure = $this->reflectionFunction->getClosure($object);
+
+        if (!$closure instanceof Closure) {
+            throw new ReflectionException('Cannot create closure for method');
+        }
+
+        return $closure;
     }
 
     public function getDeclaringClass(): ReflectionClass
