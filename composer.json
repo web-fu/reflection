@@ -39,6 +39,22 @@
     "phpbench/phpbench": "^1.2",
     "infection/infection": "^0.26.16"
   },
+  "scripts": {
+    "cs": "PHP_CS_FIXER_IGNORE_ENV=1 php ./vendor/bin/php-cs-fixer fix --dry-run --allow-risky=yes",
+    "cs:fix": "PHP_CS_FIXER_IGNORE_ENV=1 php ./vendor/bin/php-cs-fixer fix --allow-risky=yes",
+    "phpstan": "./vendor/bin/phpstan analyse --memory-limit=-1",
+    "tests": "./vendor/bin/phpunit --coverage-text --color",
+    "testquality": "@parallel infection",
+    "infection": [
+      "Composer\\Config::disableProcessTimeout",
+      "./vendor/bin/infection --show-mutations -v"
+    ],
+    "ci": [
+      "@autoload",
+      "@parallel cs phpstan tests",
+      "@parallel infection"
+    ]
+  },
   "config": {
     "allow-plugins": {
       "infection/extension-installer": true
