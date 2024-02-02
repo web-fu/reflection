@@ -587,9 +587,11 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
 
-        $expected = <<<'EOT'
+        $filename = realpath(__DIR__.'/../../Fixtures/ClassWithMethods.php');
+
+        $expected = <<<EOT
             Method [ <user> public method methodWithoutParameters ] {
-              @@ /var/www/html/tests/Fixtures/ClassWithMethods.php 15 - 17
+              @@ $filename 15 - 17
 
               - Parameters [0] {
               }

@@ -24,9 +24,11 @@ use WebFu\Reflection\WrongPhpVersionException;
  */
 class ReflectionFunctionTest extends TestCase
 {
+    private $filename = __DIR__.'/../../Fixtures/example.php';
+
     protected function setUp(): void
     {
-        require_once __DIR__.'/../../Fixtures/example.php';
+        require_once $this->filename;
     }
 
     /**
@@ -358,14 +360,16 @@ class ReflectionFunctionTest extends TestCase
     {
         $reflectionFunction = new ReflectionFunction('example');
 
-        $expected = <<<'EOT'
-            /** @param class-string $param */
+        $filename = realpath($this->filename);
+
+        $expected = <<<EOT
+            /** @param class-string \$param */
             Function [ <user> function example ] {
-              @@ /var/www/html/tests/Fixtures/example.php 6 - 9
+              @@ $filename 6 - 9
 
               - Parameters [2] {
-                Parameter #0 [ <required> string $param ]
-                Parameter #1 [ <optional> int $default = 0 ]
+                Parameter #0 [ <required> string \$param ]
+                Parameter #1 [ <optional> int \$default = 0 ]
               }
               - Return [ string ]
             }

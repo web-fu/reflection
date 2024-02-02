@@ -147,7 +147,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
         foreach ($docTypesList as $docType) {
             $isArray = false;
 
-            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
+            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[]/i', $docType, $matches);
 
             if ($matches) {
                 $docType = $matches['group1'].($matches['group2'] ?? '');
