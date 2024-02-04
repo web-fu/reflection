@@ -26,6 +26,7 @@ class ReflectionEnum extends ReflectionClass
         }
 
         $this->reflectionEnum = new \ReflectionEnum($objectOrClass);
+        parent::__construct($objectOrClass);
     }
 
     /**

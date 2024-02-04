@@ -60,9 +60,9 @@ class ReflectionTypeTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithIntersectionTypes::class);
         $reflectionType  = $reflectionClass->getProperty('intersection')->getType();
 
-        $this->assertTrue($reflectionType->hasType('\Countable&\Iterator'));
-        $this->assertFalse($reflectionType->hasType('\Countable'));
-        $this->assertFalse($reflectionType->hasType('\Iterator'));
+        $this->assertTrue($reflectionType->hasType('Countable&Iterator'));
+        $this->assertFalse($reflectionType->hasType('Countable'));
+        $this->assertFalse($reflectionType->hasType('Iterator'));
     }
 
     /**

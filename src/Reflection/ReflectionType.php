@@ -30,6 +30,18 @@ class ReflectionType
      */
     public function __construct(array $types = [], array $phpDocTypeNames = [], private string $separator = '|')
     {
+        if (empty($types)) {
+            $types = ['mixed'];
+        }
+
+        if (count($types) > 1 && $separator !== '|') {
+            throw new \InvalidArgumentException('Union types must use the "|" separator');
+        }
+
+        if (count($types) === 1 && str_contains($types[0], '&')) {
+            $this->separator = '&';
+        }
+
         $this->types           = $types;
         $this->phpDocTypeNames = $phpDocTypeNames;
     }
