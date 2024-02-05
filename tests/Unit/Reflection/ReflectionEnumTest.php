@@ -135,8 +135,8 @@ class ReflectionEnumTest extends TestCase
         $reflectionEnum = new ReflectionEnum(BackedEnum::class);
 
         $this->assertSame([
-            'name' => BackedEnum::class,
-            'attributes' => [],
+            'name'        => BackedEnum::class,
+            'attributes'  => [],
             'annotations' => [],
         ], $reflectionEnum->__debugInfo());
     }

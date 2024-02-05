@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
+use InvalidArgumentException;
+
 class ReflectionType
 {
     /**
@@ -34,11 +36,11 @@ class ReflectionType
             $types = ['mixed'];
         }
 
-        if (count($types) > 1 && $separator !== '|') {
-            throw new \InvalidArgumentException('Union types must use the "|" separator');
+        if (count($types) > 1 && '|' !== $separator) {
+            throw new InvalidArgumentException('Union types must use the "|" separator');
         }
 
-        if (count($types) === 1 && str_contains($types[0], '&')) {
+        if (1 === count($types) && str_contains($types[0], '&')) {
             $this->separator = '&';
         }
 

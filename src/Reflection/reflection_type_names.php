@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
+use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionType;
 use ReflectionUnionType;
@@ -29,9 +30,10 @@ if (!function_exists(__NAMESPACE__.'\reflection_type_names')) {
             return ['mixed'];
         }
 
-        if (PHP_VERSION_ID >= 80000 && $reflectionType instanceof \ReflectionIntersectionType) {
+        if (PHP_VERSION_ID >= 80000 && $reflectionType instanceof ReflectionIntersectionType) {
+            /** @var ReflectionNamedType[] $reflectionNamedTypes */
             $reflectionNamedTypes = $reflectionType->getTypes();
-            $typeNames = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionNamedTypes);
+            $typeNames            = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionNamedTypes);
 
             sort($typeNames);
 
