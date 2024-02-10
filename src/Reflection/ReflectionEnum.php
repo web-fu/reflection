@@ -14,11 +14,18 @@ declare(strict_types=1);
 namespace WebFu\Reflection;
 
 use ReflectionEnumUnitCase;
+use UnitEnum;
 
+/**
+ * @template T of UnitEnum
+ */
 class ReflectionEnum extends ReflectionClass
 {
     private \ReflectionEnum $reflectionEnum;
 
+    /**
+     * @param T|class-string<T> $objectOrClass
+     */
     public function __construct(object|string $objectOrClass)
     {
         if (PHP_VERSION_ID < 80100) {

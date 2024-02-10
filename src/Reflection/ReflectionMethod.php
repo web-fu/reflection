@@ -174,6 +174,8 @@ class ReflectionMethod extends ReflectionFunctionAbstract
             throw new WrongPhpVersionException('hasPrototype() is not available for PHP versions lower than 8.2.0');
         }
 
+        assert($this->reflectionFunction instanceof \ReflectionMethod);
+
         return $this->reflectionFunction->hasPrototype();
     }
 
