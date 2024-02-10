@@ -11,7 +11,7 @@ if (PHP_VERSION_ID < 80100) {
 if (PHP_VERSION_ID < 80200) {
     $includes[] = __DIR__ . '/reflection-class-readonly.neon';
     $includes[] = __DIR__ . '/reflection-function.neon';
-    $includes[] = __DIR__ . '/reflection-function-abstract-prototype.neon';
+    $includes[] = __DIR__ . '/reflection-method.neon';
 }
 $config = [];
 $config['includes'] = $includes;
