@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-use Exception;
+use BadMethodCallException;
 
-class ReflectionException extends Exception
+class WrongPhpVersionException extends BadMethodCallException
 {
 }

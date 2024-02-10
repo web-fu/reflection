@@ -2,15 +2,26 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionAttribute;
 
 class ReflectionProperty extends AbstractReflection
 {
-    public const IS_STATIC = \ReflectionProperty::IS_STATIC;
-    public const IS_READONLY = 128;
-    public const IS_PUBLIC = \ReflectionProperty::IS_PUBLIC;
-    public const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
-    public const IS_PRIVATE = \ReflectionProperty::IS_PRIVATE;
+    public const IS_STATIC    = 16;
+    public const IS_READONLY  = 128;
+    public const IS_PUBLIC    = 1;
+    public const IS_PROTECTED = 2;
+    public const IS_PRIVATE   = 4;
 
     private \ReflectionProperty $reflectionProperty;
 
@@ -19,8 +30,25 @@ class ReflectionProperty extends AbstractReflection
         $this->reflectionProperty = new \ReflectionProperty($class, $property);
     }
 
+    public function __toString(): string
+    {
+        return $this->reflectionProperty->__toString();
+    }
+
     /**
-     * @return \ReflectionAttribute[]
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
+    /**
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -47,13 +75,13 @@ class ReflectionProperty extends AbstractReflection
      */
     public function getTypeNames(): array
     {
-        return Reflector::getTypeNames($this->reflectionProperty->getType());
+        return reflection_type_names($this->reflectionProperty->getType());
     }
 
     /**
      * @return string[]
      */
-    public function getDocTypeNames(): array
+    public function getPhpDocTypeNames(): array
     {
         $annotations = array_filter($this->getAnnotations(), fn (string $annotation) => str_starts_with($annotation, '@var'));
 
@@ -69,9 +97,12 @@ class ReflectionProperty extends AbstractReflection
 
         $docTypes = preg_replace('/@var\s/', '$1', $varAnnotation);
 
+        /*
+         * @infection-ignore-all
+         */
         assert(is_string($docTypes));
 
-        $docTypesList = explode('|', $docTypes);
+        $docTypesList         = explode('|', $docTypes);
         $docTypesListResolved = [];
 
         foreach ($docTypesList as $docType) {
@@ -80,11 +111,11 @@ class ReflectionProperty extends AbstractReflection
             preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
 
             if ($matches) {
-                $docType = $matches['group1'] . ($matches['group2'] ?? '');
+                $docType = $matches['group1'].($matches['group2'] ?? '');
                 $isArray = true;
             }
 
-            if ($resolved = Reflector::typeResolver($this->getDeclaringClass()->getName(), $docType)) {
+            if ($resolved = reflection_type_resolver($this->getDeclaringClass()->getName(), $docType)) {
                 $docType = $resolved->getTypeNames()[0];
             }
 
@@ -96,11 +127,6 @@ class ReflectionProperty extends AbstractReflection
         }
 
         return $docTypesListResolved;
-    }
-
-    public function getTypeExtended(): ReflectionTypeExtended
-    {
-        return new ReflectionTypeExtended($this->getTypeNames(), $this->getDocTypeNames());
     }
 
     public function getModifiers(): int
@@ -115,7 +141,10 @@ class ReflectionProperty extends AbstractReflection
 
     public function getType(): ReflectionType
     {
-        return Reflector::createReflectionType($this->reflectionProperty->getType());
+        return new ReflectionType(
+            types: $this->getTypeNames(),
+            phpDocTypeNames: $this->getPhpDocTypeNames(),
+        );
     }
 
     public function getValue(object|null $object = null): mixed
@@ -165,7 +194,11 @@ class ReflectionProperty extends AbstractReflection
 
     public function isReadOnly(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionProperty->isReadOnly();
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('isReadOnly() is not available for PHP versions lower than 8.1.0');
+        }
+
+        return $this->reflectionProperty->isReadOnly();
     }
 
     public function isStatic(): bool
@@ -181,10 +214,5 @@ class ReflectionProperty extends AbstractReflection
     public function setValue(object $object, mixed $value): void
     {
         $this->reflectionProperty->setValue($object, $value);
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionProperty->__toString();
     }
 }

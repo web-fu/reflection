@@ -2,14 +2,28 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
+
+use ReflectionAttribute;
+use ReflectionExtension;
 
 abstract class ReflectionFunctionAbstract extends AbstractReflection
 {
     protected \ReflectionFunctionAbstract $reflectionFunction;
 
+    abstract public function __toString(): string;
+
     /**
-     * @return \ReflectionAttribute[]
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -21,6 +35,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         if (!$closureScopeClass = $this->reflectionFunction->getClosureScopeClass()) {
             return null;
         }
+
         return new ReflectionClass($closureScopeClass->getName());
     }
 
@@ -34,7 +49,11 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      */
     public function getClosureUsedVariables(): array
     {
-        return PHP_VERSION_ID >= 80100 ? $this->reflectionFunction->getClosureUsedVariables() : [];
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('getClosureUsedVariables() is not available for PHP versions lower than 8.1.0');
+        }
+
+        return $this->reflectionFunction->getClosureUsedVariables();
     }
 
     public function getDocComment(): string|null
@@ -47,7 +66,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         return $this->reflectionFunction->getEndLine() ?: null;
     }
 
-    public function getExtension(): \ReflectionExtension|null
+    public function getExtension(): ReflectionExtension|null
     {
         return $this->reflectionFunction->getExtension();
     }
@@ -89,7 +108,10 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function getReturnType(): ReflectionType
     {
-        return Reflector::createReflectionType($this->reflectionFunction->getReturnType());
+        return new ReflectionType(
+            types: $this->getReturnTypeNames(),
+            phpDocTypeNames: $this->getPhpDocReturnTypeNames(),
+        );
     }
 
     /**
@@ -97,7 +119,7 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
      */
     public function getReturnTypeNames(): array
     {
-        return Reflector::getTypeNames($this->reflectionFunction->getReturnType());
+        return reflection_type_names($this->reflectionFunction->getReturnType());
     }
 
     public function getShortName(): string
@@ -121,10 +143,16 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
     public function getTentativeReturnType(): ReflectionType|null
     {
         if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('getTentativeReturnType() is not available for PHP versions lower than 8.1.0');
+        }
+
+        if (!$this->reflectionFunction->hasTentativeReturnType()) {
             return null;
         }
 
-        return Reflector::createReflectionType($this->reflectionFunction->getTentativeReturnType());
+        $tentativeReturnTypeNames = reflection_type_names($this->reflectionFunction->getTentativeReturnType());
+
+        return new ReflectionType($tentativeReturnTypeNames);
     }
 
     public function hasReturnType(): bool
@@ -134,7 +162,11 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
 
     public function hasTentativeReturnType(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionFunction->hasTentativeReturnType();
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('hasTentativeReturnType() is not available for PHP versions lower than 8.1.0');
+        }
+
+        return $this->reflectionFunction->hasTentativeReturnType();
     }
 
     public function inNamespace(): bool
@@ -182,5 +214,8 @@ abstract class ReflectionFunctionAbstract extends AbstractReflection
         return $this->reflectionFunction->returnsReference();
     }
 
-    abstract public function __toString(): string;
+    /**
+     * @return string[]
+     */
+    abstract public function getPhpDocReturnTypeNames();
 }

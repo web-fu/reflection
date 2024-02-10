@@ -44,12 +44,7 @@ class ClassWithMethods
     {
     }
 
-    final public function finalMethod(): void
-    {
-    }
-
     public function __destruct()
     {
-        echo 'Called __destruct()';
     }
 }

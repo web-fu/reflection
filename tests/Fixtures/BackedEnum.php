@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace WebFu\Tests\Fixtures;
 
-enum EnumClass
+enum BackedEnum: int
 {
-    case A;
-    case B;
-    case C;
+    case ONE = 1;
 }

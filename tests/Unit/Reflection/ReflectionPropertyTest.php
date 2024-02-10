@@ -2,21 +2,37 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Tests\Unit\Reflection;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\ReflectionTypeExtended;
+use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\Attribute;
 use WebFu\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Tests\Fixtures\ClassWithProperties;
+use WebFu\Tests\Fixtures\ClassWithReadOnly;
 use WebFu\Tests\Fixtures\ClassWithTypes;
 use WebFu\Tests\Fixtures\GenericClass;
 
+/**
+ * @covers \WebFu\Reflection\ReflectionProperty
+ */
 class ReflectionPropertyTest extends TestCase
 {
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getAnnotations
+     */
     public function testGetAnnotation(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');
@@ -27,15 +43,21 @@ class ReflectionPropertyTest extends TestCase
         ], $reflectionProperty->getAnnotations());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getAttributes
+     */
     public function testGetAttributes(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithAttribute');
-        $attributes = $reflectionProperty->getAttributes();
+        $attributes         = $reflectionProperty->getAttributes();
 
         $this->assertCount(1, $attributes);
         $this->assertEquals(Attribute::class, $attributes[0]->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getDeclaringClass
+     */
     public function testGetDeclaringClass(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -43,6 +65,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals(new ReflectionClass(ClassWithProperties::class), $reflectionProperty->getDeclaringClass());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getDefaultValue
+     */
     public function testGetDefaultValue(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -50,6 +75,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals(1, $reflectionProperty->getDefaultValue());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getDocComment
+     */
     public function testGetDocComment(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment');
@@ -60,6 +88,9 @@ class ReflectionPropertyTest extends TestCase
      */', $reflectionProperty->getDocComment());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getType
+     */
     public function testGetType(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -67,6 +98,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals(new ReflectionType(['int']), $reflectionProperty->getType());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getTypeNames
+     */
     public function testGetTypeNames(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'simple');
@@ -75,35 +109,34 @@ class ReflectionPropertyTest extends TestCase
 
         $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'union');
 
-        $this->assertEquals(['string', 'int'], $reflectionProperty->getTypeNames());
+        $this->assertEquals(['int', 'string'], $reflectionProperty->getTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithTypes::class, 'noType');
 
         $this->assertEquals(['mixed'], $reflectionProperty->getTypeNames());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getPhpDocTypeNames
+     */
     public function testGetDocTypeName(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');
 
-        $this->assertEquals(['class-string'], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals(['class-string'], $reflectionProperty->getPhpDocTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'noDocComments');
 
-        $this->assertEquals([], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals([], $reflectionProperty->getPhpDocTypeNames());
 
         $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'useStatementDocComment');
 
-        $this->assertEquals([GenericClass::class . '[]'], $reflectionProperty->getDocTypeNames());
+        $this->assertEquals([GenericClass::class.'[]'], $reflectionProperty->getPhpDocTypeNames());
     }
 
-    public function testGetTypeExtended(): void
-    {
-        $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment');
-
-        $this->assertEquals(new ReflectionTypeExtended(['string'], ['class-string']), $reflectionProperty->getTypeExtended());
-    }
-
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getModifiers
+     */
     public function testGetModifiers(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -111,6 +144,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals(ReflectionProperty::IS_PUBLIC, $reflectionProperty->getModifiers());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getName
+     */
     public function testGetName(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -118,14 +154,20 @@ class ReflectionPropertyTest extends TestCase
         $this->assertEquals('public', $reflectionProperty->getName());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::getValue
+     */
     public function testGetValue(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'public');
 
         $this->assertEquals(1, $reflectionProperty->getValue($object));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::hasDefaultValue
+     */
     public function testHasDefaultValue(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -133,28 +175,40 @@ class ReflectionPropertyTest extends TestCase
         $this->assertTrue($reflectionProperty->hasDefaultValue());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::hasType
+     */
     public function testHasType(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
 
-        $this->assertEquals(true, $reflectionProperty->hasType());
+        $this->assertTrue($reflectionProperty->hasType());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isDefault
+     */
     public function testIsDefault(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
 
-        $this->assertEquals(true, $reflectionProperty->isDefault());
+        $this->assertTrue($reflectionProperty->isDefault());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isInitialized
+     */
     public function testIsInitialized(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'public');
 
         $this->assertTrue($reflectionProperty->isInitialized($object));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isPrivate
+     */
     public function testIsPrivate(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'private');
@@ -162,6 +216,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertTrue($reflectionProperty->isPrivate());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isPromoted
+     */
     public function testIsPromoted(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -169,6 +226,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertFalse($reflectionProperty->isPromoted());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isProtected
+     */
     public function testIsProtected(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'protected');
@@ -176,6 +236,9 @@ class ReflectionPropertyTest extends TestCase
         $this->assertTrue($reflectionProperty->isProtected());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isPublic
+     */
     public function testIsPublic(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
@@ -183,17 +246,31 @@ class ReflectionPropertyTest extends TestCase
         $this->assertTrue($reflectionProperty->isPublic());
     }
 
-    public function testIsReadonly(): void
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isReadOnly
+     */
+    public function testIsReadOnly(): void
     {
         if (PHP_VERSION_ID < 80100) {
-            $this->markTestSkipped('Readonly properties are only available in PHP 8.1 and above.');
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isReadOnly() is not available for PHP versions lower than 8.1.0');
+
+            $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
+            $reflectionProperty->isReadOnly();
+
+            $this->markTestSkipped('isReadOnly() is not available for PHP versions lower than 8.1.0');
         }
 
-        $reflectionProperty = new ReflectionProperty(ClassWithDocComments::class, 'property');
+        $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
+        $this->assertFalse($reflectionProperty->isReadOnly());
 
-        $this->assertEquals(false, $reflectionProperty->isReadonly());
+        $reflectionProperty = new ReflectionProperty(ClassWithReadOnly::class, 'public');
+        $this->assertTrue($reflectionProperty->isReadOnly());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::isStatic
+     */
     public function testIsStatic(): void
     {
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'staticPublic');
@@ -201,18 +278,24 @@ class ReflectionPropertyTest extends TestCase
         $this->assertTrue($reflectionProperty->isStatic());
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::setAccessible
+     */
     public function testSetAccessible(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty($object, 'private');
         $reflectionProperty->setAccessible(true);
 
         $this->assertEquals(3, $reflectionProperty->getValue($object));
     }
 
+    /**
+     * @covers \WebFu\Reflection\ReflectionProperty::setValue
+     */
     public function testSetValue(): void
     {
-        $object = new ClassWithProperties();
+        $object             = new ClassWithProperties();
         $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'private');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, 6);

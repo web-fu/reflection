@@ -2,22 +2,54 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of web-fu/reflection
+ *
+ * @copyright Web-Fu <info@web-fu.it>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace WebFu\Reflection;
 
+use ReflectionAttribute;
+use ReflectionExtension;
+
+/**
+ * @template T of object
+ */
 class ReflectionClass extends AbstractReflection
 {
     private \ReflectionClass $reflectionClass;
 
     /**
-     * @param object|class-string $objectOrClass
+     * @param T|class-string<T> $objectOrClass
      */
     public function __construct(object|string $objectOrClass)
     {
         $this->reflectionClass = new \ReflectionClass($objectOrClass);
     }
 
+    public function __toString(): string
+    {
+        return $this->reflectionClass->__toString();
+    }
+
     /**
-     * @return \ReflectionAttribute[]
+     * @return array<string, mixed>
+     */
+    public function __debugInfo(): array
+    {
+        return [
+            'name'        => $this->getName(),
+            'attributes'  => $this->getAttributes(),
+            'annotations' => $this->getAnnotations(),
+        ];
+    }
+
+    /**
+     * @return ReflectionAttribute[]
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
@@ -31,7 +63,7 @@ class ReflectionClass extends AbstractReflection
                 return $constant->getValue();
             }
         }
-        throw new ReflectionException('Undefined constant name: ' . $name);
+        throw new ReflectionException('Undefined constant name: '.$name);
     }
 
     /**
@@ -43,12 +75,13 @@ class ReflectionClass extends AbstractReflection
         foreach ($this->getReflectionConstants($filter) as $constant) {
             $result[$constant->getName()] = $constant->getValue();
         }
+
         return $result;
     }
 
     public function getConstructor(): ReflectionMethod|null
     {
-        if (! $this->reflectionClass->getConstructor()) {
+        if (!$this->reflectionClass->getConstructor()) {
             return null;
         }
 
@@ -73,7 +106,7 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->getEndLine() ?: null;
     }
 
-    public function getExtension(): \ReflectionExtension|null
+    public function getExtension(): ReflectionExtension|null
     {
         return $this->reflectionClass->getExtension();
     }
@@ -114,8 +147,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getMethods(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionMethod $method) =>
-            $this->getMethod($method->getName()), $this->reflectionClass->getMethods($filter));
+        return array_map(fn (\ReflectionMethod $method) => $this->getMethod($method->getName()), $this->reflectionClass->getMethods($filter));
     }
 
     public function getModifiers(): int
@@ -160,6 +192,7 @@ class ReflectionClass extends AbstractReflection
         if (!$this->reflectionClass->hasProperty($name)) {
             return null;
         }
+
         return new ReflectionProperty($this->reflectionClass->getName(), $name);
     }
 
@@ -201,7 +234,7 @@ class ReflectionClass extends AbstractReflection
     public function getStaticPropertyValue(string $propertyName, mixed $default = null): mixed
     {
         if (!$this->hasProperty($propertyName)) {
-            throw new ReflectionException('Undefined property name: ' . $propertyName);
+            throw new ReflectionException('Undefined static property: '.$this->getName().'::$'.$propertyName);
         }
 
         return $this->reflectionClass->getStaticPropertyValue($propertyName, $default);
@@ -236,7 +269,87 @@ class ReflectionClass extends AbstractReflection
      */
     public function getUseStatements(): array
     {
-        return Reflector::createReflectionClassUseStatements($this->getName());
+        if (!$filename = $this->getFileName()) {
+            throw new ReflectionException('Unable to retrieve filename for class '.$this->getName());
+        }
+
+        $source = file_get_contents($filename);
+        if (!$source) {
+            throw new ReflectionException('Could not open file '.$filename);
+        }
+
+        $tokens = token_get_all($source);
+
+        $builtNamespace    = '';
+        $useStatements     = [];
+        $class             = '';
+        $as                = '';
+        $buildingNamespace = false;
+        $buildingUse       = false;
+        $buildingAs        = false;
+
+        foreach ($tokens as $token) {
+            if (is_array($token)) {
+                if (T_NAMESPACE === $token[0]) {
+                    $buildingNamespace = true;
+                }
+
+                if (T_USE === $token[0]) {
+                    $buildingUse = true;
+                }
+
+                if (T_AS === $token[0]) {
+                    $buildingAs = true;
+                }
+            }
+
+            if (';' === $token) {
+                $buildingNamespace = false;
+                $buildingUse       = false;
+                $buildingAs        = false;
+
+                if ($builtNamespace) {
+                    $builtNamespace = trim($builtNamespace);
+                }
+
+                if ($class) {
+                    /** @var class-string $class */
+                    $class           = trim($class);
+                    $as              = $as ? trim($as) : $class;
+                    $useStatements[] = new ReflectionUseStatement($class, $as);
+                    $class           = '';
+                    $as              = '';
+                }
+            }
+
+            if ($buildingNamespace) {
+                if (T_NAMESPACE === $token[0]) {
+                    continue;
+                }
+
+                $builtNamespace .= $token[1];
+
+                continue;
+            }
+
+            if ($buildingUse) {
+                if (T_USE === $token[0]) {
+                    continue;
+                }
+
+                if (T_AS === $token[0]) {
+                    continue;
+                }
+
+                if (!$buildingAs) {
+                    $class .= $token[1];
+                } else {
+                    $as .= $token[1];
+                }
+            }
+        }
+
+        return $useStatements;
     }
 
     public function hasConstant(string $name): bool
@@ -286,7 +399,11 @@ class ReflectionClass extends AbstractReflection
 
     public function isEnum(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isEnum();
+        if (PHP_VERSION_ID < 80100) {
+            throw new WrongPhpVersionException('isEnum() is not available for PHP versions lower than 8.1.0');
+        }
+
+        return $this->reflectionClass->isEnum();
     }
 
     public function isFinal(): bool
@@ -321,7 +438,11 @@ class ReflectionClass extends AbstractReflection
 
     public function isReadOnly(): bool
     {
-        return PHP_VERSION_ID >= 80100 && $this->reflectionClass->isReadOnly();
+        if (PHP_VERSION_ID < 80200) {
+            throw new WrongPhpVersionException('isReadOnly() is not available for PHP versions lower than 8.2.0');
+        }
+
+        return $this->reflectionClass->isReadOnly();
     }
 
     /**
@@ -344,31 +465,58 @@ class ReflectionClass extends AbstractReflection
         return $this->reflectionClass->isUserDefined();
     }
 
+    /**
+     * @return T
+     */
     public function newInstance(mixed ...$args): object
     {
-        return $this->reflectionClass->newInstance(...$args);
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstance(...$args);
+
+        /*
+         * @infection-ignore-all
+         */
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
     /**
      * @param mixed[] $args
+     *
+     * @return T
      */
     public function newInstanceArgs(array $args = []): object
     {
-        return $this->reflectionClass->newInstanceArgs($args);
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstanceArgs($args);
+
+        /*
+         * @infection-ignore-all
+         */
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
+    /**
+     * @return T
+     */
     public function newInstanceWithoutConstructor(): object
     {
-        return $this->reflectionClass->newInstanceWithoutConstructor();
+        /** @var T $instance */
+        $instance = $this->reflectionClass->newInstanceWithoutConstructor();
+
+        /*
+         * @infection-ignore-all
+         */
+        assert(get_class($instance) === $this->getName());
+
+        return $instance;
     }
 
     public function setStaticPropertyValue(string $name, mixed $value): void
     {
         $this->reflectionClass->setStaticPropertyValue($name, $value);
-    }
-
-    public function __toString(): string
-    {
-        return $this->reflectionClass->__toString();
     }
 }

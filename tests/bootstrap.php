@@ -11,10 +11,4 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Reflection;
-
-use Exception;
-
-class ReflectionException extends Exception
-{
-}
+require dirname(__DIR__).'/vendor/autoload.php';
