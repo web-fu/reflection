@@ -113,4 +113,26 @@ class ReflectionClassConstant extends AbstractReflection
     {
         return $this->reflectionClassConstant->isPublic();
     }
+
+    public function getType(): ReflectionType
+    {
+        if (PHP_VERSION_ID < 80300) {
+            throw new WrongPhpVersionException('getType() is not available for PHP versions lower than 8.3.0');
+        }
+
+        $type = $this->reflectionClassConstant->getType();
+
+        $reflectionTypeNames = reflection_type_names($type);
+
+        return new ReflectionType($reflectionTypeNames);
+    }
+
+    public function hasType(): bool
+    {
+        if (PHP_VERSION_ID < 80300) {
+            throw new WrongPhpVersionException('hasType() is not available for PHP versions lower than 8.3.0');
+        }
+
+        return $this->reflectionClassConstant->hasType();
+    }
 }

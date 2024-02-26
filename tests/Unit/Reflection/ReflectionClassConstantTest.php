@@ -20,6 +20,7 @@ use WebFu\Reflection\WrongPhpVersionException;
 use WebFu\Tests\Fixtures\Attribute;
 use WebFu\Tests\Fixtures\ClassWithConstants;
 use WebFu\Tests\Fixtures\ClassWithFinals;
+use WebFu\Tests\Fixtures\ClassWithTypedConstants;
 use WebFu\Tests\Fixtures\EnumClass;
 
 /**
@@ -216,5 +217,52 @@ class ReflectionClassConstantTest extends TestCase
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
 
         $this->assertSame('Constant [ public int PUBLIC ] { 1 }'.PHP_EOL, $reflectionClassConstant->__toString());
+    }
+
+    /**
+     * @covers \WebFu\Reflection\ReflectionClassConstant::getType
+     */
+    public function testGetType(): void
+    {
+        if (PHP_VERSION_ID < 80300) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('getType() is not available for PHP versions lower than 8.3.0');
+
+            $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+            $reflectionClassConstant->getType();
+
+            $this->markTestSkipped('getType() is not available for PHP versions lower than 8.3.0');
+        }
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+        $this->assertSame(['mixed'], $reflectionClassConstant->getType());
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'INTEGER');
+        $this->assertSame(['int'], $reflectionClassConstant->getType()->getTypeNames());
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'INTEGER_OR_STRING');
+        $this->assertSame(['int', 'string'], $reflectionClassConstant->getType()->getTypeNames());
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'COLLABLE_CONSTANTS');
+        $this->assertSame(['callable'], $reflectionClassConstant->getType()->getTypeNames());
+    }
+
+    public function testHasType(): void
+    {
+        if (PHP_VERSION_ID < 80300) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('hasType() is not available for PHP versions lower than 8.3.0');
+
+            $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+            $reflectionClassConstant->hasType();
+
+            $this->markTestSkipped('hasType() is not available for PHP versions lower than 8.3.0');
+        }
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
+        $this->assertFalse($reflectionClassConstant->hasType());
+
+        $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'INTEGER');
+        $this->assertTrue($reflectionClassConstant->hasType());
     }
 }
