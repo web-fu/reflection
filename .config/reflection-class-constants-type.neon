@@ -1,0 +1,4 @@
+parameters:
+    ignoreErrors:
+        - '#Call to an undefined method ReflectionClassConstant::getType\(\)#'
+        - '#Call to an undefined method ReflectionClassConstant::hasType\(\)#'
