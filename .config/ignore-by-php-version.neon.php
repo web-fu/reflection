@@ -13,6 +13,11 @@ if (PHP_VERSION_ID < 80200) {
     $includes[] = __DIR__ . '/reflection-function.neon';
     $includes[] = __DIR__ . '/reflection-method.neon';
 }
+
+if (PHP_VERSION_ID < 80300) {
+    $includes[] = __DIR__ . '/reflection-class-constants-type.neon';
+}
+
 $config = [];
 $config['includes'] = $includes;
 $config['parameters']['phpVersion'] = PHP_VERSION_ID;
