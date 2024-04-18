@@ -27,6 +27,7 @@ return (new PhpCsFixer\Config())
         'combine_consecutive_unsets'                       => true,
         'combine_nested_dirname'                           => true,
         'comment_to_phpdoc'                                => true,
+        'nullable_type_declaration'                        => ['syntax' => 'union'],
         'compact_nullable_type_declaration'                => true,
         'declare_strict_types'                             => true,
         'dir_constant'                                     => true,
