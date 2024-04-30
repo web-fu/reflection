@@ -235,7 +235,7 @@ class ReflectionClassConstantTest extends TestCase
         }
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC');
-        $this->assertSame(['mixed'], $reflectionClassConstant->getType());
+        $this->assertSame(['mixed'], $reflectionClassConstant->getType()->getTypeNames());
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'INTEGER');
         $this->assertSame(['int'], $reflectionClassConstant->getType()->getTypeNames());
