@@ -242,9 +242,6 @@ class ReflectionClassConstantTest extends TestCase
 
         $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'INTEGER_OR_STRING');
         $this->assertSame(['int', 'string'], $reflectionClassConstant->getType()->getTypeNames());
-
-        $reflectionClassConstant = new ReflectionClassConstant(ClassWithTypedConstants::class, 'COLLABLE_CONSTANTS');
-        $this->assertSame(['callable'], $reflectionClassConstant->getType()->getTypeNames());
     }
 
     public function testHasType(): void

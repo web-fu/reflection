@@ -17,9 +17,4 @@ class ClassWithTypedConstants
 {
     public const int INTEGER = 1;
     public const int|string INTEGER_OR_STRING = 1;
-    public const \Closure COLLABLE_CONSTANTS = [self::class, 'classMethod'];
-
-    public function classMethod(): void
-    {
-    }
 }
