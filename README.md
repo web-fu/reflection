@@ -1,4 +1,7 @@
 # Reflection
+![Test status](https://github.com/web-fu/reflection/actions/workflows/tests.yaml/badge.svg)
+![Static analysis status](https://github.com/web-fu/reflection/actions/workflows/static-analysis.yml/badge.svg)
+![Code style status](https://github.com/web-fu/reflection/actions/workflows/code-style.yaml/badge.svg)
 
 ### This library is a type safe wrapper for PHP Reflection API.
 

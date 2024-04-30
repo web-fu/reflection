@@ -475,8 +475,8 @@ class ReflectionClassTest extends TestCase
 
         $this->assertEquals(
             [
-            'traitFunction' => GenericTrait::class.'::publicTraitFunction',
-        ],
+                'traitFunction' => GenericTrait::class.'::publicTraitFunction',
+            ],
             $reflectionClass->getTraitAliases()
         );
     }

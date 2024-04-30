@@ -226,7 +226,7 @@ class ReflectionClass extends AbstractReflection
     /**
      * @return array<string, mixed>
      */
-    public function getStaticProperties(): ?array
+    public function getStaticProperties(): array|null
     {
         return $this->reflectionClass->getStaticProperties();
     }
