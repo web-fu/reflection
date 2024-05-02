@@ -3,7 +3,7 @@
   "type": "library",
   "description": "Reflection API",
   "keywords": [
-    "reflection", "static analysis"
+    "reflection"
   ],
   "license": "MIT",
   "authors": [
