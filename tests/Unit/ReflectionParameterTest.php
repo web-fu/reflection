@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
@@ -19,10 +19,10 @@ use WebFu\Reflection\ReflectionFunction;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\ClassWithMethods;
-use WebFu\Tests\Fixtures\ClassWithTypes;
-use WebFu\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
+use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
 
 /**
  * @covers \WebFu\Reflection\ReflectionParameter
@@ -31,7 +31,7 @@ class ReflectionParameterTest extends TestCase
 {
     protected function setUp(): void
     {
-        require_once __DIR__.'/../../Fixtures/example.php';
+        require_once __DIR__.'/../Fixtures/example.php';
     }
 
     /**

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
@@ -24,11 +24,11 @@ use WebFu\Reflection\WrongPhpVersionException;
  */
 class ReflectionFunctionTest extends TestCase
 {
-    private $filename = __DIR__.'/../../Fixtures/example.php';
+    private const FILENAME = __DIR__.'/../Fixtures/example.php';
 
     protected function setUp(): void
     {
-        require_once $this->filename;
+        require_once self::FILENAME;
     }
 
     /**
@@ -360,7 +360,7 @@ class ReflectionFunctionTest extends TestCase
     {
         $reflectionFunction = new ReflectionFunction('example');
 
-        $filename = realpath($this->filename);
+        $filename = realpath(self::FILENAME);
 
         $expected = <<<EOT
             /** @param class-string \$param */

@@ -11,10 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Benchmark\Reflection;
+namespace WebFu\Reflection\Tests\Benchmark;
 
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
 
 class RefectionClassBench
 {

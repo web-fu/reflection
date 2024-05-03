@@ -18,16 +18,16 @@
   },
   "autoload": {
     "psr-4": {
-      "WebFu\\": "src/"
+      "WebFu\\Reflection\\": "src/"
     },
     "files": [
-      "src/Reflection/reflection_type_names.php",
-      "src/Reflection/reflection_type_resolver.php"
+      "src/reflection_type_names.php",
+      "src/reflection_type_resolver.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "WebFu\\Tests\\": "tests/"
+      "WebFu\\Reflection\\Tests\\": "tests/"
     }
   },
   "require-dev": {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace WebFu\Tests\Fixtures;
+namespace WebFu\Reflection\Tests\Fixtures;
 
-use WebFu\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
 use DateTime as DT;
 
 class ClassWithUseStatements
