@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -25,7 +25,7 @@ class ReflectionTypeNamesTest extends TestCase
 {
     public function testReflectionTypeNames(): void
     {
-        $reflectionClass      = new ReflectionClass('WebFu\Tests\Fixtures\ClassWithTypes');
+        $reflectionClass      = new ReflectionClass('WebFu\Reflection\Tests\Fixtures\ClassWithTypes');
         $reflectionProperty   = $reflectionClass->getProperty('simple');
         $reflectionSimpleType = $reflectionProperty->getType();
 

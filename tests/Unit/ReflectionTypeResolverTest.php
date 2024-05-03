@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
 use function WebFu\Reflection\reflection_type_resolver;
 
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
 
 /**
  * @covers \WebFu\Reflection\reflection_type_resolver

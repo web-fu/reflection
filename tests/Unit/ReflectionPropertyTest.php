@@ -11,19 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\Tests\Fixtures\Attribute;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithProperties;
+use WebFu\Reflection\Tests\Fixtures\ClassWithReadOnly;
+use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\Attribute;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\ClassWithProperties;
-use WebFu\Tests\Fixtures\ClassWithReadOnly;
-use WebFu\Tests\Fixtures\ClassWithTypes;
-use WebFu\Tests\Fixtures\GenericClass;
 
 /**
  * @covers \WebFu\Reflection\ReflectionProperty

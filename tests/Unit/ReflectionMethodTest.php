@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use ArrayAccess;
 use Closure;
@@ -19,13 +19,13 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\Tests\Fixtures\AbstractClass;
+use WebFu\Reflection\Tests\Fixtures\ClassFinal;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithFinals;
+use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\AbstractClass;
-use WebFu\Tests\Fixtures\ClassFinal;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\ClassWithFinals;
-use WebFu\Tests\Fixtures\ClassWithMethods;
-use WebFu\Tests\Fixtures\GenericClass;
 
 /**
  * @covers \WebFu\Reflection\ReflectionMethod
@@ -587,7 +587,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
 
-        $filename = realpath(__DIR__.'/../../Fixtures/ClassWithMethods.php');
+        $filename = realpath(__DIR__.'/../Fixtures/ClassWithMethods.php');
 
         $expected = <<<EOT
             Method [ <user> public method methodWithoutParameters ] {

@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithIntersectionTypes;
+use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\ClassWithIntersectionTypes;
-use WebFu\Tests\Fixtures\ClassWithTypes;
 
 /**
  * @covers \WebFu\Reflection\ReflectionType

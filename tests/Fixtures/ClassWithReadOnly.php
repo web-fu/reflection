@@ -1,6 +1,6 @@
 <?php
 
-namespace WebFu\Tests\Fixtures;
+namespace WebFu\Reflection\Tests\Fixtures;
 
 class ClassWithReadOnly
 {

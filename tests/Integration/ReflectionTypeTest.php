@@ -11,11 +11,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Integration;
+namespace WebFu\Reflection\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Tests\Fixtures\ClassWithTypes;
+use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 
 /**
  * @coversNothing

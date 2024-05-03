@@ -11,14 +11,14 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionEnumBackedCase;
 use WebFu\Reflection\ReflectionEnum;
+use WebFu\Reflection\Tests\Fixtures\BackedEnum;
+use WebFu\Reflection\Tests\Fixtures\BasicEnum;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\BackedEnum;
-use WebFu\Tests\Fixtures\BasicEnum;
 
 /**
  * @covers \WebFu\Reflection\ReflectionEnum

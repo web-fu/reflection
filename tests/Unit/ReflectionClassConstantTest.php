@@ -11,17 +11,17 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionClassConstant;
+use WebFu\Reflection\Tests\Fixtures\Attribute;
+use WebFu\Reflection\Tests\Fixtures\ClassWithConstants;
+use WebFu\Reflection\Tests\Fixtures\ClassWithFinals;
+use WebFu\Reflection\Tests\Fixtures\ClassWithTypedConstants;
+use WebFu\Reflection\Tests\Fixtures\EnumClass;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\Attribute;
-use WebFu\Tests\Fixtures\ClassWithConstants;
-use WebFu\Tests\Fixtures\ClassWithFinals;
-use WebFu\Tests\Fixtures\ClassWithTypedConstants;
-use WebFu\Tests\Fixtures\EnumClass;
 
 /**
  * @covers \WebFu\Reflection\ReflectionClassConstant

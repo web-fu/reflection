@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Tests\Unit\Reflection;
+namespace WebFu\Reflection\Tests\Unit;
 
 use ArrayObject;
 use DateTime;
@@ -24,22 +24,22 @@ use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionUseStatement;
+use WebFu\Reflection\Tests\Fixtures\AbstractClass;
+use WebFu\Reflection\Tests\Fixtures\ClassFinal;
+use WebFu\Reflection\Tests\Fixtures\ClassNonClonable;
+use WebFu\Reflection\Tests\Fixtures\ClassReadOnly;
+use WebFu\Reflection\Tests\Fixtures\ClassWithAttributes;
+use WebFu\Reflection\Tests\Fixtures\ClassWithConstants;
+use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\Fixtures\ClassWithInterfaces;
+use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
+use WebFu\Reflection\Tests\Fixtures\ClassWithProperties;
+use WebFu\Reflection\Tests\Fixtures\ClassWithUseStatements;
+use WebFu\Reflection\Tests\Fixtures\EnumClass;
+use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\Fixtures\GenericInterface;
+use WebFu\Reflection\Tests\Fixtures\GenericTrait;
 use WebFu\Reflection\WrongPhpVersionException;
-use WebFu\Tests\Fixtures\AbstractClass;
-use WebFu\Tests\Fixtures\ClassFinal;
-use WebFu\Tests\Fixtures\ClassNonClonable;
-use WebFu\Tests\Fixtures\ClassReadOnly;
-use WebFu\Tests\Fixtures\ClassWithAttributes;
-use WebFu\Tests\Fixtures\ClassWithConstants;
-use WebFu\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Tests\Fixtures\ClassWithInterfaces;
-use WebFu\Tests\Fixtures\ClassWithMethods;
-use WebFu\Tests\Fixtures\ClassWithProperties;
-use WebFu\Tests\Fixtures\ClassWithUseStatements;
-use WebFu\Tests\Fixtures\EnumClass;
-use WebFu\Tests\Fixtures\GenericClass;
-use WebFu\Tests\Fixtures\GenericInterface;
-use WebFu\Tests\Fixtures\GenericTrait;
 
 /**
  * @covers \WebFu\Reflection\ReflectionClass
@@ -63,7 +63,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(ClassWithAttributes::class);
         $this->assertCount(1, $reflectionClass->getAttributes());
-        $this->assertEquals('WebFu\Tests\Fixtures\Attribute', $reflectionClass->getAttributes()[0]->getName());
+        $this->assertEquals('WebFu\Reflection\Tests\Fixtures\Attribute', $reflectionClass->getAttributes()[0]->getName());
     }
 
     /**
@@ -303,7 +303,7 @@ class ReflectionClassTest extends TestCase
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
-        $this->assertEquals('WebFu\Tests\Fixtures', $reflectionClass->getNamespaceName());
+        $this->assertEquals('WebFu\Reflection\Tests\Fixtures', $reflectionClass->getNamespaceName());
     }
 
     /**
@@ -461,7 +461,7 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
         $this->expectException(ReflectionException::class);
-        $this->expectExceptionMessage('Undefined static property: WebFu\Tests\Fixtures\ClassWithProperties::$iDoNotExist');
+        $this->expectExceptionMessage('Undefined static property: WebFu\Reflection\Tests\Fixtures\ClassWithProperties::$iDoNotExist');
 
         $reflectionClass->getStaticPropertyValue('iDoNotExist');
     }
