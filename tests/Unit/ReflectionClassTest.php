@@ -381,6 +381,7 @@ class ReflectionClassTest extends TestCase
 
             $reflectionClass = new ReflectionClass(ClassWithProperties::class);
             $reflectionClass->getProperties(ReflectionProperty::IS_READONLY);
+
             return;
         }
 
