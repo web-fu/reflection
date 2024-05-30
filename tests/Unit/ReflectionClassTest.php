@@ -382,7 +382,7 @@ class ReflectionClassTest extends TestCase
             $reflectionClass = new ReflectionClass(ClassWithProperties::class);
             $reflectionClass->getProperties(ReflectionProperty::IS_READONLY);
         } else {
-            $reflectionClass = new ReflectionClass(ClassReadOnly::class);
+            $reflectionClass = new ReflectionClass(ClassWithReadOnly::class);
 
             $this->assertEquals([
                 new ReflectionProperty(ClassWithReadOnly::class, 'public'),
