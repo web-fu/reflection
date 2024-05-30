@@ -34,6 +34,7 @@ use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Reflection\Tests\Fixtures\ClassWithInterfaces;
 use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
 use WebFu\Reflection\Tests\Fixtures\ClassWithProperties;
+use WebFu\Reflection\Tests\Fixtures\ClassWithReadOnly;
 use WebFu\Reflection\Tests\Fixtures\ClassWithUseStatements;
 use WebFu\Reflection\Tests\Fixtures\EnumClass;
 use WebFu\Reflection\Tests\Fixtures\GenericClass;
@@ -372,6 +373,23 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getProperties(ReflectionProperty::IS_STATIC));
     }
 
+    public function testGetPropertiesReadOnly(): void
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('The IS_READONLY filter is not available for PHP versions higher than 8.2.0');
+
+            $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+            $reflectionClass->getProperties(ReflectionProperty::IS_READONLY);
+        } else {
+            $reflectionClass = new ReflectionClass(ClassReadOnly::class);
+
+            $this->assertEquals([
+                new ReflectionProperty(ClassWithReadOnly::class, 'public'),
+            ], $reflectionClass->getProperties(ReflectionProperty::IS_READONLY));
+        }
+    }
+
     /**
      * @covers \WebFu\Reflection\ReflectionClass::getProperty
      *
@@ -410,6 +428,10 @@ class ReflectionClassTest extends TestCase
 
         $this->assertInstanceOf(ReflectionProperty::class, $reflectionProperty);
         $this->assertTrue($reflectionProperty->isDynamic());
+
+        $dynamicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_DYNAMIC);
+        $this->assertCount(1, $dynamicProperties);
+        $this->assertEquals($reflectionProperty, $dynamicProperties[0]);
     }
 
     public function dynamicPropertyProvider(): iterable

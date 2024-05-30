@@ -199,6 +199,10 @@ class ReflectionClass extends AbstractReflection
      */
     public function getProperties(int|null $filter = null): array
     {
+        if (PHP_VERSION_ID < 80200 && ReflectionProperty::IS_READONLY === $filter) {
+            throw new WrongPhpVersionException('The IS_READONLY filter is not available for PHP versions higher than 8.2.0');
+        }
+
         $propertyList = array_map(fn (\ReflectionProperty $reflectionProperty) => new ReflectionProperty($this->instance ?? $this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
 
         if ($this->instance) {
