@@ -341,6 +341,37 @@ class ReflectionClassTest extends TestCase
         ], $reflectionClass->getProperties());
     }
 
+    public function testGetPropertiesWithFilter(): void
+    {
+        $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->assertEquals([
+            new ReflectionProperty(ClassWithProperties::class, 'public'),
+            new ReflectionProperty(ClassWithProperties::class, 'propertyWithoutDefault'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPublic'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPropertyWithoutDefault'),
+            new ReflectionProperty(ClassWithProperties::class, 'propertyWithAttribute'),
+            new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC));
+
+        $this->assertEquals([
+            new ReflectionProperty(ClassWithProperties::class, 'protected'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticProtected'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PROTECTED));
+
+        $this->assertEquals([
+            new ReflectionProperty(ClassWithProperties::class, 'private'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPrivate'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE));
+
+        $this->assertEquals([
+            new ReflectionProperty(ClassWithProperties::class, 'staticPublic'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticProtected'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPrivate'),
+            new ReflectionProperty(ClassWithProperties::class, 'staticPropertyWithoutDefault'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_STATIC));
+    }
+
     /**
      * @covers \WebFu\Reflection\ReflectionClass::getProperty
      *
@@ -366,6 +397,38 @@ class ReflectionClassTest extends TestCase
         yield ['name' => 'staticProtected', 'expected' => new ReflectionProperty(ClassWithProperties::class, 'staticProtected')];
         yield ['name' => 'staticPrivate', 'expected' => new ReflectionProperty(ClassWithProperties::class, 'staticPrivate')];
         yield ['name' => 'iDoNotExist', 'expected' => null];
+    }
+
+    /**
+     * @dataProvider dynamicPropertyProvider
+     */
+    public function testDynamicProperties(object $object): void
+    {
+        $reflectionClass = new ReflectionClass($object);
+
+        $reflectionProperty = $reflectionClass->getProperty('dynamic');
+
+        $this->assertInstanceOf(ReflectionProperty::class, $reflectionProperty);
+        $this->assertTrue($reflectionProperty->isDynamic());
+    }
+
+    public function dynamicPropertyProvider(): iterable
+    {
+        $stdClass          = new stdClass();
+        $stdClass->dynamic = 'dynamic';
+
+        $existingClass          = new ClassWithProperties();
+        $existingClass->dynamic = 'dynamic';
+
+        yield 'stdClass' => [
+            'object' => $stdClass,
+        ];
+        yield 'object' => [
+            'object' => (object) ['dynamic' => 'dynamic'],
+        ];
+        yield 'existingClass' => [
+            'object' => $existingClass,
+        ];
     }
 
     /**
