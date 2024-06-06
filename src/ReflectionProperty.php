@@ -22,10 +22,11 @@ class ReflectionProperty extends AbstractReflection
     public const IS_PUBLIC    = 1;
     public const IS_PROTECTED = 2;
     public const IS_PRIVATE   = 4;
+    public const IS_DYNAMIC   = 256;
 
     private \ReflectionProperty $reflectionProperty;
 
-    public function __construct(object|string $class, string $property)
+    public function __construct(object|string $class, string $property, private bool $dynamic = false)
     {
         $this->reflectionProperty = new \ReflectionProperty($class, $property);
     }
@@ -165,6 +166,11 @@ class ReflectionProperty extends AbstractReflection
     public function isDefault(): bool
     {
         return $this->reflectionProperty->isDefault();
+    }
+
+    public function isDynamic(): bool
+    {
+        return $this->dynamic;
     }
 
     public function isInitialized(object|null $object = null): bool

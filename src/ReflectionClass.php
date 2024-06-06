@@ -22,6 +22,7 @@ use ReflectionExtension;
 class ReflectionClass extends AbstractReflection
 {
     private \ReflectionClass $reflectionClass;
+    private object|null $instance = null;
 
     /**
      * @param T|class-string<T> $objectOrClass
@@ -29,6 +30,10 @@ class ReflectionClass extends AbstractReflection
     public function __construct(object|string $objectOrClass)
     {
         $this->reflectionClass = new \ReflectionClass($objectOrClass);
+
+        if (is_object($objectOrClass)) {
+            $this->instance = $objectOrClass;
+        }
     }
 
     public function __toString(): string
@@ -46,6 +51,16 @@ class ReflectionClass extends AbstractReflection
             'attributes'  => $this->getAttributes(),
             'annotations' => $this->getAnnotations(),
         ];
+    }
+
+    public function hasInstance(): bool
+    {
+        return null !== $this->instance;
+    }
+
+    public function getInstance(): object|null
+    {
+        return $this->instance;
     }
 
     /**
@@ -139,7 +154,7 @@ class ReflectionClass extends AbstractReflection
 
     public function getMethod(string $name): ReflectionMethod
     {
-        return new ReflectionMethod($this->reflectionClass->getName(), $this->reflectionClass->getMethod($name)->getName());
+        return new ReflectionMethod($this->instance ?? $this->reflectionClass->getName(), $this->reflectionClass->getMethod($name)->getName());
     }
 
     /**
@@ -184,16 +199,41 @@ class ReflectionClass extends AbstractReflection
      */
     public function getProperties(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionProperty $reflectionProperty) => new ReflectionProperty($this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
+        if (PHP_VERSION_ID < 80200 && ReflectionProperty::IS_READONLY === $filter) {
+            throw new WrongPhpVersionException('The IS_READONLY filter is not available for PHP versions higher than 8.2.0');
+        }
+
+        $propertyList = array_map(fn (\ReflectionProperty $reflectionProperty) => new ReflectionProperty($this->instance ?? $this->reflectionClass->getName(), $reflectionProperty->getName()), $this->reflectionClass->getProperties($filter));
+
+        if ($this->instance) {
+            $objectVars = get_object_vars($this->instance);
+            foreach ($objectVars as $name => $value) {
+                if (!$this->reflectionClass->hasProperty($name)) {
+                    $propertyList[] = new ReflectionProperty($this->instance, $name, true);
+                }
+            }
+        }
+
+        return $propertyList;
     }
 
     public function getProperty(string $name): ReflectionProperty|null
     {
         if (!$this->reflectionClass->hasProperty($name)) {
-            return null;
+            if (!$this->instance) {
+                return null;
+            }
+
+            $objectVars = get_object_vars($this->instance);
+
+            if (!array_key_exists($name, $objectVars)) {
+                return null;
+            }
+
+            return new ReflectionProperty($this->instance, $name, true);
         }
 
-        return new ReflectionProperty($this->reflectionClass->getName(), $name);
+        return new ReflectionProperty($this->instance ?? $this->reflectionClass->getName(), $name);
     }
 
     public function getReflectionConstant(string $name): ReflectionClassConstant|null
@@ -202,7 +242,7 @@ class ReflectionClass extends AbstractReflection
             return null;
         }
 
-        return new ReflectionClassConstant($this->reflectionClass->getName(), $name);
+        return new ReflectionClassConstant($this->instance ?? $this->reflectionClass->getName(), $name);
     }
 
     /**
@@ -210,7 +250,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getReflectionConstants(int|null $filter = null): array
     {
-        return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => new ReflectionClassConstant($this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
+        return array_map(fn (\ReflectionClassConstant $reflectionClassConstant) => new ReflectionClassConstant($this->instance ?? $this->reflectionClass->getName(), $reflectionClassConstant->getName()), $this->reflectionClass->getReflectionConstants($filter));
     }
 
     public function getShortName(): string
@@ -261,7 +301,7 @@ class ReflectionClass extends AbstractReflection
      */
     public function getTraits(): array
     {
-        return array_map(fn (\ReflectionClass $reflectionClass) => new self($reflectionClass->getName()), $this->reflectionClass->getTraits());
+        return array_map(fn (\ReflectionClass $reflectionClass) => new self($this->instance ?? $reflectionClass->getName()), $this->reflectionClass->getTraits());
     }
 
     /**
