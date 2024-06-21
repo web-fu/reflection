@@ -21,12 +21,12 @@ use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
- * @covers \WebFu\Reflection\ReflectionType
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionType
  */
 class ReflectionTypeTest extends TestCase
 {
     /**
-     * @covers \WebFu\Reflection\ReflectionType::allowNull
+     * @covers ::allowNull
      */
     public function testAllowNull(): void
     {
@@ -37,7 +37,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::hasType
+     * @covers ::hasType
      */
     public function testHasType(): void
     {
@@ -66,7 +66,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::getTypeNames
+     * @covers ::getTypeNames
      */
     public function testGetTypeNames(): void
     {
@@ -77,7 +77,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::__toString
+     * @covers ::__toString
      */
     public function testToString(): void
     {
@@ -88,7 +88,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::isUnionType
+     * @covers ::isUnionType
      */
     public function testIsUnionType(): void
     {
@@ -102,7 +102,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::isIntersectionType
+     * @covers ::isIntersectionType
      */
     public function testIsIntersectionType(): void
     {
@@ -128,7 +128,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::getPhpDocTypeNames
+     * @covers ::getPhpDocTypeNames
      */
     public function testGetPhpDocTypeNames(): void
     {
@@ -142,7 +142,7 @@ class ReflectionTypeTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionType::__debugInfo
+     * @covers ::__debugInfo
      */
     public function testDebugInfo(): void
     {

@@ -21,12 +21,12 @@ use WebFu\Reflection\Tests\Fixtures\BasicEnum;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
- * @covers \WebFu\Reflection\ReflectionEnum
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionEnum
  */
 class ReflectionEnumTest extends TestCase
 {
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::getType
+     * @covers ::getType
      *
      * @dataProvider backingTypeProvider
      *
@@ -64,7 +64,7 @@ class ReflectionEnumTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::getCase
+     * @covers ::getCase
      */
     public function testGetCase(): void
     {
@@ -77,7 +77,7 @@ class ReflectionEnumTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::getCases
+     * @covers ::getCases
      */
     public function testGetCases(): void
     {
@@ -93,7 +93,7 @@ class ReflectionEnumTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::hasCase
+     * @covers ::hasCase
      */
     public function testHasCase(): void
     {
@@ -108,7 +108,7 @@ class ReflectionEnumTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::isBacked
+     * @covers ::isBacked
      */
     public function testIsBacked(): void
     {
@@ -124,7 +124,7 @@ class ReflectionEnumTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionEnum::__debugInfo
+     * @covers ::__debugInfo
      */
     public function testDebugInfo(): void
     {

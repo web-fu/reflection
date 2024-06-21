@@ -20,7 +20,7 @@ use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
- * @covers \WebFu\Reflection\ReflectionFunction
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionFunction
  */
 class ReflectionFunctionTest extends TestCase
 {
@@ -32,7 +32,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getAttributes
+     * @covers ::getAttributes
      */
     public function testGetAttributes(): void
     {
@@ -42,7 +42,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getClosureScopeClass
+     * @covers ::getClosureScopeClass
      */
     public function testGetClosureScopeClass(): void
     {
@@ -52,7 +52,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getClosureScopeClass
+     * @covers ::getClosureScopeClass
      */
     public function testGetClosureThis(): void
     {
@@ -62,7 +62,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getClosureUsedVariables
+     * @covers ::getClosureUsedVariables
      */
     public function testGetClosureUsedVariables(): void
     {
@@ -76,7 +76,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getDocComment
+     * @covers ::getDocComment
      */
     public function testGetDocComment(): void
     {
@@ -86,7 +86,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getEndLine
+     * @covers ::getEndLine
      */
     public function testGetEndLine(): void
     {
@@ -96,7 +96,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getExtension
+     * @covers ::getExtension
      */
     public function testGetExtension(): void
     {
@@ -106,7 +106,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getExtensionName
+     * @covers ::getExtensionName
      */
     public function testGetExtensionName(): void
     {
@@ -116,7 +116,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getFileName
+     * @covers ::getFileName
      */
     public function testGetFileName(): void
     {
@@ -126,7 +126,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getFileName
+     * @covers ::getFileName
      */
     public function testGetName(): void
     {
@@ -136,7 +136,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getNamespaceName
+     * @covers ::getNamespaceName
      */
     public function testGetNamespaceName(): void
     {
@@ -146,7 +146,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getShortName
+     * @covers ::getShortName
      */
     public function getShortName(): void
     {
@@ -156,7 +156,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getStartLine
+     * @covers ::getStartLine
      */
     public function testGetStartLine(): void
     {
@@ -166,7 +166,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getStaticVariables
+     * @covers ::getStaticVariables
      */
     public function testGetStaticVariables(): void
     {
@@ -176,7 +176,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getTentativeReturnType
+     * @covers ::getTentativeReturnType
      */
     public function testGetTentativeReturnType(): void
     {
@@ -184,7 +184,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::hasReturnType
+     * @covers ::hasReturnType
      */
     public function testHasReturnType(): void
     {
@@ -194,7 +194,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::inNamespace
+     * @covers ::inNamespace
      */
     public function testInNameSpace(): void
     {
@@ -204,7 +204,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isClosure
+     * @covers ::isClosure
      */
     public function testIsClosure(): void
     {
@@ -214,7 +214,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isDeprecated
+     * @covers ::isDeprecated
      */
     public function testIsDeprecated(): void
     {
@@ -224,7 +224,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isGenerator
+     * @covers ::isGenerator
      */
     public function testIsGenerator(): void
     {
@@ -234,7 +234,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isInternal
+     * @covers ::isInternal
      */
     public function testIsInternal(): void
     {
@@ -244,7 +244,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isUserDefined
+     * @covers ::isUserDefined
      */
     public function testIsUserDefined(): void
     {
@@ -254,7 +254,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::isVariadic
+     * @covers ::isVariadic
      */
     public function testIsVariadic(): void
     {
@@ -264,7 +264,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::returnsReference
+     * @covers ::returnsReference
      */
     public function testReturnsReference(): void
     {
@@ -274,7 +274,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getClosure
+     * @covers ::getClosure
      */
     public function testGetClosure(): void
     {
@@ -286,7 +286,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::getParameters
+     * @covers ::getParameters
      */
     public function testGetParameters(): void
     {
@@ -296,7 +296,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::invoke
+     * @covers ::invoke
      */
     public function testInvoke(): void
     {
@@ -306,7 +306,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::invokeArgs
+     * @covers ::invokeArgs
      */
     public function testInvokeArgs(): void
     {
@@ -316,7 +316,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::invokeArgs
+     * @covers ::invokeArgs
      */
     public function testIsAnonymous(): void
     {
@@ -340,7 +340,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::__debugInfo
+     * @covers ::__debugInfo
      */
     public function testDebugInfo(): void
     {
@@ -354,7 +354,7 @@ class ReflectionFunctionTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionFunction::__toString
+     * @covers ::__toString
      */
     public function testToString(): void
     {

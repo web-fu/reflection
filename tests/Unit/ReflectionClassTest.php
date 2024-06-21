@@ -43,12 +43,12 @@ use WebFu\Reflection\Tests\Fixtures\GenericTrait;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
- * @covers \WebFu\Reflection\ReflectionClass
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionClass
  */
 class ReflectionClassTest extends TestCase
 {
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getAnnotations
+     * @covers ::getAnnotations
      */
     public function testGetAnnotation(): void
     {
@@ -58,7 +58,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getAttributes
+     * @covers ::getAttributes
      */
     public function testGetAttributes(): void
     {
@@ -68,7 +68,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getConstant
+     * @covers ::getConstant
      *
      * @dataProvider constantProvider
      */
@@ -98,7 +98,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getConstant
+     * @covers ::getConstant
      */
     public function testGetConstantFail(): void
     {
@@ -111,7 +111,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getConstants
+     * @covers ::getConstants
      */
     public function testGetConstants(): void
     {
@@ -127,7 +127,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getConstructor
+     * @covers ::getConstructor
      */
     public function testGetConstructor(): void
     {
@@ -141,7 +141,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getDefaultProperties
+     * @covers ::getDefaultProperties
      */
     public function testGetDefaultProperties(): void
     {
@@ -158,7 +158,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getDocComment
+     * @covers ::getDocComment
      */
     public function testDocComment(): void
     {
@@ -172,7 +172,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getEndLine
+     * @covers ::getEndLine
      */
     public function testGetEndLine(): void
     {
@@ -182,7 +182,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getExtension
+     * @covers ::getExtension
      */
     public function testExtension(): void
     {
@@ -196,7 +196,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getExtensionName
+     * @covers ::getExtensionName
      */
     public function testExtensionName(): void
     {
@@ -210,7 +210,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getFileName
+     * @covers ::getFileName
      */
     public function testGetFileName(): void
     {
@@ -224,7 +224,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getInterfaceNames
+     * @covers ::getInterfaceNames
      */
     public function testGetInterfaceNames(): void
     {
@@ -234,7 +234,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getInterfaces
+     * @covers ::getInterfaces
      */
     public function testGetInterfaces(): void
     {
@@ -244,7 +244,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getMethod
+     * @covers ::getMethod
      */
     public function testGetMethod(): void
     {
@@ -254,7 +254,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getMethods
+     * @covers ::getMethods
      */
     public function testGetMethods(): void
     {
@@ -274,7 +274,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getModifiers
+     * @covers ::getModifiers
      */
     public function testGetModifiers(): void
     {
@@ -288,7 +288,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getName
+     * @covers ::getName
      */
     public function testGetName(): void
     {
@@ -298,7 +298,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getNamespaceName
+     * @covers ::getNamespaceName
      */
     public function testGetNamespaceName(): void
     {
@@ -308,7 +308,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getParentClass
+     * @covers ::getParentClass
      */
     public function testGetParentClass(): void
     {
@@ -322,7 +322,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getProperties
+     * @covers ::getProperties
      */
     public function testGetProperties(): void
     {
@@ -393,7 +393,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getProperty
+     * @covers ::getProperty
      *
      * @dataProvider propertyProvider
      */
@@ -456,7 +456,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getReflectionConstant
+     * @covers ::getReflectionConstant
      *
      * @dataProvider reflectionConstantProvider
      */
@@ -479,7 +479,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getReflectionConstants
+     * @covers ::getReflectionConstants
      */
     public function testGetReflectionConstants(): void
     {
@@ -495,7 +495,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getShortName
+     * @covers ::getShortName
      */
     public function testGetShortName(): void
     {
@@ -505,7 +505,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getStartLine
+     * @covers ::getStartLine
      */
     public function testGetStartLine(): void
     {
@@ -515,7 +515,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getStaticProperties
+     * @covers ::getStaticProperties
      */
     public function testGetStaticProperties(): void
     {
@@ -529,7 +529,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getStaticPropertyValue
+     * @covers ::getStaticPropertyValue
      */
     public function testGetStaticPropertyValue(): void
     {
@@ -541,7 +541,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getStaticPropertyValue
+     * @covers ::getStaticPropertyValue
      */
     public function testGetStaticPropertyValueException(): void
     {
@@ -554,7 +554,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getTraitAliases
+     * @covers ::getTraitAliases
      */
     public function testGetTraitAliases(): void
     {
@@ -569,7 +569,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getTraitNames
+     * @covers ::getTraitNames
      */
     public function testGetTraitNames(): void
     {
@@ -581,7 +581,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getTraits
+     * @covers ::getTraits
      */
     public function testGetTraits(): void
     {
@@ -593,7 +593,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::getUseStatements
+     * @covers ::getUseStatements
      */
     public function testGetUseStatements(): void
     {
@@ -605,7 +605,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::hasConstant
+     * @covers ::hasConstant
      */
     public function testHasConstant(): void
     {
@@ -616,7 +616,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::hasMethod
+     * @covers ::hasMethod
      */
     public function testHasMethod(): void
     {
@@ -627,7 +627,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::hasProperty
+     * @covers ::hasProperty
      */
     public function testHasProperty(): void
     {
@@ -638,7 +638,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::implementsInterface
+     * @covers ::implementsInterface
      */
     public function testImplementsInterface(): void
     {
@@ -648,7 +648,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::inNamespace
+     * @covers ::inNamespace
      */
     public function testInNamespace(): void
     {
@@ -658,7 +658,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isAbstract
+     * @covers ::isAbstract
      */
     public function testIsAbstract(): void
     {
@@ -672,7 +672,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isAnonymous
+     * @covers ::isAnonymous
      */
     public function testIsAnonymous(): void
     {
@@ -686,7 +686,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isCloneable
+     * @covers ::isCloneable
      */
     public function testIsCloneable(): void
     {
@@ -700,7 +700,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isEnum
+     * @covers ::isEnum
      */
     public function testIsEnum(): void
     {
@@ -724,7 +724,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isFinal
+     * @covers ::isFinal
      */
     public function testIsFinal(): void
     {
@@ -738,7 +738,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isInstance
+     * @covers ::isInstance
      */
     public function testIsInstance(): void
     {
@@ -749,7 +749,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isInstantiable
+     * @covers ::isInstantiable
      */
     public function testIsInstantiable(): void
     {
@@ -763,7 +763,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isInterface
+     * @covers ::isInterface
      */
     public function testIsInterface(): void
     {
@@ -777,7 +777,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isInternal
+     * @covers ::isInternal
      */
     public function testIsInternal(): void
     {
@@ -791,7 +791,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isIterable
+     * @covers ::isIterable
      */
     public function testIsIterable(): void
     {
@@ -805,7 +805,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isReadOnly
+     * @covers ::isReadOnly
      */
     public function testIsReadOnly(): void
     {
@@ -827,7 +827,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isSubclassOf
+     * @covers ::isSubclassOf
      */
     public function testIsSubclassOf(): void
     {
@@ -838,7 +838,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isTrait
+     * @covers ::isTrait
      */
     public function testIsTrait(): void
     {
@@ -852,7 +852,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::isUserDefined
+     * @covers ::isUserDefined
      */
     public function testIsUserDefined(): void
     {
@@ -866,7 +866,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::newInstance
+     * @covers ::newInstance
      */
     public function testNewInstance(): void
     {
@@ -876,7 +876,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::newInstanceArgs
+     * @covers ::newInstanceArgs
      */
     public function testNewInstanceArgs(): void
     {
@@ -886,7 +886,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::newInstanceWithoutConstructor
+     * @covers ::newInstanceWithoutConstructor
      */
     public function testNewInstanceWithoutConstructor(): void
     {
@@ -896,7 +896,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::setStaticPropertyValue
+     * @covers ::setStaticPropertyValue
      */
     public function testSetStaticPropertyValue(): void
     {
@@ -907,7 +907,7 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionClass::__debugInfo
+     * @covers ::__debugInfo
      */
     public function testDebugInfo(): void
     {

@@ -25,7 +25,7 @@ use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 use WebFu\Reflection\Tests\Fixtures\GenericClass;
 
 /**
- * @covers \WebFu\Reflection\ReflectionParameter
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionParameter
  */
 class ReflectionParameterTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::allowsNull
+     * @covers ::allowsNull
      */
     public function testAllowsNull(): void
     {
@@ -45,7 +45,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::canBePassedByValue
+     * @covers ::canBePassedByValue
      */
     public function testCanBePassedByValue(): void
     {
@@ -55,7 +55,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getAnnotations
+     * @covers ::getAnnotations
      */
     public function testGetAnnotation(): void
     {
@@ -67,7 +67,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getAttributes
+     * @covers ::getAttributes
      */
     public function testGetAttributes(): void
     {
@@ -77,7 +77,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDeclaringClass
+     * @covers ::getDeclaringClass
      */
     public function testGetDeclaringClass(): void
     {
@@ -91,7 +91,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDefaultValue
+     * @covers ::getDefaultValue
      */
     public function getDefaultValue(): void
     {
@@ -101,7 +101,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDeclaringFunction
+     * @covers ::getDeclaringFunction
      */
     public function testGetDeclaringFunction(): void
     {
@@ -115,7 +115,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getType
+     * @covers ::getType
      */
     public function testGetType(): void
     {
@@ -125,7 +125,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getTypeNames
+     * @covers ::getTypeNames
      */
     public function testGetTypeNames(): void
     {
@@ -139,7 +139,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getPhpDocTypeNames
+     * @covers ::getPhpDocTypeNames
      */
     public function testGetDocTypeNames(): void
     {
@@ -161,7 +161,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDefaultValue
+     * @covers ::getDefaultValue
      */
     public function testGetDefaultValue(): void
     {
@@ -171,7 +171,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getDefaultValueConstantName
+     * @covers ::getDefaultValueConstantName
      */
     public function testGetDefaultValueConstantName(): void
     {
@@ -181,7 +181,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getName
+     * @covers ::getName
      */
     public function testGetPosition(): void
     {
@@ -191,7 +191,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::hasType
+     * @covers ::hasType
      */
     public function testHasType(): void
     {
@@ -201,7 +201,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::isDefaultValueAvailable
+     * @covers ::isDefaultValueAvailable
      */
     public function testIsDefaultValueAvailable(): void
     {
@@ -211,7 +211,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::isDefaultValueConstant
+     * @covers ::isDefaultValueConstant
      */
     public function testIsDefaultValueConstant(): void
     {
@@ -221,7 +221,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::isOptional
+     * @covers ::isOptional
      */
     public function testIsOptional(): void
     {
@@ -231,7 +231,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::isPassedByReference
+     * @covers ::isPassedByReference
      */
     public function testIsPassedByReference(): void
     {
@@ -241,7 +241,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::isVariadic
+     * @covers ::isVariadic
      */
     public function testIsVariadic(): void
     {
@@ -251,7 +251,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::getAnnotations
+     * @covers ::getAnnotations
      */
     public function testGetAnnotations(): void
     {
@@ -263,7 +263,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::__debugInfo
+     * @covers ::__debugInfo
      */
     public function testDebugInfo(): void
     {
@@ -281,7 +281,7 @@ class ReflectionParameterTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionParameter::__toString
+     * @covers ::__toString
      */
     public function testToString(): void
     {

@@ -26,12 +26,12 @@ use WebFu\Reflection\Tests\Fixtures\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
- * @covers \WebFu\Reflection\ReflectionProperty
+ * @coversDefaultClass  \WebFu\Reflection\ReflectionProperty
  */
 class ReflectionPropertyTest extends TestCase
 {
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getAnnotations
+     * @covers ::getAnnotations
      */
     public function testGetAnnotation(): void
     {
@@ -44,7 +44,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getAttributes
+     * @covers ::getAttributes
      */
     public function testGetAttributes(): void
     {
@@ -56,7 +56,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getDeclaringClass
+     * @covers ::getDeclaringClass
      */
     public function testGetDeclaringClass(): void
     {
@@ -66,7 +66,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getDefaultValue
+     * @covers ::getDefaultValue
      */
     public function testGetDefaultValue(): void
     {
@@ -76,7 +76,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getDocComment
+     * @covers ::getDocComment
      */
     public function testGetDocComment(): void
     {
@@ -89,7 +89,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getType
+     * @covers ::getType
      */
     public function testGetType(): void
     {
@@ -99,7 +99,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getTypeNames
+     * @covers ::getTypeNames
      */
     public function testGetTypeNames(): void
     {
@@ -117,7 +117,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getPhpDocTypeNames
+     * @covers ::getPhpDocTypeNames
      */
     public function testGetDocTypeName(): void
     {
@@ -135,7 +135,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getModifiers
+     * @covers ::getModifiers
      */
     public function testGetModifiers(): void
     {
@@ -145,7 +145,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getName
+     * @covers ::getName
      */
     public function testGetName(): void
     {
@@ -155,7 +155,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::getValue
+     * @covers ::getValue
      */
     public function testGetValue(): void
     {
@@ -166,7 +166,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::hasDefaultValue
+     * @covers ::hasDefaultValue
      */
     public function testHasDefaultValue(): void
     {
@@ -176,7 +176,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::hasType
+     * @covers ::hasType
      */
     public function testHasType(): void
     {
@@ -186,7 +186,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isDefault
+     * @covers ::isDefault
      */
     public function testIsDefault(): void
     {
@@ -196,7 +196,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isInitialized
+     * @covers ::isInitialized
      */
     public function testIsInitialized(): void
     {
@@ -207,7 +207,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isPrivate
+     * @covers ::isPrivate
      */
     public function testIsPrivate(): void
     {
@@ -217,7 +217,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isPromoted
+     * @covers ::isPromoted
      */
     public function testIsPromoted(): void
     {
@@ -227,7 +227,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isProtected
+     * @covers ::isProtected
      */
     public function testIsProtected(): void
     {
@@ -237,7 +237,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isPublic
+     * @covers ::isPublic
      */
     public function testIsPublic(): void
     {
@@ -247,7 +247,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isReadOnly
+     * @covers ::isReadOnly
      */
     public function testIsReadOnly(): void
     {
@@ -269,7 +269,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::isStatic
+     * @covers ::isStatic
      */
     public function testIsStatic(): void
     {
@@ -279,7 +279,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::setAccessible
+     * @covers ::setAccessible
      */
     public function testSetAccessible(): void
     {
@@ -291,7 +291,7 @@ class ReflectionPropertyTest extends TestCase
     }
 
     /**
-     * @covers \WebFu\Reflection\ReflectionProperty::setValue
+     * @covers ::setValue
      */
     public function testSetValue(): void
     {

@@ -18,10 +18,13 @@ use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 
 /**
- * @coversNothing
+ * @coversDefaultClass \WebFu\Reflection\ReflectionType
  */
 class ReflectionTypeTest extends TestCase
 {
+    /**
+     * @covers ::hasType
+     */
     public function testHasType(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithTypes::class);
