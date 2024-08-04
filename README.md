@@ -1,7 +1,7 @@
 Reflection
 ==============================================================================================
-[![Latest Stable Version](http://poser.pugx.org/web-fu/reflection/v)](https://packagist.org/packages/web-fu/reflection)
-[![PHP Version Require](http://poser.pugx.org/web-fu/reflection/require/php)](https://packagist.org/packages/web-fu/reflection)
+[![Latest Stable Version](https://poser.pugx.org/web-fu/reflection/v)](https://packagist.org/packages/web-fu/reflection)
+[![PHP Version Require](https://poser.pugx.org/web-fu/reflection/require/php)](https://packagist.org/packages/web-fu/reflection)
 ![Test status](https://github.com/web-fu/reflection/actions/workflows/tests.yaml/badge.svg)
 ![Static analysis status](https://github.com/web-fu/reflection/actions/workflows/static-analysis.yml/badge.svg)
 ![Code style status](https://github.com/web-fu/reflection/actions/workflows/code-style.yaml/badge.svg)
