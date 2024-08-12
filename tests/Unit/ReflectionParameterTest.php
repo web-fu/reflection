@@ -13,16 +13,20 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection\Tests\Unit;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionFunction;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
+use WebFu\Reflection\Tests\Fixtures\BasicEnum;
+use WebFu\Reflection\Tests\Fixtures\ClassWithComplexTypes;
 use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
 use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\WrongPhpVersionException;
 
 /**
  * @coversDefaultClass  \WebFu\Reflection\ReflectionParameter
@@ -122,6 +126,23 @@ class ReflectionParameterTest extends TestCase
         $reflectionParameter = new ReflectionParameter([ClassWithDocComments::class, 'setProperty'], 'property');
 
         $this->assertEquals(new ReflectionType(types: ['string'], phpDocTypeNames: ['class-string']), $reflectionParameter->getType());
+
+        $reflectionParameter = new ReflectionParameter([ClassWithComplexTypes::class, 'setDateTime'], 'dateTime');
+
+        $this->assertEquals(new ReflectionType(types: [DateTime::class]), $reflectionParameter->getType());
+
+        if (PHP_VERSION_ID < 80100) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isEnum() is not available for PHP versions lower than 8.1.0');
+
+            $reflectionParameter = new ReflectionParameter([ClassWithComplexTypes::class, 'setBasicEnum'], 'basicEnum');
+            $reflectionParameter->getType();
+
+            $this->markTestSkipped('Enum are not available for PHP versions lower than 8.1.0');
+        }
+
+        $reflectionParameter = new ReflectionParameter([ClassWithComplexTypes::class, 'setBasicEnum'], 'basicEnum');
+        $this->assertEquals(new ReflectionType(types: [BasicEnum::class]), $reflectionParameter->getType());
     }
 
     /**
