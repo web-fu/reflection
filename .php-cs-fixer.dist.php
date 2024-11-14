@@ -58,6 +58,7 @@ return (new PhpCsFixer\Config())
         'no_binary_string'                                 => true,
         'no_homoglyph_names'                               => true,
         'no_php4_constructor'                              => true,
+        'new_with_parentheses'                             => true,
         'echo_tag_syntax'                                  => ['format' => 'long'],
         'no_superfluous_elseif'                            => true,
         'no_superfluous_phpdoc_tags'                       => false,
