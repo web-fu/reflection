@@ -18,6 +18,7 @@ use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\Tests\data\Attribute;
+use WebFu\Reflection\Tests\data\ClassWithAsymmetricVisibilityProperties;
 use WebFu\Reflection\Tests\data\ClassWithDocComments;
 use WebFu\Reflection\Tests\data\ClassWithProperties;
 use WebFu\Reflection\Tests\data\ClassWithReadOnly;
@@ -303,5 +304,30 @@ class ReflectionPropertyTest extends TestCase
         $reflectionProperty->setValue($object, 6);
 
         $this->assertEquals(6, $reflectionProperty->getValue($object));
+    }
+
+    public function testCheckAsymmetricVisibility(): void
+    {
+        if (PHP_VERSION_ID < 80400) {
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isProtectedSet() is not available for PHP versions lower than 8.4.0');
+
+            $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
+            $reflectionProperty->isProtectedSet();
+
+            $this->expectException(WrongPhpVersionException::class);
+            $this->expectExceptionMessage('isPrivateSet() is not available for PHP versions lower than 8.4.0');
+
+            $reflectionProperty = new ReflectionProperty(ClassWithProperties::class, 'public');
+            $reflectionProperty->isPrivateSet();
+
+            $this->markTestSkipped('Asymmetric Visibility is not available for PHP versions lower than 8.4.0');
+        }
+
+        $reflectionProperty = new ReflectionProperty(ClassWithAsymmetricVisibilityProperties::class, 'version');
+
+        $this->assertTrue($reflectionProperty->isPublic());
+        $this->assertTrue($reflectionProperty->isPrivateSet());
+        $this->assertFalse($reflectionProperty->isProtectedSet());
     }
 }
