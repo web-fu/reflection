@@ -15,9 +15,9 @@ namespace WebFu\Reflection\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Reflection\Tests\Fixtures\ClassWithIntersectionTypes;
-use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\ClassWithIntersectionTypes;
+use WebFu\Reflection\Tests\data\ClassWithTypes;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**

@@ -16,8 +16,8 @@ namespace WebFu\Reflection\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use ReflectionEnumBackedCase;
 use WebFu\Reflection\ReflectionEnum;
-use WebFu\Reflection\Tests\Fixtures\BackedEnum;
-use WebFu\Reflection\Tests\Fixtures\BasicEnum;
+use WebFu\Reflection\Tests\data\BackedEnum;
+use WebFu\Reflection\Tests\data\BasicEnum;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**

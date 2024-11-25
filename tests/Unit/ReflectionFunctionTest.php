@@ -26,7 +26,7 @@ use WebFu\Reflection\WrongPhpVersionException;
  */
 class ReflectionFunctionTest extends TestCase
 {
-    private const FILENAME = __DIR__.'/../Fixtures/example.php';
+    private const FILENAME = __DIR__.'/../data/example.php';
 
     protected function setUp(): void
     {
@@ -124,7 +124,7 @@ class ReflectionFunctionTest extends TestCase
     {
         $reflectionFunction = new ReflectionFunction('example');
 
-        $this->assertStringContainsString('/Fixtures/example.php', $reflectionFunction->getFileName());
+        $this->assertStringContainsString('/data/example.php', $reflectionFunction->getFileName());
     }
 
     /**

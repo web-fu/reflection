@@ -15,7 +15,7 @@ namespace WebFu\Reflection\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
+use WebFu\Reflection\Tests\data\ClassWithTypes;
 
 /**
  * @group integration

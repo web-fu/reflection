@@ -19,12 +19,12 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionException;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\Tests\Fixtures\AbstractClass;
-use WebFu\Reflection\Tests\Fixtures\ClassFinal;
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Reflection\Tests\Fixtures\ClassWithFinals;
-use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
-use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\data\AbstractClass;
+use WebFu\Reflection\Tests\data\ClassFinal;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\ClassWithFinals;
+use WebFu\Reflection\Tests\data\ClassWithMethods;
+use WebFu\Reflection\Tests\data\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
@@ -155,7 +155,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithDocComments::class, 'getProperty');
 
-        $this->assertStringContainsString('/Fixtures/ClassWithDocComments.php', $reflectionMethod->getFileName());
+        $this->assertStringContainsString('/data/ClassWithDocComments.php', $reflectionMethod->getFileName());
     }
 
     /**
@@ -589,7 +589,7 @@ class ReflectionMethodTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters');
 
-        $filename = realpath(__DIR__.'/../Fixtures/ClassWithMethods.php');
+        $filename = realpath(__DIR__.'/../data/ClassWithMethods.php');
 
         $expected = <<<EOT
             Method [ <user> public method methodWithoutParameters ] {

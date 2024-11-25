@@ -1,6 +1,6 @@
 <?php
 
-namespace WebFu\Reflection\Tests\Fixtures;
+namespace WebFu\Reflection\Tests\data;
 
 class ClassWithFinals
 {

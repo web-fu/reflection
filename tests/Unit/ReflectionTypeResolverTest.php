@@ -17,8 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 use function WebFu\Reflection\reflection_type_resolver;
 
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\GenericClass;
 
 /**
  * @group unit

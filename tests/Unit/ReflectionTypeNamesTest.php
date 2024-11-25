@@ -27,7 +27,7 @@ class ReflectionTypeNamesTest extends TestCase
 {
     public function testReflectionTypeNames(): void
     {
-        $reflectionClass      = new ReflectionClass('WebFu\Reflection\Tests\Fixtures\ClassWithTypes');
+        $reflectionClass      = new ReflectionClass('WebFu\Reflection\Tests\data\ClassWithTypes');
         $reflectionProperty   = $reflectionClass->getProperty('simple');
         $reflectionSimpleType = $reflectionProperty->getType();
 

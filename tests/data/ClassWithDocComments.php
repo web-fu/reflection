@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace WebFu\Reflection\Tests\Fixtures;
+namespace WebFu\Reflection\Tests\data;
 
-use WebFu\Reflection\Tests\Fixtures\GenericClass as GC;
+use WebFu\Reflection\Tests\data\GenericClass as GC;
 
 /**
  * @template Test

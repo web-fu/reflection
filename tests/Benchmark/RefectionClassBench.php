@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace WebFu\Reflection\Tests\Benchmark;
 
 use WebFu\Reflection\ReflectionClass;
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
 
 class RefectionClassBench
 {

@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\Tests\Fixtures\Attribute;
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Reflection\Tests\Fixtures\ClassWithProperties;
-use WebFu\Reflection\Tests\Fixtures\ClassWithReadOnly;
-use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
-use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\data\Attribute;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\ClassWithProperties;
+use WebFu\Reflection\Tests\data\ClassWithReadOnly;
+use WebFu\Reflection\Tests\data\ClassWithTypes;
+use WebFu\Reflection\Tests\data\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**

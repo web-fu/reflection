@@ -16,11 +16,11 @@ namespace WebFu\Reflection\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionClassConstant;
-use WebFu\Reflection\Tests\Fixtures\Attribute;
-use WebFu\Reflection\Tests\Fixtures\ClassWithConstants;
-use WebFu\Reflection\Tests\Fixtures\ClassWithFinals;
-use WebFu\Reflection\Tests\Fixtures\ClassWithTypedConstants;
-use WebFu\Reflection\Tests\Fixtures\EnumClass;
+use WebFu\Reflection\Tests\data\Attribute;
+use WebFu\Reflection\Tests\data\ClassWithConstants;
+use WebFu\Reflection\Tests\data\ClassWithFinals;
+use WebFu\Reflection\Tests\data\ClassWithTypedConstants;
+use WebFu\Reflection\Tests\data\EnumClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**

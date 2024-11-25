@@ -20,12 +20,12 @@ use WebFu\Reflection\ReflectionFunction;
 use WebFu\Reflection\ReflectionMethod;
 use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\ReflectionType;
-use WebFu\Reflection\Tests\Fixtures\BasicEnum;
-use WebFu\Reflection\Tests\Fixtures\ClassWithComplexTypes;
-use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
-use WebFu\Reflection\Tests\Fixtures\ClassWithMethods;
-use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
-use WebFu\Reflection\Tests\Fixtures\GenericClass;
+use WebFu\Reflection\Tests\data\BasicEnum;
+use WebFu\Reflection\Tests\data\ClassWithComplexTypes;
+use WebFu\Reflection\Tests\data\ClassWithDocComments;
+use WebFu\Reflection\Tests\data\ClassWithMethods;
+use WebFu\Reflection\Tests\data\ClassWithTypes;
+use WebFu\Reflection\Tests\data\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
@@ -37,7 +37,7 @@ class ReflectionParameterTest extends TestCase
 {
     protected function setUp(): void
     {
-        require_once __DIR__.'/../Fixtures/example.php';
+        require_once __DIR__.'/../data/example.php';
     }
 
     /**
