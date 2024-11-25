@@ -20,6 +20,8 @@ use WebFu\Reflection\ReflectionParameter;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionFunction
  */
 class ReflectionFunctionTest extends TestCase

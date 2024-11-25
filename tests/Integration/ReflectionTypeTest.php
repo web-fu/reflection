@@ -18,6 +18,8 @@ use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 
 /**
+ * @group integration
+ *
  * @coversDefaultClass \WebFu\Reflection\ReflectionType
  */
 class ReflectionTypeTest extends TestCase

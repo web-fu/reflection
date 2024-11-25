@@ -21,6 +21,8 @@ use WebFu\Reflection\Tests\Fixtures\BasicEnum;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionEnum
  */
 class ReflectionEnumTest extends TestCase

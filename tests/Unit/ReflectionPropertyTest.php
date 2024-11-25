@@ -26,6 +26,8 @@ use WebFu\Reflection\Tests\Fixtures\GenericClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionProperty
  */
 class ReflectionPropertyTest extends TestCase

@@ -24,6 +24,8 @@ use WebFu\Reflection\Tests\Fixtures\EnumClass;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionClassConstant
  */
 class ReflectionClassConstantTest extends TestCase

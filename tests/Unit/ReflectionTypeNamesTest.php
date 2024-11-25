@@ -19,6 +19,8 @@ use ReflectionClass;
 use function WebFu\Reflection\reflection_type_names;
 
 /**
+ * @group unit
+ *
  * @covers \WebFu\Reflection\reflection_type_names
  */
 class ReflectionTypeNamesTest extends TestCase

@@ -21,6 +21,8 @@ use WebFu\Reflection\Tests\Fixtures\ClassWithTypes;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionType
  */
 class ReflectionTypeTest extends TestCase

@@ -21,6 +21,8 @@ use WebFu\Reflection\Tests\Fixtures\ClassWithDocComments;
 use WebFu\Reflection\Tests\Fixtures\GenericClass;
 
 /**
+ * @group unit
+ *
  * @covers \WebFu\Reflection\reflection_type_resolver
  */
 class ReflectionTypeResolverTest extends TestCase

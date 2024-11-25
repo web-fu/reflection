@@ -43,6 +43,8 @@ use WebFu\Reflection\Tests\Fixtures\GenericTrait;
 use WebFu\Reflection\WrongPhpVersionException;
 
 /**
+ * @group unit
+ *
  * @coversDefaultClass  \WebFu\Reflection\ReflectionClass
  */
 class ReflectionClassTest extends TestCase
@@ -221,6 +223,20 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(DateTime::class);
 
         $this->assertNull($reflectionClass->getFileName());
+    }
+
+    /**
+     * @covers ::getInstance
+     */
+    public function testGetInstance(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertNull($reflectionClass->getInstance());
+
+        $reflectionClass = new ReflectionClass(new GenericClass());
+
+        $this->assertInstanceOf(GenericClass::class, $reflectionClass->getInstance());
     }
 
     /**
@@ -613,6 +629,19 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->hasConstant('PUBLIC'));
         $this->assertFalse($reflectionClass->hasConstant('DOES_NOT_EXIST'));
+    }
+
+    /**
+     * @covers ::hasMethod
+     */
+    public function testHasInstance(): void
+    {
+        $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertFalse($reflectionClass->hasInstance());
+
+        $reflectionClass = new ReflectionClass(new GenericClass());
+        $this->assertTrue($reflectionClass->hasInstance());
     }
 
     /**
