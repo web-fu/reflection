@@ -13,51 +13,29 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-use InvalidArgumentException;
-
 class ReflectionType
 {
-    /**
-     * @var string[]
-     */
-    private array $types;
-    /**
-     * @var string[]
-     */
-    private array $phpDocTypeNames;
-
     /**
      * @param string[] $types
      * @param string[] $phpDocTypeNames
      */
-    public function __construct(array $types = [], array $phpDocTypeNames = [], private string $separator = '|')
+    public function __construct(private array $types = [], private array $phpDocTypeNames = [])
     {
         if (empty($types)) {
-            $types = ['mixed'];
+            $this->types = ['mixed'];
         }
-
-        if (count($types) > 1 && '|' !== $separator) {
-            throw new InvalidArgumentException('Union types must use the "|" separator');
-        }
-
-        if (1 === count($types) && str_contains($types[0], '&')) {
-            $this->separator = '&';
-        }
-
-        $this->types           = $types;
-        $this->phpDocTypeNames = $phpDocTypeNames;
     }
 
     public function __toString(): string
     {
-        return implode($this->separator, $this->types);
+        return implode('|', $this->types);
     }
 
     public function __debugInfo(): array
     {
         return [
-            'types'     => $this->types,
-            'separator' => $this->separator,
+            'types'       => $this->types,
+            'phpDocTypes' => $this->phpDocTypeNames,
         ];
     }
 
@@ -89,7 +67,7 @@ class ReflectionType
 
     public function isUnionType(): bool
     {
-        return '|' === $this->separator && count($this->types) > 1;
+        return count($this->types) > 1;
     }
 
     public function isIntersectionType(): bool
@@ -98,6 +76,6 @@ class ReflectionType
             throw new WrongPhpVersionException('isIntersectionType() is not available for PHP versions lower than 8.1.0');
         }
 
-        return '&' === $this->separator;
+        return str_contains($this->types[0], '&');
     }
 }

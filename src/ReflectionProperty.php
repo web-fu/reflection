@@ -221,4 +221,22 @@ class ReflectionProperty extends AbstractReflection
     {
         $this->reflectionProperty->setValue($object, $value);
     }
+
+    public function isProtectedSet(): bool
+    {
+        if (PHP_VERSION_ID < 80400) {
+            throw new WrongPhpVersionException('isProtectedSet() is not available for PHP versions lower than 8.4.0');
+        }
+
+        return $this->reflectionProperty->isProtectedSet();
+    }
+
+    public function isPrivateSet(): bool
+    {
+        if (PHP_VERSION_ID < 80400) {
+            throw new WrongPhpVersionException('isPrivateSet() is not available for PHP versions lower than 8.4.0');
+        }
+
+        return $this->reflectionProperty->isPrivateSet();
+    }
 }

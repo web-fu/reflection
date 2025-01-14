@@ -18,6 +18,10 @@ if (PHP_VERSION_ID < 80300) {
     $includes[] = __DIR__ . '/reflection-class-constants-type.neon';
 }
 
+if (PHP_VERSION_ID < 80400) {
+    $includes[] = __DIR__ . '/reflection-property-asymmetric-visibility.neon';
+}
+
 $config = [];
 $config['includes'] = $includes;
 $config['parameters']['phpVersion'] = PHP_VERSION_ID;

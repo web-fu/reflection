@@ -30,7 +30,7 @@ if (!function_exists(__NAMESPACE__.'\reflection_type_names')) {
             return ['mixed'];
         }
 
-        if (PHP_VERSION_ID >= 80000 && $reflectionType instanceof ReflectionIntersectionType) {
+        if (PHP_VERSION_ID >= 80100 && $reflectionType instanceof ReflectionIntersectionType) {
             /** @var ReflectionNamedType[] $reflectionNamedTypes */
             $reflectionNamedTypes = $reflectionType->getTypes();
             $typeNames            = array_map(fn (ReflectionNamedType $type): string => $type->getName(), $reflectionNamedTypes);
