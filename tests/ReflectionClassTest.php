@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Reflection\Tests\Unit;
+namespace WebFu\Reflection\Tests;
 
 use ArrayObject;
 use DateTime;

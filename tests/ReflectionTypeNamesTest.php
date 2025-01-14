@@ -11,11 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Reflection\Tests\Unit;
+namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-
 use function WebFu\Reflection\reflection_type_names;
 
 /**

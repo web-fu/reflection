@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Reflection\Tests\Unit;
+namespace WebFu\Reflection\Tests;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +26,7 @@ use WebFu\Reflection\WrongPhpVersionException;
  */
 class ReflectionFunctionTest extends TestCase
 {
-    private const FILENAME = __DIR__.'/../data/example.php';
+    private const FILENAME = __DIR__.'/data/example.php';
 
     protected function setUp(): void
     {

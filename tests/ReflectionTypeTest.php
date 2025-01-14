@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace WebFu\Reflection\Tests\Unit;
+namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
@@ -54,6 +54,8 @@ class ReflectionTypeTest extends TestCase
 
         $this->assertTrue($unionType->hasType('int'));
         $this->assertTrue($unionType->hasType('string'));
+
+        $this->assertTrue($reflectionClass->getMethod('returnVoid')->getReturnType()->hasType('void'));
 
         if (PHP_VERSION_ID < 80100) {
             $this->markTestSkipped('hasType() cannot check intersection types for PHP versions lower than 8.1.0');
