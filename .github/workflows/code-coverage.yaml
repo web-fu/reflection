@@ -1,0 +1,30 @@
+name: "code coverage"
+
+on:
+  pull_request: ~
+  push: ~
+
+jobs:
+  code-coverage:
+    name: "code coverage"
+
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: "8.4"
+          tools: composer:v2
+          extensions: mbstring
+      - name: Installing dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Run coverage
+        run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml
+          verbose: true
