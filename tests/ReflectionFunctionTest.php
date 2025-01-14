@@ -187,7 +187,7 @@ class ReflectionFunctionTest extends TestCase
         }
 
         $reflectionFunction = new ReflectionFunction('date');
-        $this->assertEquals('string', $reflectionFunction->getTentativeReturnType());
+        $this->assertNull($reflectionFunction->getTentativeReturnType());
     }
 
     /**
