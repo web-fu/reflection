@@ -15,6 +15,7 @@ namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use WebFu\Reflection\ReflectionClass;
+use WebFu\Reflection\ReflectionType;
 use WebFu\Reflection\Tests\data\ClassWithDocComments;
 use WebFu\Reflection\Tests\data\ClassWithIntersectionTypes;
 use WebFu\Reflection\Tests\data\ClassWithTypes;
@@ -27,6 +28,21 @@ use WebFu\Reflection\WrongPhpVersionException;
  */
 class ReflectionTypeTest extends TestCase
 {
+    /**
+     * @rcovers ::__construct
+     */
+    public function testReflectionType(): void
+    {
+        $reflectionType = new ReflectionType(['int', 'null']);
+
+        $this->assertEquals(['int', 'null'], $reflectionType->getTypeNames());
+
+        $reflectionType = new ReflectionType(['string'], ['non-empty-string']);
+
+        $this->assertEquals(['string'], $reflectionType->getTypeNames());
+        $this->assertEquals(['non-empty-string'], $reflectionType->getPhpDocTypeNames());
+    }
+
     /**
      * @covers ::allowNull
      */
@@ -155,8 +171,8 @@ class ReflectionTypeTest extends TestCase
 
         $this->assertEquals(
             [
-                'types'     => ['int', 'null'],
-                'separator' => '|',
+                'types'       => ['int', 'null'],
+                'phpDocTypes' => [],
             ],
             $reflectionType->__debugInfo()
         );
