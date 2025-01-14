@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
-use \ReflectionEnumBackedCase;
+use ReflectionEnumBackedCase;
 use WebFu\Reflection\ReflectionEnum;
 use WebFu\Reflection\Tests\data\BackedEnum;
 use WebFu\Reflection\Tests\data\BasicEnum;

@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
+
+use function WebFu\Reflection\reflection_type_resolver;
+
 use WebFu\Reflection\Tests\data\ClassWithDocComments;
 use WebFu\Reflection\Tests\data\GenericClass;
-use function WebFu\Reflection\reflection_type_resolver;
 
 /**
  * @group unit

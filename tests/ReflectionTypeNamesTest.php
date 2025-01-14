@@ -15,6 +15,7 @@ namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+
 use function WebFu\Reflection\reflection_type_names;
 
 /**
