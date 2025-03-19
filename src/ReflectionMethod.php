@@ -284,7 +284,7 @@ class ReflectionMethod extends ReflectionFunctionAbstract
 
     public function isMagic(): bool
     {
-        return (in_array($this->getName(), [
+        return in_array($this->getName(), [
             '__construct',
             '__destruct',
             '__call',
@@ -302,6 +302,6 @@ class ReflectionMethod extends ReflectionFunctionAbstract
             '__set_state',
             '__clone',
             '__debugInfo',
-        ], true));
+        ], true);
     }
 }
