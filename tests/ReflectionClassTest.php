@@ -15,6 +15,7 @@ namespace WebFu\Reflection\Tests;
 
 use ArrayObject;
 use DateTime;
+use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionExtension;
 use stdClass;
@@ -57,6 +58,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithDocComments::class);
 
         $this->assertEquals(['@template Test'], $reflectionClass->getAnnotations());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertEmpty($reflectionClass->getAnnotations());
     }
 
     /**
@@ -67,6 +72,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithAttributes::class);
         $this->assertCount(1, $reflectionClass->getAttributes());
         $this->assertEquals('WebFu\Reflection\Tests\data\Attribute', $reflectionClass->getAttributes()[0]->getName());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertEmpty($reflectionClass->getAttributes());
     }
 
     /**
@@ -77,6 +86,13 @@ class ReflectionClassTest extends TestCase
     public function testGetConstant(int $expected, string $name): void
     {
         $reflectionClass = new ReflectionClass(ClassWithConstants::class);
+        $this->assertEquals($expected, $reflectionClass->getConstant($name));
+
+        $reflectionClass = new ReflectionClass(new class() {
+            public const PUBLIC    = 1;
+            public const PROTECTED = 2;
+            public const PRIVATE   = 3;
+        });
         $this->assertEquals($expected, $reflectionClass->getConstant($name));
     }
 
@@ -113,6 +129,23 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
+     * @covers ::getConstant
+     */
+    public function testGetConstantFailAnonymousClass(): void
+    {
+        $reflectionClass = new ReflectionClass(new class() {
+            public const PUBLIC    = 1;
+            public const PROTECTED = 2;
+            public const PRIVATE   = 3;
+        });
+
+        $this->expectException(ReflectionException::class);
+        $this->expectExceptionMessage('Undefined constant name: FOO');
+
+        $reflectionClass->getConstant('FOO');
+    }
+
+    /**
      * @covers ::getConstants
      */
     public function testGetConstants(): void
@@ -125,6 +158,18 @@ class ReflectionClassTest extends TestCase
             'PRIVATE'                 => 3,
             'PUBLIC_WITH_ATTRIBUTE'   => 4,
             'PUBLIC_WITH_DOC_COMMENT' => 5,
+        ], $reflectionClass->getConstants());
+
+        $reflectionClass = new ReflectionClass(new class() {
+            public const PUBLIC    = 1;
+            public const PROTECTED = 2;
+            public const PRIVATE   = 3;
+        });
+
+        $this->assertEquals([
+            'PUBLIC'    => 1,
+            'PROTECTED' => 2,
+            'PRIVATE'   => 3,
         ], $reflectionClass->getConstants());
     }
 
@@ -140,6 +185,21 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertNull($reflectionClass->getConstructor());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertNull($reflectionClass->getConstructor());
+
+        $reflectionClass = new ReflectionClass(new class() {
+            public function __construct()
+            {
+            }
+        });
+
+        $constructor = $reflectionClass->getConstructor();
+        $this->assertInstanceOf(ReflectionMethod::class, $constructor);
+        $this->assertSame('__construct', $constructor->getName());
+        $this->assertStringContainsString('class@anonymous', $constructor->getDeclaringClass()->getName());
     }
 
     /**
@@ -148,6 +208,24 @@ class ReflectionClassTest extends TestCase
     public function testGetDefaultProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->assertEquals([
+            'public'          => 1,
+            'protected'       => 2,
+            'private'         => 3,
+            'staticPublic'    => 1,
+            'staticProtected' => 2,
+            'staticPrivate'   => 3,
+        ], $reflectionClass->getDefaultProperties());
+
+        $reflectionClass = new ReflectionClass(new class() {
+            public int $public                    = 1;
+            protected int $protected              = 2;
+            private int $private                  = 3;
+            public static int $staticPublic       = 1;
+            protected static int $staticProtected = 2;
+            private static int $staticPrivate     = 3;
+        });
 
         $this->assertEquals([
             'public'          => 1,
@@ -171,6 +249,12 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertNull($reflectionClass->getDocComment());
+
+        $this->assertNull($reflectionClass->getDocComment());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertNull($reflectionClass->getDocComment());
     }
 
     /**
@@ -181,6 +265,11 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertEquals(9, $reflectionClass->getEndLine());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertIsInt($reflectionClass->getEndLine());
+        $this->assertGreaterThanOrEqual($reflectionClass->getStartLine(), $reflectionClass->getEndLine());
     }
 
     /**
@@ -223,6 +312,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(DateTime::class);
 
         $this->assertNull($reflectionClass->getFileName());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertStringContainsString('/tests/ReflectionClassTest.php', $reflectionClass->getFileName());
     }
 
     /**
@@ -237,6 +330,11 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(new GenericClass());
 
         $this->assertInstanceOf(GenericClass::class, $reflectionClass->getInstance());
+
+        $anonymousClass  = $this->anonymousClassFixture();
+        $reflectionClass = new ReflectionClass($anonymousClass);
+
+        $this->assertSame($anonymousClass, $reflectionClass->getInstance());
     }
 
     /**
@@ -245,6 +343,10 @@ class ReflectionClassTest extends TestCase
     public function testGetInterfaceNames(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertEquals([GenericInterface::class], $reflectionClass->getInterfaceNames());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
 
         $this->assertEquals([GenericInterface::class], $reflectionClass->getInterfaceNames());
     }
@@ -257,6 +359,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertEquals([GenericInterface::class => new ReflectionClass(GenericInterface::class)], $reflectionClass->getInterfaces());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertEquals([GenericInterface::class => new ReflectionClass(GenericInterface::class)], $reflectionClass->getInterfaces());
     }
 
     /**
@@ -267,6 +373,11 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
 
         $this->assertEquals(new ReflectionMethod(ClassWithMethods::class, 'methodWithoutParameters'), $reflectionClass->getMethod('methodWithoutParameters'));
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals(new ReflectionMethod($anonymousClassName, 'anonymousMethod'), $reflectionClass->getMethod('anonymousMethod'));
     }
 
     /**
@@ -287,6 +398,14 @@ class ReflectionClassTest extends TestCase
             new ReflectionMethod(ClassWithMethods::class, 'staticMethod'),
             new ReflectionMethod(ClassWithMethods::class, '__destruct'),
         ], $reflectionClass->getMethods());
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+        $methods            = array_map(fn (ReflectionMethod $method) => $method->getName(), $reflectionClass->getMethods());
+
+        $this->assertContains('publicFunction', $methods);
+        $this->assertContains('anonymousMethod', $methods);
+        $this->assertContains('publicTraitFunction', $methods);
     }
 
     /**
@@ -301,6 +420,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(AbstractClass::class);
 
         $this->assertEquals(\ReflectionClass::IS_EXPLICIT_ABSTRACT, $reflectionClass->getModifiers());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertEquals(0, $reflectionClass->getModifiers());
     }
 
     /**
@@ -311,6 +434,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertEquals(GenericClass::class, $reflectionClass->getName());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertStringContainsString('class@anonymous', $reflectionClass->getName());
     }
 
     /**
@@ -319,6 +446,10 @@ class ReflectionClassTest extends TestCase
     public function testGetNamespaceName(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertEquals('WebFu\Reflection\Tests\data', $reflectionClass->getNamespaceName());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
 
         $this->assertEquals('WebFu\Reflection\Tests\data', $reflectionClass->getNamespaceName());
     }
@@ -333,6 +464,10 @@ class ReflectionClassTest extends TestCase
         $this->assertNull($reflectionClass->getParentClass());
 
         $reflectionClass = new ReflectionClass(ClassFinal::class);
+
+        $this->assertEquals(new ReflectionClass(AbstractClass::class), $reflectionClass->getParentClass());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
 
         $this->assertEquals(new ReflectionClass(AbstractClass::class), $reflectionClass->getParentClass());
     }
@@ -355,6 +490,18 @@ class ReflectionClassTest extends TestCase
             new ReflectionProperty(ClassWithProperties::class, 'staticPropertyWithoutDefault'),
             new ReflectionProperty(ClassWithProperties::class, 'propertyWithAttribute'),
             new ReflectionProperty(ClassWithProperties::class, 'propertyWithDocComment'),
+        ], $reflectionClass->getProperties());
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals([
+            new ReflectionProperty($anonymousClassName, 'public'),
+            new ReflectionProperty($anonymousClassName, 'protected'),
+            new ReflectionProperty($anonymousClassName, 'private'),
+            new ReflectionProperty($anonymousClassName, 'staticPublic'),
+            new ReflectionProperty($anonymousClassName, 'staticProtected'),
+            new ReflectionProperty($anonymousClassName, 'staticPrivate'),
         ], $reflectionClass->getProperties());
     }
 
@@ -387,6 +534,30 @@ class ReflectionClassTest extends TestCase
             new ReflectionProperty(ClassWithProperties::class, 'staticPrivate'),
             new ReflectionProperty(ClassWithProperties::class, 'staticPropertyWithoutDefault'),
         ], $reflectionClass->getProperties(ReflectionProperty::IS_STATIC));
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals([
+            new ReflectionProperty($anonymousClassName, 'public'),
+            new ReflectionProperty($anonymousClassName, 'staticPublic'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC));
+
+        $this->assertEquals([
+            new ReflectionProperty($anonymousClassName, 'protected'),
+            new ReflectionProperty($anonymousClassName, 'staticProtected'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PROTECTED));
+
+        $this->assertEquals([
+            new ReflectionProperty($anonymousClassName, 'private'),
+            new ReflectionProperty($anonymousClassName, 'staticPrivate'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE));
+
+        $this->assertEquals([
+            new ReflectionProperty($anonymousClassName, 'staticPublic'),
+            new ReflectionProperty($anonymousClassName, 'staticProtected'),
+            new ReflectionProperty($anonymousClassName, 'staticPrivate'),
+        ], $reflectionClass->getProperties(ReflectionProperty::IS_STATIC));
     }
 
     public function testGetPropertiesReadOnly(): void
@@ -418,6 +589,19 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
 
         $this->assertEquals($expected, $reflectionClass->getProperty($name));
+    }
+
+    /**
+     * @covers ::getProperty
+     */
+    public function testGetPropertyAnonymousClass(): void
+    {
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals(new ReflectionProperty($anonymousClassName, 'public'), $reflectionClass->getProperty('public'));
+        $this->assertEquals(new ReflectionProperty($anonymousClassName, 'staticPublic'), $reflectionClass->getProperty('staticPublic'));
+        $this->assertNull($reflectionClass->getProperty('doesNotExist'));
     }
 
     /**
@@ -484,6 +668,20 @@ class ReflectionClassTest extends TestCase
     }
 
     /**
+     * @covers ::getReflectionConstant
+     */
+    public function testGetReflectionConstantAnonymousClass(): void
+    {
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals(new ReflectionClassConstant($anonymousClassName, 'PUBLIC'), $reflectionClass->getReflectionConstant('PUBLIC'));
+        $this->assertEquals(new ReflectionClassConstant($anonymousClassName, 'PROTECTED'), $reflectionClass->getReflectionConstant('PROTECTED'));
+        $this->assertEquals(new ReflectionClassConstant($anonymousClassName, 'PRIVATE'), $reflectionClass->getReflectionConstant('PRIVATE'));
+        $this->assertNull($reflectionClass->getReflectionConstant('iDoNotExist'));
+    }
+
+    /**
      * @return iterable<array{name: string, expected: ReflectionClassConstant|null}>
      */
     public function reflectionConstantProvider(): iterable
@@ -508,6 +706,15 @@ class ReflectionClassTest extends TestCase
             new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_ATTRIBUTE'),
             new ReflectionClassConstant(ClassWithConstants::class, 'PUBLIC_WITH_DOC_COMMENT'),
         ], $reflectionClass->getReflectionConstants());
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertEquals([
+            new ReflectionClassConstant($anonymousClassName, 'PUBLIC'),
+            new ReflectionClassConstant($anonymousClassName, 'PROTECTED'),
+            new ReflectionClassConstant($anonymousClassName, 'PRIVATE'),
+        ], $reflectionClass->getReflectionConstants());
     }
 
     /**
@@ -518,6 +725,10 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertEquals('GenericClass', $reflectionClass->getShortName());
+
+        $reflectionClass = new ReflectionClass(new class() {});
+
+        $this->assertStringContainsString('class@anonymous', $reflectionClass->getShortName());
     }
 
     /**
@@ -528,6 +739,12 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertEquals(7, $reflectionClass->getStartLine());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertIsInt($reflectionClass->getStartLine());
+        $this->assertGreaterThan(0, $reflectionClass->getStartLine());
+        $this->assertLessThanOrEqual($reflectionClass->getEndLine(), $reflectionClass->getStartLine());
     }
 
     /**
@@ -536,6 +753,14 @@ class ReflectionClassTest extends TestCase
     public function testGetStaticProperties(): void
     {
         $reflectionClass = new ReflectionClass(ClassWithProperties::class);
+
+        $this->assertEquals([
+            'staticPublic'    => 1,
+            'staticProtected' => 2,
+            'staticPrivate'   => 3,
+        ], $reflectionClass->getStaticProperties());
+
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
 
         $this->assertEquals([
             'staticPublic'    => 1,
@@ -554,6 +779,12 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals(1, $reflectionClass->getStaticPropertyValue('staticPublic'));
         $this->assertEquals(2, $reflectionClass->getStaticPropertyValue('staticProtected'));
         $this->assertEquals(3, $reflectionClass->getStaticPropertyValue('staticPrivate'));
+
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
+
+        $this->assertEquals(1, $reflectionClass->getStaticPropertyValue('staticPublic'));
+        $this->assertEquals(2, $reflectionClass->getStaticPropertyValue('staticProtected'));
+        $this->assertEquals(3, $reflectionClass->getStaticPropertyValue('staticPrivate'));
     }
 
     /**
@@ -565,6 +796,19 @@ class ReflectionClassTest extends TestCase
 
         $this->expectException(ReflectionException::class);
         $this->expectExceptionMessage('Undefined static property: WebFu\Reflection\Tests\data\ClassWithProperties::$iDoNotExist');
+
+        $reflectionClass->getStaticPropertyValue('iDoNotExist');
+    }
+
+    /**
+     * @covers ::getStaticPropertyValue
+     */
+    public function testGetStaticPropertyValueExceptionAnonymousClass(): void
+    {
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
+
+        $this->expectException(ReflectionException::class);
+        $this->expectExceptionMessage('::$iDoNotExist');
 
         $reflectionClass->getStaticPropertyValue('iDoNotExist');
     }
@@ -594,6 +838,12 @@ class ReflectionClassTest extends TestCase
         $this->assertEquals([
             GenericTrait::class,
         ], $reflectionClass->getTraitNames());
+
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
+
+        $this->assertEquals([
+            GenericTrait::class,
+        ], $reflectionClass->getTraitNames());
     }
 
     /**
@@ -602,6 +852,12 @@ class ReflectionClassTest extends TestCase
     public function testGetTraits(): void
     {
         $reflectionClass = new ReflectionClass(ClassFinal::class);
+
+        $this->assertEquals([
+            GenericTrait::class => new ReflectionClass(GenericTrait::class),
+        ], $reflectionClass->getTraits());
+
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
 
         $this->assertEquals([
             GenericTrait::class => new ReflectionClass(GenericTrait::class),
@@ -629,10 +885,15 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->hasConstant('PUBLIC'));
         $this->assertFalse($reflectionClass->hasConstant('DOES_NOT_EXIST'));
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertTrue($reflectionClass->hasConstant('PUBLIC'));
+        $this->assertFalse($reflectionClass->hasConstant('DOES_NOT_EXIST'));
     }
 
     /**
-     * @covers ::hasMethod
+     * @covers ::hasInstance
      */
     public function testHasInstance(): void
     {
@@ -641,6 +902,9 @@ class ReflectionClassTest extends TestCase
         $this->assertFalse($reflectionClass->hasInstance());
 
         $reflectionClass = new ReflectionClass(new GenericClass());
+        $this->assertTrue($reflectionClass->hasInstance());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
         $this->assertTrue($reflectionClass->hasInstance());
     }
 
@@ -653,6 +917,27 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->hasMethod('methodWithoutParameters'));
         $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertTrue($reflectionClass->hasMethod('anonymousMethod'));
+        $this->assertTrue($reflectionClass->hasMethod('publicTraitFunction'));
+        $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
+
+        $reflectionClass = new ReflectionClass(new class {
+            public function test(): void {}
+        });
+
+        $this->assertTrue($reflectionClass->hasMethod('test'));
+    }
+
+    public function hasMethodProvider(): iterable
+    {
+        yield [
+            'class' => ClassWithMethods::class,
+            'method' => 'methodWithoutParameters',
+            'expected' => true,
+        ];
     }
 
     /**
@@ -664,6 +949,12 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->hasProperty('public'));
         $this->assertFalse($reflectionClass->hasProperty('doesNotExist'));
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertTrue($reflectionClass->hasProperty('public'));
+        $this->assertTrue($reflectionClass->hasProperty('staticPublic'));
+        $this->assertFalse($reflectionClass->hasProperty('doesNotExist'));
     }
 
     /**
@@ -674,6 +965,12 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithInterfaces::class);
 
         $this->assertTrue($reflectionClass->implementsInterface(GenericInterface::class));
+        $this->assertFalse($reflectionClass->implementsInterface(DateTimeInterface::class));
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        $this->assertTrue($reflectionClass->implementsInterface(GenericInterface::class));
+        $this->assertFalse($reflectionClass->implementsInterface(DateTimeInterface::class));
     }
 
     /**
@@ -682,6 +979,10 @@ class ReflectionClassTest extends TestCase
     public function testInNamespace(): void
     {
         $reflectionClass = new ReflectionClass(GenericClass::class);
+
+        $this->assertTrue($reflectionClass->inNamespace());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
 
         $this->assertTrue($reflectionClass->inNamespace());
     }
@@ -775,6 +1076,12 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->isInstance(new GenericClass()));
         $this->assertFalse($reflectionClass->isInstance(new stdClass()));
+
+        $anonymousClass  = $this->anonymousClassFixture();
+        $reflectionClass = new ReflectionClass(get_class($anonymousClass));
+
+        $this->assertTrue($reflectionClass->isInstance($anonymousClass));
+        $this->assertFalse($reflectionClass->isInstance(new stdClass()));
     }
 
     /**
@@ -864,6 +1171,11 @@ class ReflectionClassTest extends TestCase
 
         $this->assertTrue($reflectionClass->isSubclassOf(AbstractClass::class));
         $this->assertFalse($reflectionClass->isSubclassOf(DateTime::class));
+
+        $reflectionClass = new ReflectionClass(get_class($this->anonymousClassFixture()));
+
+        $this->assertTrue($reflectionClass->isSubclassOf(AbstractClass::class));
+        $this->assertFalse($reflectionClass->isSubclassOf(DateTime::class));
     }
 
     /**
@@ -902,6 +1214,11 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(GenericClass::class);
 
         $this->assertInstanceOf(GenericClass::class, $reflectionClass->newInstance());
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertInstanceOf($anonymousClassName, $reflectionClass->newInstance());
     }
 
     /**
@@ -912,6 +1229,14 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
 
         $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceArgs([1, 'foo']));
+
+        $anonymousClassName = $this->anonymousClassWithConstructorFixture();
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+        $instance           = $reflectionClass->newInstanceArgs([2, 'bar']);
+
+        $this->assertInstanceOf($anonymousClassName, $instance);
+        $this->assertSame(2, $instance->integer);
+        $this->assertSame('bar', $instance->string);
     }
 
     /**
@@ -922,6 +1247,11 @@ class ReflectionClassTest extends TestCase
         $reflectionClass = new ReflectionClass(ClassWithMethods::class);
 
         $this->assertInstanceOf(ClassWithMethods::class, $reflectionClass->newInstanceWithoutConstructor());
+
+        $anonymousClassName = $this->anonymousClassWithConstructorFixture();
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $this->assertInstanceOf($anonymousClassName, $reflectionClass->newInstanceWithoutConstructor());
     }
 
     /**
@@ -933,6 +1263,12 @@ class ReflectionClassTest extends TestCase
 
         $reflectionClass->setStaticPropertyValue('staticPublic', 2);
         $this->assertEquals(2, ClassWithProperties::$staticPublic);
+
+        $anonymousClassName = get_class($this->anonymousClassFixture());
+        $reflectionClass    = new ReflectionClass($anonymousClassName);
+
+        $reflectionClass->setStaticPropertyValue('staticPublic', 4);
+        $this->assertEquals(4, $reflectionClass->getStaticPropertyValue('staticPublic'));
     }
 
     /**
@@ -947,5 +1283,52 @@ class ReflectionClassTest extends TestCase
             'attributes'  => [],
             'annotations' => [],
         ], $reflectionClass->__debugInfo());
+
+        $reflectionClass = new ReflectionClass($this->anonymousClassFixture());
+
+        // $this->assertStringContainsString('class@anonymous', $reflectionClass->__debugInfo()['name']);
+        $this->assertSame([], $reflectionClass->__debugInfo()['attributes']);
+        $this->assertSame([], $reflectionClass->__debugInfo()['annotations']);
+    }
+
+    private function anonymousClassFixture(): object
+    {
+        return new class() extends AbstractClass implements GenericInterface {
+            use GenericTrait;
+
+            public const PUBLIC       = 1;
+            protected const PROTECTED = 2;
+            private const PRIVATE     = 3;
+
+            public int $public       = 1;
+            protected int $protected = 2;
+            private int $private     = 3;
+
+            public static int $staticPublic       = 1;
+            protected static int $staticProtected = 2;
+            private static int $staticPrivate     = 3;
+
+            public function publicFunction(): void
+            {
+            }
+
+            public function anonymousMethod(): void
+            {
+            }
+        };
+    }
+
+    /**
+     * @return class-string
+     */
+    private function anonymousClassWithConstructorFixture(): string
+    {
+        return get_class(new class(1, 'foo') {
+            public function __construct(
+                public int $integer,
+                public string $string,
+            ) {
+            }
+        });
     }
 }
