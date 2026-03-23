@@ -924,8 +924,10 @@ class ReflectionClassTest extends TestCase
         $this->assertTrue($reflectionClass->hasMethod('publicTraitFunction'));
         $this->assertFalse($reflectionClass->hasMethod('doesNotExist'));
 
-        $reflectionClass = new ReflectionClass(new class {
-            public function test(): void {}
+        $reflectionClass = new ReflectionClass(new class() {
+            public function test(): void
+            {
+            }
         });
 
         $this->assertTrue($reflectionClass->hasMethod('test'));
@@ -934,8 +936,8 @@ class ReflectionClassTest extends TestCase
     public function hasMethodProvider(): iterable
     {
         yield [
-            'class' => ClassWithMethods::class,
-            'method' => 'methodWithoutParameters',
+            'class'    => ClassWithMethods::class,
+            'method'   => 'methodWithoutParameters',
             'expected' => true,
         ];
     }
