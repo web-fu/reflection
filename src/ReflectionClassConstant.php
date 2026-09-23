@@ -15,6 +15,9 @@ namespace WebFu\Reflection;
 
 use ReflectionAttribute;
 
+/**
+ * @template T of object
+ */
 class ReflectionClassConstant extends AbstractReflection
 {
     public const IS_PUBLIC    = 1;
@@ -24,9 +27,12 @@ class ReflectionClassConstant extends AbstractReflection
 
     private \ReflectionClassConstant $reflectionClassConstant;
 
-    public function __construct(object|string $class, string $constant)
+    /**
+     * @param T|class-string<T> $objectOrClass
+     */
+    public function __construct(object|string $objectOrClass, string $constant)
     {
-        $this->reflectionClassConstant = new \ReflectionClassConstant($class, $constant);
+        $this->reflectionClassConstant = new \ReflectionClassConstant($objectOrClass, $constant);
     }
 
     public function __toString(): string

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
+/**
+ * @template T of object
+ */
 class ReflectionProperty extends AbstractReflection
 {
     public const IS_STATIC    = 16;
@@ -24,9 +27,12 @@ class ReflectionProperty extends AbstractReflection
 
     private \ReflectionProperty $reflectionProperty;
 
-    public function __construct(object|string $class, string $property, private bool $dynamic = false)
+    /**
+     * @param T|class-string<T> $objectOrClass
+     */
+    public function __construct(object|string $objectOrClass, string $property, private bool $dynamic = false)
     {
-        $this->reflectionProperty = new \ReflectionProperty($class, $property);
+        $this->reflectionProperty = new \ReflectionProperty($objectOrClass, $property);
     }
 
     public function __toString(): string
