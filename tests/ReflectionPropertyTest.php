@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WebFu\Reflection\Tests;
 
 use PHPUnit\Framework\TestCase;
+use WebFu\Reflection\ReflectionAttribute;
 use WebFu\Reflection\ReflectionClass;
 use WebFu\Reflection\ReflectionProperty;
 use WebFu\Reflection\ReflectionType;
@@ -55,7 +56,13 @@ class ReflectionPropertyTest extends TestCase
         $attributes         = $reflectionProperty->getAttributes();
 
         $this->assertCount(1, $attributes);
-        $this->assertEquals(Attribute::class, $attributes[0]->getName());
+
+        $attribute = $attributes[0];
+
+        $this->assertInstanceOf(ReflectionAttribute::class, $attribute);
+        $this->assertEquals(Attribute::class, $attribute->getName());
+        $this->assertEquals(ReflectionAttribute::TARGET_PROPERTY, $attribute->getTarget());
+        $this->assertFalse($attribute->isRepeated());
     }
 
     /**
