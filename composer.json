@@ -34,7 +34,7 @@
     "ext-mbstring": "*",
     "phpunit/phpunit": "^9.5",
     "friendsofphp/php-cs-fixer": "^3.13",
-    "phpstan/phpstan": "^1.9",
+    "phpstan/phpstan": "^2.2",
     "infection/infection": "^0.26.16",
     "phpunit/php-code-coverage": "^9.2"
   },
