@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace WebFu\Reflection;
 
-use ReflectionAttribute;
-
 class ReflectionProperty extends AbstractReflection
 {
     public const IS_STATIC    = 16;
@@ -53,7 +51,7 @@ class ReflectionProperty extends AbstractReflection
      */
     public function getAttributes(string|null $name = null, int $flags = 0): array
     {
-        return $this->reflectionProperty->getAttributes($name, $flags);
+        return array_map(fn ($attribute) => new ReflectionAttribute($attribute), $this->reflectionProperty->getAttributes($name, $flags));
     }
 
     public function getDeclaringClass(): ReflectionClass
@@ -109,7 +107,7 @@ class ReflectionProperty extends AbstractReflection
         foreach ($docTypesList as $docType) {
             $isArray = false;
 
-            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[\]/i', $docType, $matches);
+            preg_match('/array<(?<group1>[a-z]+)>|(?<group2>[a-z]+)\[]/i', $docType, $matches);
 
             if ($matches) {
                 $docType = $matches['group1'].($matches['group2'] ?? '');
